@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ScrollerModule } from 'primeng/scroller';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
@@ -8,7 +9,8 @@ import { AppRoutingModule } from './app.routing';
   declarations: [AppComponent],
   imports: [
     CommonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ScrollerModule
   ]
 })
 export class AppModule { }

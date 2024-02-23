@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-
+  menus = [
+    {
+      label: 'Box',
+      link: 'box'
+    }
+  ]
 }
