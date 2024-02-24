@@ -15,6 +15,7 @@ let routes: Routes = [
     path: '',
     component: AppComponent,
     children: [
+      { path: '', redirectTo: 'box', pathMatch: 'full' },
       { path: 'box', component: BoxComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'shopp', component: ShoppComponent },
