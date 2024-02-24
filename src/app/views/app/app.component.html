@@ -4,12 +4,26 @@
   </header>
 
   <aside>
-    <!-- <nav class="bg-light sidebar">
 
-      <img src="../../../assets/images/ep.png" alt="Descrição da imagem">
+    <div class="d-flex" id="wrapper">
+      <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">
+          <a class="navbar-brand" href="#">
+            <i class="fas fa-tags"></i> Label
+          </a>
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action bg-light">Item 1</a>
+          <a href="#submenu1" data-bs-toggle="collapse"
+            class="list-group-item list-group-item-action bg-light">Submenu</a>
+          <div id="submenu1" class="collapse">
+            <a href="#" class="list-group-item list-group-item-action bg-light pl-5">Subitem 1</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light pl-5">Subitem 2</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <p-panelMenu [model]="items" [style]="{'width':'300px'}"></p-panelMenu>
-    </nav> -->
   </aside>
 
   <main>
