@@ -10,12 +10,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { ProductComponent } from './product/product.component';
 import { FormsModule } from '@angular/forms';
+import { LayoutModule } from '../../containers/layout/layout.module';
 
 @NgModule({
   declarations: [AppComponent, ProductComponent],
   imports: [
     CommonModule,
     AppRoutingModule,
+    LayoutModule,
     FormsModule,
     ScrollerModule,
     PanelMenuModule,

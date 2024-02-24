@@ -1,0 +1,55 @@
+.logo {
+  width: 100%;
+  max-width: 230px;
+  height: 7vh;
+}
+
+.user {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #bebebe;
+}
+
+.btn-logout {
+  background-color: #FBFBFB;
+  padding: 3px 10px;
+
+  &:hover {
+    color: #FBFBFB;
+    background-color: #2e2e2e;
+  }
+}
+
+.user-name {
+  transition: 0.5s;
+
+  &:hover {
+    color: #3a3a3a;
+  }
+}
+
+.input-search {
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 50px;
+  width: 100%;
+  color: #3a3a3a;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  input {
+    padding: 0px;
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+
+    &:focus {
+      outline: none !important;
+      border: none !important;
+    }
+  }
+}

@@ -1,67 +1,21 @@
-<div class="d-flex">
-  <nav class="col-md-2 bg-light sidebar">
+<div class="container-main">
+  <header>
+    <app-header></app-header>
+  </header>
 
-    <img src="../../../assets/images/ep.png" alt="Descrição da imagem">
+  <aside>
+    <!-- <nav class="bg-light sidebar">
 
-    <p-panelMenu [model]="items" [style]="{'width':'300px'}"></p-panelMenu>
+      <img src="../../../assets/images/ep.png" alt="Descrição da imagem">
 
-    <!-- <div class="sidebar-sticky">
-      <ul class="nav flex-column p-3">
+      <p-panelMenu [model]="items" [style]="{'width':'300px'}"></p-panelMenu>
+    </nav> -->
+  </aside>
 
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['box']">
-            Caixa
-          </a>
-        </li>
+  <main>
 
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['sales']">
-            Portal de vendas
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['shopp']">
-            Portal de compras
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['routine']">
-            Portal de rotinas
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['stock']">
-            Controle de estoque
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['finance']">
-            Financeiro
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['user']">
-            Usuário
-          </a>
-        </li>
-
-        <li class="nav-item my-1">
-          <a class="nav-link border-primary bg-light row  border shadow-lg rounded p-3" [routerLink]="['product']">
-            Produto
-          </a>
-        </li>
-
-      </ul>
-    </div> -->
-  </nav>
-
-  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-    <router-outlet></router-outlet>
   </main>
 
+
+  <footer></footer>
 </div>
