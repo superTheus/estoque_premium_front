@@ -9,14 +9,22 @@
     <div class="form mt-5">
       <div class="row text-center">
         <h4> Faça seu login </h4>
-        <p> Lorem Ipsum has been the industry's standard dummy text ever since. </p>
+        <p> Entre com sua conta e realize suas vendas </p>
       </div>
 
-      <div class="row px-2">
+      <div class="row mt-3">
+        <app-input-default label="Email" type="email" placeHolder="nome@mail.com"></app-input-default>
+      </div>
+
+      <div class="row">
+        <app-input-default label="Senha" type="password" placeHolder="*******"></app-input-default>
+      </div>
+
+      <div class="row px-2 mb-4">
         <a href=""> Esqueceu sua senha ? </a>
       </div>
 
-      <div class="row mt-4">
+      <div class="row mt-2">
         <app-button-default text="Entrar" (clickAction)="login()"></app-button-default>
       </div>
     </div>

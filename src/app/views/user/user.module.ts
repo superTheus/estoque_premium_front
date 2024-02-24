@@ -5,6 +5,7 @@ import { UserComponent } from './user.component';
 import { UserRoutingModule } from './user.routing';
 import { LoginComponent } from './login/login.component';
 import { ButtonDefaultComponent } from '../../components/button-default/button-default.component';
+import { InputDefaultComponent } from '../../components/input-default/input-default.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ButtonDefaultComponent } from '../../components/button-default/button-d
     CommonModule,
     UserRoutingModule,
     ScrollerModule,
-    ButtonDefaultComponent
+    ButtonDefaultComponent,
+    InputDefaultComponent
   ]
 })
 export class UserModule { }
