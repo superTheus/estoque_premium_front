@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ScrollerModule } from 'primeng/scroller';
 import { UserComponent } from './user.component';
 import { UserRoutingModule } from './user.routing';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
-import { PasswordModule } from 'primeng/password';
+import { ButtonDefaultComponent } from '../../components/button-default/button-default.component';
+import { InputDefaultComponent } from '../../components/input-default/input-default.component';
+
 
 @NgModule({
   declarations: [UserComponent, LoginComponent],
@@ -14,10 +14,9 @@ import { PasswordModule } from 'primeng/password';
     CommonModule,
     UserRoutingModule,
     ScrollerModule,
-    FormsModule,
-    InputTextModule,
-    PasswordModule
+    ButtonDefaultComponent,
+    InputDefaultComponent
   ]
 })
-export class AppModule { }
+export class UserModule { }
 

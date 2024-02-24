@@ -1,33 +1,34 @@
 <div class="container-login">
-  <div class="col-7">
-    <img src="../../../../assets/images/home_welcome.svg" alt="">
-  </div>
-  <div class="col-5">
 
-    <div class="container">
-      <div class="row justify-content-center mt-5">
 
-        <img src="../../../assets/images/ep.png" alt="Descrição da imagem">
+  <div class="col-12 col-md-6 col-lg-5 card p-4 d-flex justify-content-center">
+    <div class="logo">
+      <img src="../../../../assets/images/ep.png" alt="">
+    </div>
 
-        <div class="form">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input pInputText placeholder="Digite seu email" [(ngModel)]="email" />
-          </div>
-          <div class="form-group mt-2">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" placeholder="Digite sua senha" [(ngModel)]="password" />
-          </div>
+    <div class="form mt-5">
+      <div class="row text-center">
+        <h4> Faça seu login </h4>
+        <p> Entre com sua conta e realize suas vendas </p>
+      </div>
 
-          <div class="form-group mt-2">
-            <a href="#" class="text-primary">Esqueceu a senha?</a>
-          </div>
+      <div class="row mt-3">
+        <app-input-default label="Email" type="email" placeHolder="nome@mail.com"></app-input-default>
+      </div>
 
-          <button type="submit" (click)="login()" class="btn btn-primary btn-block">Entrar</button>
-        </div>
+      <div class="row">
+        <app-input-default label="Senha" type="password" placeHolder="*******"></app-input-default>
+      </div>
 
+      <div class="row px-2 mb-4">
+        <a href=""> Esqueceu sua senha ? </a>
+      </div>
+
+      <div class="row mt-2">
+        <app-button-default text="Entrar" (clickAction)="login()"></app-button-default>
       </div>
     </div>
 
   </div>
+  <<<<<<< HEAD=======>>>>>>> master
 </div>

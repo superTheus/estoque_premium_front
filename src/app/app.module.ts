@@ -9,8 +9,6 @@ import { ViewsModule } from './views/views.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   imports: [
     BrowserModule,

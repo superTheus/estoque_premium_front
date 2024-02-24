@@ -7,8 +7,8 @@ let routes: Routes = [
     path: '',
     component: ViewsComponent,
     children: [
-      { path: '', redirectTo: 'user', pathMatch: 'full' },
-      { path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.AppModule) },
+      { path: '', redirectTo: 'user/login', pathMatch: 'full' },
+      { path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.UserModule) },
       { path: 'app', loadChildren: () => import('./app/app.module').then((m) => m.AppModule) }
     ]
   }
