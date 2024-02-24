@@ -1,1 +1,42 @@
-<p>shopp works!</p>
+<div class="container ">
+  <div class="row">
+    <div class="col-md-12 offset-md-0">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa vendedor....">
+        <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo vendedor</button>
+      </div>
+
+      <div class="container custom-container ">
+        <div class="row">
+          <div class="col-md-12 offset-md-0">
+
+
+            <!-- Barra de Pesquisa para Produtos -->
+
+            <div class="custom-input-group  mt-0 ">
+              <button class=" col-md-12 btn btn-primary form-control rounded-0" onclick="searchProduct()">Adicionar
+                Produtos </button>
+              <input type="text" class=" form-control p-3 btn btn  " placeholder="Pesquisar">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé -->
+      <div class="custom-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4 offset-md-3">
+              <hr style="background-color: #ffffff;">
+              <h6>Total</h6>
+              <span id="totalAmount">
+                <h4>R$ 0,120</h4>
+              </span>
+              <button class="btn btn-light col-md-6" onclick="continueShopping()">Continuar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,52 @@
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
+@import "../node_modules/primeng/resources/themes/lara-light-blue/theme.css";
+@import "../node_modules/primeng/resources/primeng.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+#pass {
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1.2em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+}
+
+.p-component {
+  width: 100% !important;
+  padding: 5px;
+
+  a {
+    color: #0a58ca;
+    text-decoration: none;
+  }
+
+  .p-panelmenu-panel {
+    .p-panelmenu-header-content {
+      padding: 1.25rem;
+      border: 1px solid #0a58ca !important;
+      color: #0a58ca !important;
+      font-weight: 700;
+    }
+  }
+}
+
+.ng-trigger {
+  padding: 5px;
+
+  ul {
+    padding: 10px;
+    margin: 0;
+
+    a {
+      margin-top: 0.3rem;
+      margin-bottom: 0.3rem;
+    }
+  }
 }
