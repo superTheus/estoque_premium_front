@@ -11,9 +11,19 @@ import { AppRoutingModule } from './app.routing';
 import { ProductComponent } from './product/product.component';
 import { FormsModule } from '@angular/forms';
 import { LayoutModule } from '../../containers/layout/layout.module';
+import { InputDefaultComponent } from '../../components/input-default/input-default.component';
+import { UserComponent } from './user/user.component';
+import { ComponentsModule } from '../../components/components.module';
+import { BrandsComponent } from './brands/brands.component';
+import { ApiService } from '../../data/api.service';
 
 @NgModule({
-  declarations: [AppComponent, ProductComponent],
+  declarations: [
+    AppComponent,
+    ProductComponent,
+    UserComponent,
+    BrandsComponent
+  ],
   imports: [
     CommonModule,
     AppRoutingModule,
@@ -23,8 +33,10 @@ import { LayoutModule } from '../../containers/layout/layout.module';
     PanelMenuModule,
     RatingModule,
     TagModule,
-    DataViewModule
-  ]
+    DataViewModule,
+    ComponentsModule
+  ],
+  providers: [ApiService],
 })
 export class AppModule { }
 

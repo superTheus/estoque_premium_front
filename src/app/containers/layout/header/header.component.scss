@@ -28,28 +28,3 @@
     color: #3a3a3a;
   }
 }
-
-.input-search {
-  background-color: #fff;
-  padding: 5px 10px;
-  border-radius: 50px;
-  width: 100%;
-  color: #3a3a3a;
-
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  input {
-    padding: 0px;
-    border: 0;
-    border-radius: 0;
-    width: 100%;
-
-    &:focus {
-      outline: none !important;
-      border: none !important;
-    }
-  }
-}

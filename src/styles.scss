@@ -67,13 +67,42 @@ header {
 }
 
 aside {
+  border: 2px solid #e6e6e6;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
   grid-area: sidenav;
 }
 
 main {
   grid-area: content;
+  background-color: #eeeeee;
+  padding: 20px;
 }
 
 footer {
   grid-area: footer;
+}
+
+.input-search {
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 50px;
+  width: 100%;
+  color: #3a3a3a;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  input {
+    padding: 0px;
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+
+    &:focus {
+      outline: none !important;
+      border: none !important;
+    }
+  }
 }

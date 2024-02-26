@@ -9,6 +9,8 @@ import { StockComponent } from './stock/stock.component';
 import { FinanceComponent } from './finance/finance.component';
 import { UserComponent } from './user/user.component';
 import { ProductComponent } from './product/product.component';
+import { ClientComponent } from './client/client.component';
+import { BrandsComponent } from './brands/brands.component';
 
 let routes: Routes = [
   {
@@ -16,6 +18,7 @@ let routes: Routes = [
     component: AppComponent,
     children: [
       { path: '', redirectTo: 'box', pathMatch: 'full' },
+      { path: 'brands', component: BrandsComponent },
       { path: 'box', component: BoxComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'shopp', component: ShoppComponent },
@@ -23,7 +26,8 @@ let routes: Routes = [
       { path: 'stock', component: StockComponent },
       { path: 'finance', component: FinanceComponent },
       { path: 'user', component: UserComponent },
-      { path: 'product', component: ProductComponent }
+      { path: 'product', component: ProductComponent },
+      { path: 'client', component: ClientComponent }
     ]
   }
 ];
