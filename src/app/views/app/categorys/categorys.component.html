@@ -1,5 +1,5 @@
 <div class="row px-3 mb-4">
-  <h3> Usuário </h3>
+  <h3> Categorias </h3>
 </div>
 <div id="stock-control-container">
   <div class="search-bar">
@@ -13,7 +13,7 @@
     <div class="col-3"></div>
     <div class="col-3"></div>
     <div class="col-3 d-flex justify-content-end">
-      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Usuário</button>
+      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Categoria</button>
     </div>
   </div>
 
@@ -21,23 +21,21 @@
     <thead>
       <tr>
         <th class="col-2">ID</th>
-        <th class="col-5">Descricão</th>
-        <th class="col-4">Email</th>
+        <th class="col-9">Descricão</th>
         <th class="col"></th>
       </tr>
     </thead>
     <tbody>
 
-      <ng-container *ngFor="let user of data">
+      <ng-container *ngFor="let brand of data">
         <tr>
-          <td class="col-2"> {{user.id}} </td>
-          <td class="col-5"> {{user.name}} </td>
-          <td class="col-4"> {{user.email}} </td>
+          <td class="col-2"> {{brand.id}} </td>
+          <td class="col-9"> {{brand.description}} </td>
           <td class="col d-flex">
-            <button class="btn btn-primary me-2" (click)="update(user)">
+            <button class="btn btn-primary me-2" (click)="update(brand)">
               <i class="fas fa-edit"></i>
             </button>
-            <button class="btn btn-danger" (click)="delete(user)">
+            <button class="btn btn-danger" (click)="delete(brand)">
               <i class="fas fa-trash"></i>
             </button>
           </td>

@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
+import { Categorys } from './categorys.interface';
 
 declare const $: any;
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.scss'
+  selector: 'app-categorys',
+  templateUrl: './categorys.component.html',
+  styleUrl: './categorys.component.scss'
 })
-export class UserComponent {
+export class CategorysComponent implements OnInit {
   description = new FormControl('');
   isEditMode = false;
-  userSelected?: Users;
-  data: Users[] = [];
+  Categoryselected?: Categorys;
+  data: Categorys[] = [];
 
   constructor(private apiService: ApiService) { }
 
@@ -23,26 +23,24 @@ export class UserComponent {
   }
 
   load() {
-    this.apiService.getUser({
-      filters: {
+    this.apiService.findCategorys({
+      filter: {
         deleted: 'N'
       }
-    }).subscribe((res: any) => {
-      console.log(res);
+    }).then(res => {
       this.data = res.results;
-      console.log(this.data);
     })
   }
 
   save() {
     if (this.isEditMode) {
       this.apiService.updateCategory({
-        id: this.userSelected?.id,
+        id: this.Categoryselected?.id,
         description: this.description.value ? this.description.value : '',
-        deleted: this.userSelected?.deleted
+        deleted: this.Categoryselected?.deleted
       }).then(res => {
         let allCategorys = [...this.data];
-        let index = allCategorys.findIndex(brand => brand.id === this.userSelected?.id);
+        let index = allCategorys.findIndex(brand => brand.id === this.Categoryselected?.id);
         allCategorys[index] = res.results;
         this.data = allCategorys;
       })
@@ -57,22 +55,22 @@ export class UserComponent {
     $('#modalProduct').modal('hide');
   }
 
-  update(brand: Users) {
-    this.userSelected = brand;
-    // this.description.setValue(brand.description);
+  update(brand: Categorys) {
+    this.Categoryselected = brand;
+    this.description.setValue(brand.description);
     this.isEditMode = true;
     $('#modalProduct').modal('show');
   }
 
-  delete(user: Users) {
-    var newUser = { ...user };
-    newUser.deleted = 'S';
-    this.userSelected = newUser;
+  delete(brand: Categorys) {
+    var newBrand = { ...brand };
+    newBrand.deleted = 'S';
+    this.Categoryselected = newBrand;
 
     this.apiService.updateCategory({
-      id: this.userSelected?.id,
+      id: this.Categoryselected?.id,
       description: this.description.value ? this.description.value : '',
-      deleted: this.userSelected?.deleted
+      deleted: this.Categoryselected?.deleted
     }).then(res => {
       this.load();
     })

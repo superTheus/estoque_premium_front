@@ -11,6 +11,8 @@ import { UserComponent } from './user/user.component';
 import { ProductComponent } from './product/product.component';
 import { ClientComponent } from './client/client.component';
 import { BrandsComponent } from './brands/brands.component';
+import { CategorysComponent } from './categorys/categorys.component';
+import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 
 let routes: Routes = [
   {
@@ -19,6 +21,8 @@ let routes: Routes = [
     children: [
       { path: '', redirectTo: 'box', pathMatch: 'full' },
       { path: 'brands', component: BrandsComponent },
+      { path: 'categorys', component: CategorysComponent },
+      { path: 'subcategorys', component: SubcategorysComponent },
       { path: 'box', component: BoxComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'shopp', component: ShoppComponent },

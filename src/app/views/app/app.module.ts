@@ -16,13 +16,17 @@ import { UserComponent } from './user/user.component';
 import { ComponentsModule } from '../../components/components.module';
 import { BrandsComponent } from './brands/brands.component';
 import { ApiService } from '../../data/api.service';
+import { CategorysComponent } from './categorys/categorys.component';
+import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductComponent,
     UserComponent,
-    BrandsComponent
+    BrandsComponent,
+    CategorysComponent,
+    SubcategorysComponent
   ],
   imports: [
     CommonModule,

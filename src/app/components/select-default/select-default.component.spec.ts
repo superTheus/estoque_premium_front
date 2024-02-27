@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserComponent } from './user.component';
+import { SelectDefaultComponent } from './select-default.component';
 
-describe('UserComponent', () => {
-  let component: UserComponent;
-  let fixture: ComponentFixture<UserComponent>;
+describe('SelectDefaultComponent', () => {
+  let component: SelectDefaultComponent;
+  let fixture: ComponentFixture<SelectDefaultComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserComponent]
+      imports: [SelectDefaultComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(UserComponent);
+    fixture = TestBed.createComponent(SelectDefaultComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

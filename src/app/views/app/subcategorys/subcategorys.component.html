@@ -1,5 +1,5 @@
 <div class="row px-3 mb-4">
-  <h3> Usuário </h3>
+  <h3> Subcategorias </h3>
 </div>
 <div id="stock-control-container">
   <div class="search-bar">
@@ -13,7 +13,8 @@
     <div class="col-3"></div>
     <div class="col-3"></div>
     <div class="col-3 d-flex justify-content-end">
-      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Usuário</button>
+      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova
+        subategoria</button>
     </div>
   </div>
 
@@ -22,22 +23,22 @@
       <tr>
         <th class="col-2">ID</th>
         <th class="col-5">Descricão</th>
-        <th class="col-4">Email</th>
+        <th class="col-4">Categoria</th>
         <th class="col"></th>
       </tr>
     </thead>
     <tbody>
 
-      <ng-container *ngFor="let user of data">
+      <ng-container *ngFor="let subcategory of data">
         <tr>
-          <td class="col-2"> {{user.id}} </td>
-          <td class="col-5"> {{user.name}} </td>
-          <td class="col-4"> {{user.email}} </td>
+          <td class="col-2"> {{subcategory.id}} </td>
+          <td class="col-5"> {{subcategory.description}} </td>
+          <td class="col-4"> {{subcategory.category ? subcategory.category.description : ''}} </td>
           <td class="col d-flex">
-            <button class="btn btn-primary me-2" (click)="update(user)">
+            <button class="btn btn-primary me-2" (click)="update(subcategory)">
               <i class="fas fa-edit"></i>
             </button>
-            <button class="btn btn-danger" (click)="delete(user)">
+            <button class="btn btn-danger" (click)="delete(subcategory)">
               <i class="fas fa-trash"></i>
             </button>
           </td>
@@ -62,7 +63,11 @@
         <form>
           <div class="row mt-3">
             <app-input-default [control]="description" type="text" label="Descricão"
-              placeHolder="Ex: Bebidas"></app-input-default>
+              placeHolder="Ex: Refrigerantes"></app-input-default>
+          </div>
+
+          <div class="row mt-3">
+            <app-select-default [control]="category" label="Categoria" [items]="categories"></app-select-default>
           </div>
         </form>
 
