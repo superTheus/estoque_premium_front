@@ -2,14 +2,15 @@ export interface Users {
   id?: number;
   name: string;
   email: string;
-  deleted?: 'S' | 'N';
+  password: string;
+  ativo?: 'S' | 'N';
 }
 
 export interface UsersRequest {
   filter?: {
     id?: number;
     description?: string;
-    deleted?: 'S' | 'N';
+    ativo?: 'S' | 'N';
   };
   limit?: number;
 }

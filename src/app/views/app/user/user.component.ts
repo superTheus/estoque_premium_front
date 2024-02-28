@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
 
@@ -11,7 +11,11 @@ declare const $: any;
   styleUrl: './user.component.scss'
 })
 export class UserComponent {
-  description = new FormControl('');
+  name = new FormControl('', [Validators.required]);
+  lastName = new FormControl('', [Validators.required]);
+  email = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
+
   isEditMode = false;
   userSelected?: Users;
   data: Users[] = [];
@@ -24,8 +28,8 @@ export class UserComponent {
 
   load() {
     this.apiService.getUser({
-      filters: {
-        deleted: 'N'
+      filter: {
+        ativo: 'S'
       }
     }).subscribe((res: any) => {
       console.log(res);
@@ -35,46 +39,56 @@ export class UserComponent {
   }
 
   save() {
-    if (this.isEditMode) {
-      this.apiService.updateCategory({
-        id: this.userSelected?.id,
-        description: this.description.value ? this.description.value : '',
-        deleted: this.userSelected?.deleted
-      }).then(res => {
-        let allCategorys = [...this.data];
-        let index = allCategorys.findIndex(brand => brand.id === this.userSelected?.id);
-        allCategorys[index] = res.results;
-        this.data = allCategorys;
-      })
-    } else {
-      this.apiService.createCategory({
-        description: this.description.value ? this.description.value : ''
-      }).then(res => {
-        this.data.push(res.results);
-      })
-    }
+    this.isEditMode ? this.updateUser() : this.createUser();
 
     $('#modalProduct').modal('hide');
   }
 
-  update(brand: Users) {
-    this.userSelected = brand;
-    // this.description.setValue(brand.description);
+  createUser() {
+    this.apiService.createUser({
+      name: this.name.value + ' ' + this.lastName.value,
+      email: this.email.value ?? '',
+      password: this.password.value ?? '',
+      photo: '',
+      company: 1,
+    }).then((res) => {
+      console.log(res);
+      this.load();
+    });
+  }
+
+  updateUser() {
+    this.apiService.updateUser({
+      id: this.userSelected?.id,
+      name: this.name.value + ' ' + this.lastName.value,
+      email: this.email.value ?? '',
+      password: this.password.value ?? '',
+      photo: '',
+      company: 1,
+    }).then((res) => {
+      console.log(res);
+      this.load();
+    });
+  }
+
+  update(user: Users) {
+    this.userSelected = user;
+    this.name.setValue(user.name?.split(' ')[0]);
+    this.lastName.setValue(user.name?.split(' ')[1]);
+    this.email.setValue(user.email);
+    this.password.setValue(user.password);
+
     this.isEditMode = true;
     $('#modalProduct').modal('show');
   }
 
   delete(user: Users) {
-    var newUser = { ...user };
-    newUser.deleted = 'S';
-    this.userSelected = newUser;
-
-    this.apiService.updateCategory({
-      id: this.userSelected?.id,
-      description: this.description.value ? this.description.value : '',
-      deleted: this.userSelected?.deleted
-    }).then(res => {
+    this.apiService.updateUser({
+      id: user?.id,
+      ativo: 'N'
+    }).then((res) => {
+      console.log(res);
       this.load();
-    })
+    });
   }
 }

@@ -8,18 +8,20 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Brands, BrandsRequest, Categorys, CategorysRequest } from '../views/app/brands/brands.interface';
 import { Subcategorys, SubcategorysRequest } from '../views/app/subcategorys/subcategorys.interface';
+import { Suppliers, SuppliersRequest } from '../views/app/supplier/supplier.interface';
 
 interface User {
+  id?: number,
   name?: string,
   email?: string,
   password?: string,
   photo?: string,
   company?: number,
-  deleted?: 'S' | 'N';
+  ativo?: 'S' | 'N';
 }
 
 interface UserRequest {
-  filters?: User;
+  filter?: User;
   limit?: number;
 }
 
@@ -49,6 +51,60 @@ export class ApiService {
           return throwError(errorRes);
         })
       );
+  }
+
+  createUser(user: User): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/user/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, user, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateUser(user: User): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/user/update/` + user.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, user, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
   }
 
   findBrands(brands?: BrandsRequest): Promise<resultInterface> {
@@ -276,6 +332,87 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, subcategory, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findSuppliers(supplier?: SuppliersRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/supplier/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, supplier, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createSupplier(supplier: Suppliers): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/supplier/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, supplier, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateSupplier(supplier: Suppliers): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/supplier/update/` + supplier.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, supplier, { headers })
         .pipe(
           map((res) => {
             return res;

@@ -18,6 +18,7 @@ import { BrandsComponent } from './brands/brands.component';
 import { ApiService } from '../../data/api.service';
 import { CategorysComponent } from './categorys/categorys.component';
 import { SubcategorysComponent } from './subcategorys/subcategorys.component';
+import { SuppliersComponent } from './supplier/supplier.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SubcategorysComponent } from './subcategorys/subcategorys.component';
     UserComponent,
     BrandsComponent,
     CategorysComponent,
-    SubcategorysComponent
+    SubcategorysComponent,
+    SuppliersComponent
   ],
   imports: [
     CommonModule,

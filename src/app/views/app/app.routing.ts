@@ -13,6 +13,7 @@ import { ClientComponent } from './client/client.component';
 import { BrandsComponent } from './brands/brands.component';
 import { CategorysComponent } from './categorys/categorys.component';
 import { SubcategorysComponent } from './subcategorys/subcategorys.component';
+import { SuppliersComponent } from './supplier/supplier.component';
 
 let routes: Routes = [
   {
@@ -23,6 +24,7 @@ let routes: Routes = [
       { path: 'brands', component: BrandsComponent },
       { path: 'categorys', component: CategorysComponent },
       { path: 'subcategorys', component: SubcategorysComponent },
+      { path: 'suppliers', component: SuppliersComponent },
       { path: 'box', component: BoxComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'shopp', component: ShoppComponent },
