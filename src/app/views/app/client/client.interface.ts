@@ -1,5 +1,6 @@
 export interface Clients {
   id?: number;
+  id_company?: number;
   nome?: string,
   apelido?: string,
   razao_social?: string,
@@ -16,7 +17,8 @@ export interface Clients {
   data_nascimento?: string,
   icms?: string,
   genero?: string
-  deleted?: string
+  deleted?: string,
+  telefone?: string
 }
 
 

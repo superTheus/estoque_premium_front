@@ -1,5 +1,97 @@
-img {
+#stock-control-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 98%;
+  margin: auto;
+}
+
+.search-bar {
+  background-color: #4CAF50;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #3E3C;
+}
+
+#searchInput {
+  width: 70%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  margin-right: 10px;
+  color: #333;
+}
+
+#stock-control-container table {
   width: 100%;
-  height: auto;
-  border-radius: 2rem;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#stock-control-container th,
+td {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: left;
+}
+
+#stock-control-container th {
+  background-color: #2196F3;
+  color: #fff;
+}
+
+#stock-control-container .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+
+
+
+
+
+.estoque,
+.estoque-zerado,
+.estoque-minimo-5,
+.investimento {
+  flex: 1 1 calc(25% - 20px);
+  margin: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.estoque {
+  background-color: #316cf4;
+  color: #fff;
+}
+
+.estoque-zerado {
+  background-color: #cb444a;
+  color: #fff;
+}
+
+.estoque-minimo-5 {
+  background-color: #f6c344;
+  color: #333;
+}
+
+.investimento {
+  background-color: #66BB6A;
+  color: #fff;
+}
+
+#info-estoque,
+#info-estoque-zerado,
+#info-estoque-minimo-5,
+#info-investimento {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
 }

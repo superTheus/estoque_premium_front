@@ -53,7 +53,8 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Marca' : 'Adicionar nova marca' }}</h5>
+        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Cliente' : 'Adicionar novo cliente' }}
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -61,52 +62,81 @@
         <form>
           <div class="row">
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Nome" placeHolder="nome"></app-input-default>
+              <app-input-default [control]="nome" type="text" label="Nome" placeHolder="nome"></app-input-default>
             </div>
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Apelido" placeHolder="apelido"></app-input-default>
+              <app-input-default [control]="apelido" type="text" label="Apelido"
+                placeHolder="apelido"></app-input-default>
             </div>
           </div>
           <div class="row">
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Razão Social"
+              <app-input-default [control]="razao_social" type="text" label="Razão Social"
                 placeHolder="Razão Social"></app-input-default>
             </div>
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="RG/N° Inscrição"
+              <app-input-default [control]="rg_inscricao" type="text" label="RG/N° Inscrição"
                 placeHolder="RG/N° Inscrição"></app-input-default>
             </div>
           </div>
           <div class="row">
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Email" placeHolder="Email"></app-input-default>
+              <app-input-default [control]="email" type="text" label="Email" placeHolder="Email"></app-input-default>
             </div>
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Celular" placeHolder="Celular"></app-input-default>
+              <app-input-default [control]="celular" type="text" label="Celular"
+                placeHolder="Celular"></app-input-default>
             </div>
           </div>
           <div class="row">
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Telefone"
+              <app-input-default [control]="telefone" type="text" label="Telefone"
                 placeHolder="Telefone"></app-input-default>
             </div>
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Documento"
+              <app-input-default [control]="documento" type="text" label="Documento"
                 placeHolder="Documento"></app-input-default>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <app-input-default [control]="name" type="text" label="CEP" placeHolder="CEP"></app-input-default>
+              <app-input-default [control]="cep" type="text" label="CEP" placeHolder="CEP"></app-input-default>
             </div>
           </div>
           <div class="row">
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Endereço"
+              <app-input-default [control]="endereco" type="text" label="Endereço"
                 placeHolder="Endereço"></app-input-default>
             </div>
             <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Cidade" placeHolder="cidade"></app-input-default>
+              <app-input-default [control]="cidade" type="text" label="Cidade" placeHolder="cidade"></app-input-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <app-input-default [control]="numero" type="text" label="Número" placeHolder="Número"></app-input-default>
+            </div>
+            <div class="col-6">
+              <app-input-default [control]="bairro" type="text" label="Bairro" placeHolder="Bairro"></app-input-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <app-input-default [control]="complemento" type="text" label="Complemento"
+                placeHolder="Complemento"></app-input-default>
+            </div>
+            <div class="col-6">
+              <app-input-default [control]="data_nascimento" type="date" label="Data Nascimento"
+                placeHolder="Data Nascimento"></app-input-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <app-input-default [control]="icms" type="text" label="Icms" placeHolder="Icms"></app-input-default>
+            </div>
+            <div class="col-6">
+              <app-select-default [control]="genero" label="Gênero" placeHolder="Gênero"
+                [items]="generoOptions"></app-select-default>
             </div>
           </div>
         </form>

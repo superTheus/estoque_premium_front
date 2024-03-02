@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Products } from './product.interface';
+import { ApiService } from '../../../data/api.service';
 
+declare var $: any;
 
 export interface Product {
   id?: string;
@@ -20,34 +24,68 @@ export interface Product {
   styleUrl: './product.component.scss'
 })
 export class ProductComponent {
-  products: Product[] = [
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 3
+  description = new FormControl('');
+  isEditMode = false;
+  productSelected?: Products;
+  data: Products[] = [];
+
+  constructor(private apiService: ApiService) { }
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load() {
+    this.apiService.findBrands({
+      filter: {
+        deleted: 'N'
+      }
+    }).then(res => {
+      this.data = res.results;
+    })
+  }
+
+  save() {
+    if (this.isEditMode) {
+      this.apiService.updateBrands({
+        id: this.productSelected?.id,
+        description: this.description.value ? this.description.value : '',
+        deleted: this.productSelected?.deleted
+      }).then(res => {
+        let allProducts = [...this.data];
+        let index = allProducts.findIndex(product => product.id === this.productSelected?.id);
+        allProducts[index] = res.results;
+        this.data = allProducts;
+      })
+    } else {
+      this.apiService.createBrands({
+        description: this.description.value ? this.description.value : ''
+      }).then(res => {
+        this.data.push(res.results);
+      })
     }
-  ];
 
-  getSeverity(product: Product) {
-    switch (product.inventoryStatus) {
-      case 'INSTOCK':
-        return 'success';
+    $('#modalProduct').modal('hide');
+  }
 
-      case 'LOWSTOCK':
-        return 'warning';
+  update(product: Products) {
+    this.productSelected = product;
+    this.description.setValue(product.description);
+    this.isEditMode = true;
+    $('#modalProduct').modal('show');
+  }
 
-      case 'OUTOFSTOCK':
-        return 'danger';
+  delete(product: Products) {
+    var newProduct = { ...product };
+    newProduct.deleted = 'S';
+    this.productSelected = newProduct;
 
-      default:
-        return 'INSTOCK';
-    }
-  };
+    this.apiService.updateBrands({
+      id: this.productSelected?.id,
+      description: this.description.value ? this.description.value : '',
+      deleted: this.productSelected?.deleted
+    }).then(res => {
+      this.load();
+    })
+  }
 }

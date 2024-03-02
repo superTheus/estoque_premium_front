@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { Brands, BrandsRequest, Categorys, CategorysRequest } from '../views/app/brands/brands.interface';
 import { Subcategorys, SubcategorysRequest } from '../views/app/subcategorys/subcategorys.interface';
 import { Suppliers, SuppliersRequest } from '../views/app/supplier/supplier.interface';
+import { Clients, ClientsRequest } from '../views/app/client/client.interface';
 
 interface User {
   id?: number,
@@ -413,6 +414,87 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, supplier, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findClient(supplier?: ClientsRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/clients/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, supplier, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createClient(client: Clients): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/clients/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, client, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateClient(client: Clients): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/clients/update/` + client.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, client, { headers })
         .pipe(
           map((res) => {
             return res;

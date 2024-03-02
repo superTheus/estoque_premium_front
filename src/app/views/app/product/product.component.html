@@ -1,40 +1,74 @@
-<div class="row">
-  <h1> Produtos </h1>
+<div class="row px-3 mb-4">
+  <h3> Produtos </h3>
+</div>
+<div id="stock-control-container">
+  <div class="search-bar">
+    <div class="input-search">
+      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+
+  <div class="row align-items-center justify-content-between mt-3">
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3 d-flex justify-content-end">
+      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Produto</button>
+    </div>
+  </div>
+
+  <table id="stockTable" *ngIf="data">
+    <thead>
+      <tr>
+        <th class="col-2">ID</th>
+        <th class="col-9">Descricão</th>
+        <th class="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <ng-container *ngFor="let brand of data">
+        <tr>
+          <td class="col-2"> {{brand.id}} </td>
+          <td class="col-9"> {{brand.description}} </td>
+          <td class="col d-flex">
+            <button class="btn btn-primary me-2" (click)="update(brand)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" (click)="delete(brand)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+  </table>
+
 </div>
 
-<div class="row">
-
-  <p-dataView #dv [value]="products" [rows]="5" [paginator]="true">
-    <ng-template let-products pTemplate="list">
-      <div class="grid grid-nogutter">
-        <div class="col-12" *ngFor="let item of products; let first = first">
-          <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
-            [ngClass]="{ 'border-top-1 surface-border': !first }">
-            <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-              [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
-            <div
-              class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-              <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                <div class="text-2xl font-bold text-900">{{ item.name }}</div>
-                <p-rating [(ngModel)]="item.rating" [readonly]="true" [cancel]="false"></p-rating>
-                <div class="flex align-items-center gap-3">
-                  <span class="flex align-items-center gap-2">
-                    <i class="pi pi-tag"></i>
-                    <span class="font-semibold">{{ item.category }}</span>
-                  </span>
-                  <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)"></p-tag>
-                </div>
-              </div>
-              <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                <span class="text-2xl font-semibold">{{ '$' + item.price }}</span>
-                <button pButton icon="pi pi-shopping-cart" class="md:align-self-end mb-2 p-button-rounded"
-                  [disabled]="item.inventoryStatus === 'OUTOFSTOCK'"></button>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </ng-template>
-  </p-dataView>
+      <div class="modal-body">
 
+        <form>
+          <div class="row mt-3">
+            <app-input-default [control]="description" type="text" label="Descricão"
+              placeHolder="Ex: Coca Cola"></app-input-default>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+      </div>
+    </div>
+  </div>
 </div>
