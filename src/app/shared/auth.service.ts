@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, from, throwError } from 'rxjs';
 
 import { ApiService } from '../data/api.service';
+import { setCompanyId, setUserEmail, setUserId } from '../utils/util';
 
 export interface ISignInCredentials {
   email: string;
@@ -35,7 +36,13 @@ export class AuthService {
           return throwError(error);
         })
       ).subscribe(
-        data => resolve(data),
+        (data: any) => {
+          let result = data.results[0];
+          setCompanyId(result.company);
+          setUserId(result.id);
+          setUserEmail(result.email);
+          resolve(data);
+        },
         error => reject(error)
       )
     });
