@@ -21,6 +21,8 @@ import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 import { SuppliersComponent } from './supplier/supplier.component';
 import { ClientComponent } from './client/client.component';
 import { ContasComponent } from './contas/contas.component';
+import { PaymentComponent } from './payment/payment.component';
+import { ReceiveComponent } from './receive/receive.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ContasComponent } from './contas/contas.component';
     SubcategorysComponent,
     SuppliersComponent,
     ClientComponent,
-    ContasComponent
+    ContasComponent,
+    PaymentComponent,
+    ReceiveComponent
   ],
   imports: [
     CommonModule,

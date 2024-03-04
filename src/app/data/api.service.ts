@@ -13,6 +13,7 @@ import { CategorysRequest, Clients, ClientsRequest } from '../views/app/client/c
 import { Categorys } from '../views/app/categorys/categorys.interface';
 import { Products, ProductsRequest } from '../views/app/product/product.interface';
 import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
+import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
 
 interface User {
   id?: number,
@@ -660,6 +661,87 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findContasFinanceiro(finance?: FinanceRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/finance/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, finance, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createContasFinanceiro(finance: Finance): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/finance/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, finance, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateContaFinanceiro(finance: Finance): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/finance/update/` + finance.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, finance, { headers })
         .pipe(
           map((res) => {
             return res;

@@ -1,21 +1,3 @@
-<!-- <div class="d-flex" id="wrapper">
-  <div class="bg-light border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading">
-      <a class="navbar-brand" href="#">
-        <i class="fas fa-tags"></i> Label
-      </a>
-    </div>
-    <div class="list-group list-group-flush">
-      <a href="#" class="list-group-item list-group-item-action bg-light">Item 1</a>
-      <a href="#submenu1" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-light">Submenu</a>
-      <div id="submenu1" class="collapse">
-        <a href="#" class="list-group-item list-group-item-action bg-light pl-5">Subitem 1</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light pl-5">Subitem 2</a>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <nav class="col-md-2 d-none d-md-block sidebar px-2">
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
@@ -76,23 +58,11 @@
         </a>
 
         <div id="submenufinanceiro" class="collapse">
-          <a [routerLink]="['user']" class="nav-link">Contas a pagar</a>
-          <a [routerLink]="['suppliers']" class="nav-link">Contas a receber</a>
+          <a [routerLink]="['payment']" class="nav-link">Contas a pagar</a>
+          <a [routerLink]="['receive']" class="nav-link">Contas a receber</a>
           <a [routerLink]="['contas']" class="nav-link">Contas Bancárias</a>
         </div>
       </li>
-
-      <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['user']">
-          Usuário
-        </a>
-      </li>
-
-      <!-- <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['product']">
-          Produto
-        </a>
-      </li> -->
     </ul>
 
   </div>

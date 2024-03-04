@@ -15,6 +15,8 @@ import { CategorysComponent } from './categorys/categorys.component';
 import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 import { SuppliersComponent } from './supplier/supplier.component';
 import { ContasComponent } from './contas/contas.component';
+import { PaymentComponent } from './payment/payment.component';
+import { ReceiveComponent } from './receive/receive.component';
 
 let routes: Routes = [
   {
@@ -35,7 +37,9 @@ let routes: Routes = [
       { path: 'user', component: UserComponent },
       { path: 'product', component: ProductComponent },
       { path: 'client', component: ClientComponent },
-      { path: 'contas', component: ContasComponent }
+      { path: 'contas', component: ContasComponent },
+      { path: 'payment', component: PaymentComponent },
+      { path: 'receive', component: ReceiveComponent },
     ]
   }
 ];
