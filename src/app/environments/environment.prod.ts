@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'http://localhost/estoque_premium_api',
+  baseUrl: 'https://estoqpremium.com.br/estoque_premium_api',
 };
