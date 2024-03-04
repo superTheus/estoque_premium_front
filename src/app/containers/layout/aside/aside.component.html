@@ -16,12 +16,10 @@
   </div>
 </div> -->
 
-<nav class="col-md-2 d-none d-md-block bg-light sidebar px-2">
+<nav class="col-md-2 d-none d-md-block sidebar px-2">
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
-
-
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
 
         <div class="list-group list-group-flush rounded">
 
@@ -40,7 +38,7 @@
 
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['box']">
           Caixa
         </a>
@@ -48,43 +46,49 @@
 
 
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['sales']">
           Portal de vendas
         </a>
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['shopp']">
           Portal de compras
         </a>
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['routine']">
           Relatório e rotinas
         </a>
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['stock']">
           Controle de estoque
         </a>
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['finance']">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
+        <a href="#submenufinanceiro" data-bs-toggle="collapse" class="nav-link">
           Financeiro
         </a>
+
+        <div id="submenufinanceiro" class="collapse">
+          <a [routerLink]="['user']" class="nav-link">Contas a pagar</a>
+          <a [routerLink]="['suppliers']" class="nav-link">Contas a receber</a>
+          <a [routerLink]="['contas']" class="nav-link">Contas Bancárias</a>
+        </div>
       </li>
 
-      <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['user']">
           Usuário
         </a>
       </li>
 
-      <!-- <li class="nav-item border-primary bg-light border shadow-lg rounded mt-2">
+      <!-- <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a class="nav-link" [routerLink]="['product']">
           Produto
         </a>

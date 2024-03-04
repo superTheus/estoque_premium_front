@@ -1,9 +1,10 @@
-import { Categorys } from "../brands/brands.interface";
+import { Categorys } from "../categorys/categorys.interface";
 
 export interface Subcategorys {
   id?: number;
   description: string;
   id_category: number;
+  id_company?: number;
   category?: Categorys;
   deleted?: 'S' | 'N';
 }

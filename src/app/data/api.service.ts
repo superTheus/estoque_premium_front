@@ -6,10 +6,13 @@ import {
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
-import { Brands, BrandsRequest, Categorys, CategorysRequest } from '../views/app/brands/brands.interface';
+import { Brands, BrandsRequest } from '../views/app/brands/brands.interface';
 import { Subcategorys, SubcategorysRequest } from '../views/app/subcategorys/subcategorys.interface';
 import { Suppliers, SuppliersRequest } from '../views/app/supplier/supplier.interface';
-import { Clients, ClientsRequest } from '../views/app/client/client.interface';
+import { CategorysRequest, Clients, ClientsRequest } from '../views/app/client/client.interface';
+import { Categorys } from '../views/app/categorys/categorys.interface';
+import { Products, ProductsRequest } from '../views/app/product/product.interface';
+import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 
 interface User {
   id?: number,
@@ -495,6 +498,168 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, client, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findProducts(product?: ProductsRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/products/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, product, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createProduct(product: Products): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/products/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, product, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateProduct(product: Products): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/products/update/` + product.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, product, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findContas(conta?: ContasRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/contas/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createContas(conta: Contas): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/contas/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateConta(conta: Contas): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/contas/update/` + conta.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, conta, { headers })
         .pipe(
           map((res) => {
             return res;

@@ -1,5 +1,6 @@
 export interface Categorys {
   id?: number;
+  id_company?: number;
   description: string;
   deleted?: 'S' | 'N';
 }

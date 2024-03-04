@@ -46,7 +46,8 @@ export class CategorysComponent implements OnInit {
       })
     } else {
       this.apiService.createCategory({
-        description: this.description.value ? this.description.value : ''
+        description: this.description.value ? this.description.value : '',
+        id_company: 1,
       }).then(res => {
         this.data.push(res.results);
       })

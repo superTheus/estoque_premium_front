@@ -14,6 +14,7 @@ import { BrandsComponent } from './brands/brands.component';
 import { CategorysComponent } from './categorys/categorys.component';
 import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 import { SuppliersComponent } from './supplier/supplier.component';
+import { ContasComponent } from './contas/contas.component';
 
 let routes: Routes = [
   {
@@ -33,7 +34,8 @@ let routes: Routes = [
       { path: 'finance', component: FinanceComponent },
       { path: 'user', component: UserComponent },
       { path: 'product', component: ProductComponent },
-      { path: 'client', component: ClientComponent }
+      { path: 'client', component: ClientComponent },
+      { path: 'contas', component: ContasComponent }
     ]
   }
 ];

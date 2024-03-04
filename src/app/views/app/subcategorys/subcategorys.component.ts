@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Subcategorys } from './subcategorys.interface';
-import { Categorys } from '../brands/brands.interface';
+import { Categorys } from '../categorys/categorys.interface';
 
 declare const $: any;
 
@@ -71,6 +71,7 @@ export class SubcategorysComponent implements OnInit {
       this.apiService.createSubcategory({
         description: this.description.value ? this.description.value : '',
         id_category: this.category.value ? Number(this.category.value) : 0,
+        id_company: 1,
       }).then(res => {
         this.data.push(res.results);
         this.description.setValue('');

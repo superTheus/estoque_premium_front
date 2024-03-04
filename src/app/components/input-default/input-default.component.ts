@@ -12,6 +12,7 @@ export class InputDefaultComponent {
   @Input() type: string = '';
   @Input() placeHolder: string = '';
   @Input() control: FormControl;
+  @Input() disabled: boolean = false;
 
   constructor() {
     this.control = new FormControl();

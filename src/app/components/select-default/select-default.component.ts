@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Options } from './select-default.interface';
 
 @Component({
   selector: 'app-select-default',
@@ -10,10 +11,7 @@ export class SelectDefaultComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() control: FormControl;
-  @Input() items: {
-    value: string;
-    label: string;
-  }[] = [];
+  @Input() items: Options[] = [];
 
   constructor() {
     this.control = new FormControl();

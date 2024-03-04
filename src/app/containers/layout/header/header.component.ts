@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { AsideService } from '../aside/aside.service';
 
 @Component({
   selector: 'app-header',
@@ -7,4 +7,10 @@ import { MenuItem } from 'primeng/api';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  constructor(private asideService: AsideService) { }
+
+  menuClick() {
+    console.log('menuClick')
+    this.asideService.open();
+  }
 }

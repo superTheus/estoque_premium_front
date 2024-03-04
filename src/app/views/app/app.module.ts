@@ -20,6 +20,7 @@ import { CategorysComponent } from './categorys/categorys.component';
 import { SubcategorysComponent } from './subcategorys/subcategorys.component';
 import { SuppliersComponent } from './supplier/supplier.component';
 import { ClientComponent } from './client/client.component';
+import { ContasComponent } from './contas/contas.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ClientComponent } from './client/client.component';
     CategorysComponent,
     SubcategorysComponent,
     SuppliersComponent,
-    ClientComponent
+    ClientComponent,
+    ContasComponent
   ],
   imports: [
     CommonModule,

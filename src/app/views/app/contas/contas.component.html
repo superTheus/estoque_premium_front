@@ -1,0 +1,103 @@
+<div class="row px-3 mb-4">
+  <h3> Contas Bancárias </h3>
+</div>
+<div id="stock-control-container">
+  <div class="search-bar">
+    <div class="input-search">
+      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+
+  <div class="row align-items-center justify-content-between mt-3">
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3 d-flex justify-content-end">
+      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Conta</button>
+    </div>
+  </div>
+
+  <table id="stockTable" *ngIf="data">
+    <thead>
+      <tr>
+        <th class="col"></th>
+        <th class="col-3">Tipo de conta</th>
+        <th class="col-4">Descricão</th>
+        <th class="col-3">Saldo Atual</th>
+        <th class="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <ng-container *ngFor="let conta of data">
+        <tr>
+          <td class="col"> {{conta.id}} </td>
+          <td class="col-3"> {{conta.tipo_conta_descricao}} </td>
+          <td class="col-4"> {{conta.descricao}} </td>
+          <td class="col-3"> {{conta.saldo_inicial}} </td>
+          <td class="col d-flex">
+            <button class="btn btn-primary me-2" (click)="update(conta)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" (click)="delete(conta)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+  </table>
+
+</div>
+
+<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Marca' : 'Adicionar nova marca' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-6">
+              <app-input-default [control]="descricao" type="text" label="Descricão"
+                placeHolder="Descricão"></app-input-default>
+            </div>
+            <div class="col-6">
+              <app-input-default [control]="saldo_inicial" type="text" label="Saldo Inicial"
+                placeHolder="Saldo"></app-input-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-select-default [control]="tipo_conta" label="Tipo de Conta"
+                [items]="contasSelect"></app-select-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-input-default [control]="cod_bancario" type="text" label="Código Bancário"
+                placeHolder="Código Bancário"></app-input-default>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <app-input-default [control]="conta" type="text" label="Conta" placeHolder="Conta"></app-input-default>
+            </div>
+            <div class="col-6">
+              <app-input-default [control]="agencia" type="text" label="Agência"
+                placeHolder="Agência"></app-input-default>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
