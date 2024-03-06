@@ -26,4 +26,5 @@ export interface Products {
 export interface ProductsRequest {
   filter?: Products;
   limit?: number;
+  search?: string;
 }

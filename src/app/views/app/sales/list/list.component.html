@@ -1,0 +1,45 @@
+<div class="row px-3 mb-4">
+  <h3> Vendas </h3>
+</div>
+<div id="stock-control-container">
+  <div class="search-bar">
+    <div class="input-search">
+      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+
+  <div class="row align-items-center justify-content-between mt-3">
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3 d-flex justify-content-end">
+      <a [routerLink]="['/app/sales/pdv']" class="btn btn-primary me-2" data-bs-toggle="modal"
+        data-bs-target="#modalProduct">Nova
+        Venda</a>
+    </div>
+  </div>
+
+  <table id="stockTable" *ngIf="data">
+    <thead>
+      <tr>
+        <th class="col-2">ID</th>
+        <th class="col-9">Descricão</th>
+        <th class="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <ng-container *ngFor="let sale of data">
+        <tr>
+          <td class="col-2"> </td>
+          <td class="col-9"> </td>
+          <td class="col d-flex">
+
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+  </table>
+
+</div>

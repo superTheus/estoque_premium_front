@@ -29,7 +29,7 @@ let routes: Routes = [
       { path: 'subcategorys', component: SubcategorysComponent },
       { path: 'suppliers', component: SuppliersComponent },
       { path: 'box', component: BoxComponent },
-      { path: 'sales', component: SalesComponent },
+      { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
       { path: 'shopp', component: ShoppComponent },
       { path: 'routine', component: RoutineComponent },
       { path: 'stock', component: StockComponent },
