@@ -23,19 +23,24 @@
     <table id="stockTable" *ngIf="data">
       <thead>
         <tr>
-          <th class="col-2">ID</th>
-          <th class="col-9">Descricão</th>
-          <th class="col"></th>
+          <th class="col">ID</th>
+          <th class="col-3">Descricão</th>
+          <th class="col-2">Valor</th>
+          <th class="col-3">Data Hora</th>
+          <th class="col-2"></th>
         </tr>
       </thead>
       <tbody>
 
         <ng-container *ngFor="let sale of data">
           <tr>
-            <td class="col-2"> </td>
-            <td class="col-9"> </td>
-            <td class="col d-flex">
-
+            <td class="col"> {{ sale.id }} </td>
+            <td class="col-3"> {{ sale.user?.name }} </td>
+            <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+            <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
+            <td class="col-2 text-center">
+              <a [routerLink]="['/app/sales/pdv/' + sale.id]" class="btn btn-primary me-2">Ver</a>
+              <a (click)="delete(sale.id || 0)" class="btn btn-danger">Excluir</a>
             </td>
           </tr>
         </ng-container>

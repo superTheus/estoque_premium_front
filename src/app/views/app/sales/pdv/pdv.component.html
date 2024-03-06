@@ -30,7 +30,7 @@
               {{ productSale.quantity }}
             </div>
             <div class="col-2 d-flex align-items-center">
-              {{ productSale.total }}
+              {{ productSale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
             </div>
             <div class="col d-flex justify-content-center">
               <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
@@ -50,7 +50,7 @@
             <hr style="background-color: #ffffff;">
             <h6>Total</h6>
             <span id="totalAmount">
-              <h4>R$ 0,33</h4>
+              <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
             </span>
             <button class="btn btn-success col-md-6">Continuar</button>
           </div>

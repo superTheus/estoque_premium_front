@@ -48,6 +48,8 @@ export class PdvComponent {
 
   products: Products[] = [];
 
+  total = 0;
+
   constructor(
     private apiService: ApiService,
     private salesService: SalesService,
@@ -107,6 +109,10 @@ export class PdvComponent {
       }).then(response => {
         if (response.results) {
           this.currentSale = response.results[0] as Sales;
+
+          this.currentSale.products?.forEach(product => {
+            this.total += Number(product.total);
+          });
         }
       });
     }
@@ -179,5 +185,4 @@ export class PdvComponent {
       this.load(this.currentSale.id);
     }
   }
-
 }
