@@ -1,139 +1,162 @@
-<!-- <div class="input-group mb-3">
-  <input type="text" class="form-control   " placeholder="Selecionar vendedor">
-  <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
-  <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
-</div> -->
+<div class="container-main d-flex flex-column justify-content-between">
+  <!-- <div class="input-group mb-3">
+    <input type="text" class="form-control   " placeholder="Selecionar vendedor">
+    <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
+    <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
+  </div> -->
 
-<div class="row">
-  <div class="col-md-12 offset-md-0">
-    <div class="custom-input-group  mt-0 ">
-      <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal" data-bs-target="#modalProduct">Adicionar
-        Produtos</button>
-      <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
-        placeholder="Pesquisar">
+  <div class="row px-3 py-2">
+    <div class="col-md-12 offset-md-0">
+      <div class="custom-input-group  mt-0 ">
+        <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal"
+          data-bs-target="#modalProduct">Adicionar
+          Produtos</button>
+        <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
+          placeholder="Pesquisar">
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="container-products">
+        <ng-container *ngIf="currentSale">
+
+          <h4 *ngIf="currentSale.products?.length" class="my-3"> Produtos </h4>
+
+          <div *ngFor="let productSale of currentSale.products" class="card bg-light p-2 d-flex flex-row my-2">
+            <div class="col-6 d-flex align-items-center">
+              {{ productSale.product?.description }}
+            </div>
+            <div class="col-2 d-flex align-items-center">
+              {{ productSale.quantity }}
+            </div>
+            <div class="col-2 d-flex align-items-center">
+              {{ productSale.total }}
+            </div>
+            <div class="col d-flex justify-content-center">
+              <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
+              <button class="btn btn-danger" (click)="deleteProduct(productSale)"> <i class="fa fa-trash"></i> </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
-</div>
 
-
-<!-- <div class=" ">
-  <div class="row">
-    <div class="col-md-12 offset-md-0">
+  <div class="row px-3 container-footer">
+    <div class="col-md-12">
       <div class="custom-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4 offset-md-3">
-              <hr style="background-color: #ffffff;">
-              <h6>Total</h6>
-              <span id="totalAmount">
-                <h4>R$ 0,33</h4>
-              </span>
-              <button class="btn btn-light col-md-6">Continuar</button>
-            </div>
+        <div class="row justify-content-center">
+          <div class="col-md-4 py-2 text-center">
+            <hr style="background-color: #ffffff;">
+            <h6>Total</h6>
+            <span id="totalAmount">
+              <h4>R$ 0,33</h4>
+            </span>
+            <button class="btn btn-success col-md-6">Continuar</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div> -->
 
-<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalProductLabel">Adicionar novo produto
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">Adicionar novo produto
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
 
-        <form>
-          <div class="row">
-            <div class="col-6">
-              <app-input-default [control]="description" type="text" label="Descricão"
-                placeHolder="Ex: Coca Cola em lata"></app-input-default>
+          <form>
+            <div class="row">
+              <div class="col-6">
+                <app-input-default [control]="description" type="text" label="Descricão"
+                  placeHolder="Ex: Coca Cola em lata"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
+            <div class="row">
+              <div class="col-6">
+                <app-input-default [control]="price_sale" type="text" label="Preço de venda"
+                  placeHolder="Preço de venda"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="price_cost" type="text" label="Preço de custo"
+                  placeHolder="Preço de custo"></app-input-default>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-input-default [control]="price_sale" type="text" label="Preço de venda"
-                placeHolder="Preço de venda"></app-input-default>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="id_category" label="Categoria"
+                  [items]="categorySelect"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-select-default [control]="id_subcategory" label="Subcategoria"
+                  [items]="subcategorySelect"></app-select-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-input-default [control]="price_cost" type="text" label="Preço de custo"
-                placeHolder="Preço de custo"></app-input-default>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-select-default [control]="id_supplier" label="Fornecedor"
+                  [items]="supplierSelect"></app-select-default>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="id_category" label="Categoria"
-                [items]="categorySelect"></app-select-default>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="control_stock" label="Controla Estoque"
+                  [items]="controlStock"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
+                  [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-select-default [control]="id_subcategory" label="Subcategoria"
-                [items]="subcategorySelect"></app-select-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
-            </div>
-            <div class="col-6">
-              <app-select-default [control]="id_supplier" label="Fornecedor"
-                [items]="supplierSelect"></app-select-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="control_stock" label="Controla Estoque"
-                [items]="controlStock"></app-select-default>
-            </div>
-            <div class="col-6">
-              <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
-                [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
-            </div>
-          </div>
-        </form>
+          </form>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
-<div class="modal fade" id="modalListProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
+  <div class="modal fade" id="modalListProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
 
-        <table id="stockTable" *ngIf="products">
-          <thead>
-            <tr>
-              <th class="col-11">Produto</th>
-              <th class="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <ng-container *ngFor="let product of products">
+          <table id="stockTable" *ngIf="products">
+            <thead>
               <tr>
-                <td class="col-11"> {{ product.description }} </td>
-                <td class="col d-flex"> <button class="btn text-white bg-success" (click)="verifySale(product)"> <i
-                      class="fa fa-plus"></i> </button>
-                </td>
+                <th class="col-11">Produto</th>
+                <th class="col"></th>
               </tr>
-            </ng-container>
+            </thead>
+            <tbody>
 
-          </tbody>
-        </table>
+              <ng-container *ngFor="let product of products">
+                <tr>
+                  <td class="col-11"> {{ product.description }} </td>
+                  <td class="col d-flex"> <button class="btn text-white bg-success" (click)="verifySale(product)"> <i
+                        class="fa fa-plus"></i> </button>
+                  </td>
+                </tr>
+              </ng-container>
 
+            </tbody>
+          </table>
+
+        </div>
       </div>
     </div>
   </div>

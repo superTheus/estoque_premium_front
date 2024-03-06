@@ -12,6 +12,7 @@ let routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: ListComponent },
       { path: 'pdv', component: PdvComponent },
+      { path: 'pdv/:id', component: PdvComponent },
     ]
   }
 ];

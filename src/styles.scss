@@ -89,6 +89,8 @@ aside {
   transition: transform 1000ms;
   overflow-y: auto;
   scrollbar-width: none;
+  width: auto;
+  min-width: 205px;
   /* Para Firefox */
 
   &::-webkit-scrollbar {
@@ -99,14 +101,20 @@ aside {
 
 main {
   margin-left: 200px;
-  margin-right: 50px;
   margin-top: 50px;
   margin-bottom: 30px;
-  padding: 20px;
+
+  .container-main {
+    width: 95%;
+    margin: auto;
+    height: calc(100vh - 80px);
+  }
 }
 
 footer {
-  width: 100vw;
+  margin-left: 200px;
+  margin-top: 50px;
+  width: calc(100vw - 200px);
   padding: 5px;
   height: auto;
   position: fixed;

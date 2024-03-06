@@ -4,14 +4,22 @@
   background-color: #f1f3f4;
 }
 
-.custom-footer {
-  background-color: #007bff;
-  color: #ffffff;
-  text-align: center;
-  padding: 1px 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+.container-footer {
+  .custom-footer {
+    height: auto;
+    min-height: 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    width: 100%;
+    border-radius: 10px;
+  }
+}
+
+.container-products {
+  height: auto;
+  min-height: 200px;
+  max-height: 700px;
+  overflow-y: auto;
 }
 
 #btTeste:hover {

@@ -6,7 +6,7 @@ export interface Sales {
   id_user?: number,
   total?: number,
   deleted?: string,
-  products?: Products[]
+  products?: SaleProduct[]
 }
 
 export interface SalesRequest {
@@ -22,7 +22,8 @@ export interface SaleProduct {
   quantity: number,
   desconto: number,
   desconto_percentual: number,
-  total: number
+  total: number,
+  product?: Products
 }
 
 export interface SalesProducRequest {

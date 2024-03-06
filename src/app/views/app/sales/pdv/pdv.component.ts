@@ -10,7 +10,8 @@ import { Subcategorys } from '../../subcategorys/subcategorys.interface';
 import { Suppliers } from '../../supplier/supplier.interface';
 import { Products } from '../../product/product.interface';
 import { SalesService } from '../../../../data/sales.service';
-import { SaleProduct } from '../sales.interface';
+import { SaleProduct, Sales } from '../sales.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var $: any;
 
@@ -20,7 +21,8 @@ declare var $: any;
   styleUrl: './pdv.component.scss'
 })
 export class PdvComponent {
-
+  isEdit = false;
+  currentSale!: Sales;
   search = new FormControl('');
 
   description = new FormControl('');
@@ -48,11 +50,18 @@ export class PdvComponent {
 
   constructor(
     private apiService: ApiService,
-    private salesService: SalesService
-  ) { }
+    private salesService: SalesService,
+    private router: Router,
+    private routeParam: ActivatedRoute,
+  ) {
+    this.routeParam.paramMap.subscribe(async (params) => {
+      const id = params.get('id');
+      this.isEdit = !!id;
+      this.load(Number(id));
+    });
+  }
 
   ngOnInit(): void {
-    this.load();
   }
 
   loadProducts(event: KeyboardEvent) {
@@ -78,34 +87,29 @@ export class PdvComponent {
     }
   }
 
-  async load() {
-    const [brands, category, subcategory, supplier] = await Promise.all([
-      this.apiService.findBrands({
-        filter: {
-          deleted: 'N'
-        }
-      }),
-      this.apiService.findCategorys({
-        filter: {
-          deleted: 'N'
-        }
-      }),
-      this.apiService.findSubcategorys({
-        filter: {
-          deleted: 'N'
-        }
-      }),
-      this.apiService.findSuppliers({
-        filter: {
-          deleted: 'N'
-        }
-      })
-    ]);
+  closeModal = () => {
+    const element = document.getElementById('modalListProduct');
 
-    this.brandsSelect = brands.results.map((brand: Brands): Options => { return { label: brand.description, value: brand.id || 0 } })
-    this.categorySelect = category.results.map((category: Categorys): Options => { return { label: category.description, value: category.id || 0 } })
-    this.subcategorySelect = subcategory.results.map((subcategorys: Subcategorys): Options => { return { label: subcategorys.description, value: subcategorys.id || 0 } })
-    this.supplierSelect = supplier.results.map((supplier: Suppliers): Options => { return { label: supplier.name || '', value: supplier.id || 0 } })
+    if (element) {
+      var myModal = bootstrap.Modal.getInstance(element);
+      if (myModal) {
+        myModal.hide();
+      }
+    }
+  }
+
+  async load(id?: number) {
+    if (id) {
+      this.salesService.findSales({
+        filter: {
+          id: id
+        }
+      }).then(response => {
+        if (response.results) {
+          this.currentSale = response.results[0] as Sales;
+        }
+      });
+    }
   }
 
   save() {
@@ -132,32 +136,48 @@ export class PdvComponent {
       id_user: 1,
       total: 0
     }).then(response => {
-      console.log(response);
+      this.currentSale = response.results as Sales;
       if (callback) {
         callback();
       }
     });
   }
 
-  addProduct(product: Products): void {
-    this.salesService.addProduct({
+  async addProduct(product: Products): Promise<void> {
+    const response = await this.salesService.addProduct({
       id: 0,
       id_product: product.id || 0,
-      id_sale: this.salesService.currentSale.id || 0,
+      id_sale: this.currentSale.id || 0,
       quantity: 1,
       desconto: 0,
       desconto_percentual: 0,
       total: product.price_sale || 0
-    }).then(response => {
-      console.log(response);
-    });
+    })
+
+    if (response && this.isEdit) {
+      this.search.setValue('');
+      this.closeModal();
+      this.load(this.currentSale.id);
+    }
   }
 
   verifySale(product: Products) {
-    if (this.salesService.currentSale) {
-      this.addProduct(product)
+    if (this.currentSale) {
+      this.addProduct(product);
     } else {
-      this.createSale(() => this.addProduct(product));
+      this.createSale(() => this.addProduct(product).then(() => {
+        this.closeModal();
+        this.router.navigate(['/app/sales/pdv/' + this.currentSale.id]);
+      }));
     }
   }
+
+  async deleteProduct(product: SaleProduct): Promise<void> {
+    const response = await this.salesService.deleteProduct(product)
+
+    if (response && this.isEdit) {
+      this.load(this.currentSale.id);
+    }
+  }
+
 }

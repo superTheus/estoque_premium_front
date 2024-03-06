@@ -16,9 +16,6 @@ interface resultInterface {
 
 @Injectable({ providedIn: 'root' })
 export class SalesService {
-
-  public currentSale!: Sales;
-
   constructor(private http: HttpClient) {
   }
 
@@ -67,13 +64,7 @@ export class SalesService {
           })
         ).subscribe(
           (res) => {
-            const response = res as resultInterface;
-
-            if (response.results) {
-              this.currentSale = response.results as Sales;
-            }
-
-            resolve(response);
+            resolve(res as resultInterface);
           },
           (error) => {
             reject(error);
@@ -100,11 +91,6 @@ export class SalesService {
           })
         ).subscribe(
           (res) => {
-            const response = res as resultInterface;
-
-            if (response.results) {
-              this.currentSale = response.results as Sales;
-            }
             resolve(res as resultInterface);
           },
           (error) => {
@@ -159,13 +145,7 @@ export class SalesService {
           })
         ).subscribe(
           (res) => {
-            const response = res as resultInterface;
-
-            if (response.results) {
-              this.currentSale = response.results as Sales;
-            }
-
-            resolve(response);
+            resolve(res as resultInterface);
           },
           (error) => {
             reject(error);
@@ -192,11 +172,6 @@ export class SalesService {
           })
         ).subscribe(
           (res) => {
-            const response = res as resultInterface;
-
-            if (response.results) {
-              this.currentSale = response.results as Sales;
-            }
             resolve(res as resultInterface);
           },
           (error) => {
@@ -207,7 +182,7 @@ export class SalesService {
   }
 
   deleteProduct(product: SaleProduct): Promise<resultInterface> {
-    const url = `${environment.baseUrl}/sales/delete/` + product.id;
+    const url = `${environment.baseUrl}/sales/products/delete/` + product.id;
 
     return new Promise((resolve, reject) => {
       this.http.delete(url)
@@ -220,11 +195,6 @@ export class SalesService {
           })
         ).subscribe(
           (res) => {
-            const response = res as resultInterface;
-
-            if (response.results) {
-              this.currentSale = response.results as Sales;
-            }
             resolve(res as resultInterface);
           },
           (error) => {
