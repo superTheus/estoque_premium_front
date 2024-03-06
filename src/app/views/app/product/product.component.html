@@ -1,123 +1,125 @@
-<div class="row px-3 mb-4">
-  <h3> Produtos </h3>
-</div>
-<div id="stock-control-container">
-  <div class="search-bar">
-    <div class="input-search">
-      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-      <i class="fas fa-search"></i>
-    </div>
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4">
+    <h3> Produtos </h3>
   </div>
-
-  <div class="row align-items-center justify-content-between mt-3">
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-    <div class="col-3 d-flex justify-content-end">
-      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Produto</button>
+  <div id="stock-control-container">
+    <div class="search-bar">
+      <div class="input-search">
+        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+        <i class="fas fa-search"></i>
+      </div>
     </div>
-  </div>
 
-  <table id="stockTable" *ngIf="data">
-    <thead>
-      <tr>
-        <th class="col">ID</th>
-        <th class="col-3">Descricão</th>
-        <th class="col-3">Estoque</th>
-        <th class="col-2">Categoria</th>
-        <th class="col-2">Subcategoria</th>
-        <th class="col"></th>
-      </tr>
-    </thead>
-    <tbody>
+    <div class="row align-items-center justify-content-between mt-3">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-end">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Produto</button>
+      </div>
+    </div>
 
-      <ng-container *ngFor="let product of data">
+    <table id="stockTable" *ngIf="data">
+      <thead>
         <tr>
-          <td class="col"> {{product.id}} </td>
-          <td class="col-3"> {{product.description}} </td>
-          <td class="col-2"> {{product.stock}} </td>
-          <td class="col-2"> {{product.category?.description}} </td>
-          <td class="col-2"> {{product.subcategory?.description}} </td>
-          <td class="col d-flex">
-            <button class="btn btn-primary me-2" (click)="update(product)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-danger" (click)="delete(product)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
+          <th class="col">ID</th>
+          <th class="col-3">Descricão</th>
+          <th class="col-3">Estoque</th>
+          <th class="col-2">Categoria</th>
+          <th class="col-2">Subcategoria</th>
+          <th class="col"></th>
         </tr>
-      </ng-container>
+      </thead>
+      <tbody>
 
-    </tbody>
-  </table>
+        <ng-container *ngFor="let product of data">
+          <tr>
+            <td class="col"> {{product.id}} </td>
+            <td class="col-3"> {{product.description}} </td>
+            <td class="col-2"> {{product.stock}} </td>
+            <td class="col-2"> {{product.category?.description}} </td>
+            <td class="col-2"> {{product.subcategory?.description}} </td>
+            <td class="col d-flex">
+              <button class="btn btn-primary me-2" (click)="update(product)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" (click)="delete(product)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
 
-</div>
+      </tbody>
+    </table>
 
-<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto' }}
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  </div>
 
-        <form>
-          <div class="row">
-            <div class="col-6">
-              <app-input-default [control]="description" type="text" label="Descricão"
-                placeHolder="Ex: Coca Cola em lata"></app-input-default>
-            </div>
-            <div class="col-6">
-              <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-input-default [control]="price_sale" type="text" label="Preço de venda"
-                placeHolder="Preço de venda"></app-input-default>
-            </div>
-            <div class="col-6">
-              <app-input-default [control]="price_cost" type="text" label="Preço de custo"
-                placeHolder="Preço de custo"></app-input-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="id_category" label="Categoria"
-                [items]="categorySelect"></app-select-default>
-            </div>
-            <div class="col-6">
-              <app-select-default [control]="id_subcategory" label="Subcategoria"
-                [items]="subcategorySelect"></app-select-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
-            </div>
-            <div class="col-6">
-              <app-select-default [control]="id_supplier" label="Fornecedor"
-                [items]="supplierSelect"></app-select-default>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="control_stock" label="Controla Estoque"
-                [items]="controlStock"></app-select-default>
-            </div>
-            <div class="col-6">
-              <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
-                [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
-            </div>
-          </div>
-        </form>
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto' }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          <form>
+            <div class="row">
+              <div class="col-6">
+                <app-input-default [control]="description" type="text" label="Descricão"
+                  placeHolder="Ex: Coca Cola em lata"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <app-input-default [control]="price_sale" type="text" label="Preço de venda"
+                  placeHolder="Preço de venda"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="price_cost" type="text" label="Preço de custo"
+                  placeHolder="Preço de custo"></app-input-default>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="id_category" label="Categoria"
+                  [items]="categorySelect"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-select-default [control]="id_subcategory" label="Subcategoria"
+                  [items]="subcategorySelect"></app-select-default>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-select-default [control]="id_supplier" label="Fornecedor"
+                  [items]="supplierSelect"></app-select-default>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="control_stock" label="Controla Estoque"
+                  [items]="controlStock"></app-select-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
+                  [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
       </div>
     </div>
   </div>

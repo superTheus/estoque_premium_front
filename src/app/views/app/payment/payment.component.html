@@ -1,116 +1,117 @@
-<div class="row px-3 mb-4">
-  <h3> Contas a Pagar </h3>
-</div>
-<div id="stock-control-container">
-  <div class="search-bar">
-    <div class="input-search">
-      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-      <i class="fas fa-search"></i>
-    </div>
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4">
+    <h3> Contas a Pagar </h3>
   </div>
-
-  <div *ngIf="totalLate > 0 || totalDay > 0" class="row align-items-center justify-content-between mt-3 px-5">
-    <div *ngIf="totalLate > 0" class="alert alert-danger col-12" role="alert">
-      Você tem <strong> {{ totalLate }} </strong> contas atrasadas
+  <div id="stock-control-container">
+    <div class="search-bar">
+      <div class="input-search">
+        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+        <i class="fas fa-search"></i>
+      </div>
     </div>
-    <div *ngIf="totalDay > 0" class="alert alert-warning col-12" role="alert">
-      Você tem <strong> {{ totalDay }} </strong> contas que venceram hoje
+
+    <div *ngIf="totalLate > 0 || totalDay > 0" class="row align-items-center justify-content-between mt-3 px-5">
+      <div *ngIf="totalLate > 0" class="alert alert-danger col-12" role="alert">
+        Você tem <strong> {{ totalLate }} </strong> contas atrasadas
+      </div>
+      <div *ngIf="totalDay > 0" class="alert alert-warning col-12" role="alert">
+        Você tem <strong> {{ totalDay }} </strong> contas que venceram hoje
+      </div>
     </div>
-  </div>
 
-  <div class="row align-items-center justify-content-between mt-3">
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-    <div class="col-3 d-flex justify-content-end">
-      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Conta</button>
+    <div class="row align-items-center justify-content-between mt-3">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-end">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Conta</button>
+      </div>
     </div>
-  </div>
 
-  <table id="stockTable" *ngIf="data">
-    <thead>
-      <tr>
-        <th class="col">ID</th>
-        <th class="col-2">Documento</th>
-        <th class="col-4">Descricão</th>
-        <th class="col-2">Valor</th>
-        <th class="col-2">Vencimento</th>
-        <th class="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <ng-container *ngFor="let conta of data">
+    <table id="stockTable" *ngIf="data">
+      <thead>
         <tr>
-          <td class="col"> {{conta.id}} </td>
-          <td class="col-2"> {{conta.documento}} </td>
-          <td class="col-4"> {{conta.descricao}} </td>
-          <td class="col-2"> {{conta.valor}} </td>
-          <td class="col-2"> {{ formatDate(conta.vencimento || '') }} </td>
-          <td class="col d-flex">
-            <button class="btn btn-primary me-2" (click)="update(conta)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-danger" (click)="delete(conta)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
+          <th class="col">ID</th>
+          <th class="col-2">Documento</th>
+          <th class="col-4">Descricão</th>
+          <th class="col-2">Valor</th>
+          <th class="col-2">Vencimento</th>
+          <th class="col"></th>
         </tr>
-      </ng-container>
+      </thead>
+      <tbody>
 
-    </tbody>
-  </table>
+        <ng-container *ngFor="let conta of data">
+          <tr>
+            <td class="col"> {{conta.id}} </td>
+            <td class="col-2"> {{conta.documento}} </td>
+            <td class="col-4"> {{conta.descricao}} </td>
+            <td class="col-2"> {{conta.valor}} </td>
+            <td class="col-2"> {{ formatDate(conta.vencimento || '') }} </td>
+            <td class="col d-flex">
+              <button class="btn btn-primary me-2" (click)="update(conta)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" (click)="delete(conta)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
 
-</div>
+      </tbody>
+    </table>
 
-<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Conta' : 'Adicionar nova conta' }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  </div>
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Conta' : 'Adicionar nova conta' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
 
-        <form>
-          <div class="row">
-            <div class="col-12">
-              <app-input-default [control]="documento" type="text" label="Documento"
-                placeHolder="Documento"></app-input-default>
+          <form>
+            <div class="row">
+              <div class="col-12">
+                <app-input-default [control]="documento" type="text" label="Documento"
+                  placeHolder="Documento"></app-input-default>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <app-input-default [control]="descricao" type="text" label="Descrição"
-                placeHolder="Descrição"></app-input-default>
+            <div class="row">
+              <div class="col-12">
+                <app-input-default [control]="descricao" type="text" label="Descrição"
+                  placeHolder="Descrição"></app-input-default>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-input-default [control]="vencimento" type="date" label="Vencimento"
-                placeHolder="Vencimento"></app-input-default>
+            <div class="row">
+              <div class="col-6">
+                <app-input-default [control]="vencimento" type="date" label="Vencimento"
+                  placeHolder="Vencimento"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="valor" type="text" label="Valor" placeHolder="Valor"></app-input-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-input-default [control]="valor" type="text" label="Valor" placeHolder="Valor"></app-input-default>
+            <div class="row my-2">
+              <h5> Pagamento </h5>
             </div>
-          </div>
-          <div class="row my-2">
-            <h5> Pagamento </h5>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <app-select-default [control]="status_pagamento" label="Status de Pagamento" [items]="statu">
-              </app-select-default>
+            <div class="row">
+              <div class="col-6">
+                <app-select-default [control]="status_pagamento" label="Status de Pagamento" [items]="statu">
+                </app-select-default>
+              </div>
+              <div class="col-6">
+                <app-select-default [control]="id_conta" label="Conta bancária" [items]="contas"> </app-select-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-select-default [control]="id_conta" label="Conta bancária" [items]="contas"> </app-select-default>
-            </div>
-          </div>
-        </form>
+          </form>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
       </div>
     </div>
   </div>

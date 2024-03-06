@@ -1,92 +1,95 @@
-<div class="row px-3 mb-4">
-  <h3> Usuário </h3>
-</div>
-<div id="stock-control-container">
-  <div class="search-bar">
-    <div class="input-search">
-      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-      <i class="fas fa-search"></i>
-    </div>
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4">
+    <h3> Usuário </h3>
   </div>
-
-  <div class="row align-items-center justify-content-between mt-3">
-    <div class="col-3"></div>
-    <div class="col-3"></div>
-    <div class="col-3 d-flex justify-content-end">
-      <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Usuário</button>
+  <div id="stock-control-container">
+    <div class="search-bar">
+      <div class="input-search">
+        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+        <i class="fas fa-search"></i>
+      </div>
     </div>
-  </div>
 
-  <table id="stockTable" *ngIf="data">
-    <thead>
-      <tr>
-        <th class="col-2">ID</th>
-        <th class="col-5">Descricão</th>
-        <th class="col-4">Email</th>
-        <th class="col"></th>
-      </tr>
-    </thead>
-    <tbody>
+    <div class="row align-items-center justify-content-between mt-3">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-end">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Usuário</button>
+      </div>
+    </div>
 
-      <ng-container *ngFor="let user of data">
+    <table id="stockTable" *ngIf="data">
+      <thead>
         <tr>
-          <td class="col-2"> {{user.id}} </td>
-          <td class="col-5"> {{user.name}} </td>
-          <td class="col-4"> {{user.email}} </td>
-          <td class="col d-flex">
-            <button class="btn btn-primary me-2" (click)="update(user)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-danger" (click)="delete(user)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
+          <th class="col-2">ID</th>
+          <th class="col-5">Descricão</th>
+          <th class="col-4">Email</th>
+          <th class="col"></th>
         </tr>
-      </ng-container>
+      </thead>
+      <tbody>
 
-    </tbody>
-  </table>
-</div>
+        <ng-container *ngFor="let user of data">
+          <tr>
+            <td class="col-2"> {{user.id}} </td>
+            <td class="col-5"> {{user.name}} </td>
+            <td class="col-4"> {{user.email}} </td>
+            <td class="col d-flex">
+              <button class="btn btn-primary me-2" (click)="update(user)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" (click)="delete(user)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
 
-<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Usuário' : 'Adicionar novo usuário'
-          }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+      </tbody>
+    </table>
+  </div>
 
-        <form>
-          <div class="row mt-2">
-            <div class="col-6">
-              <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Usuário' : 'Adicionar novo usuário'
+            }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="row mt-2">
+              <div class="col-6">
+                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+              </div>
+              <div class="col-6">
+                <app-input-default [control]="lastName" type="text" label="Sobrenome"
+                  placeHolder="Sobrenome"></app-input-default>
+              </div>
             </div>
-            <div class="col-6">
-              <app-input-default [control]="lastName" type="text" label="Sobrenome"
-                placeHolder="Sobrenome"></app-input-default>
-            </div>
-          </div>
 
-          <div class="row mt-2">
-            <div class="col-12">
-              <app-input-default [control]="email" type="email" label="E-mail" placeHolder="E-mail"></app-input-default>
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="email" type="email" label="E-mail"
+                  placeHolder="E-mail"></app-input-default>
+              </div>
             </div>
-          </div>
 
-          <div class="row mt-2">
-            <div class="col-12">
-              <app-input-default [control]="password" type="password" label="Senha"
-                placeHolder="Senha"></app-input-default>
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="password" type="password" label="Senha"
+                  placeHolder="Senha"></app-input-default>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
       </div>
     </div>
   </div>
