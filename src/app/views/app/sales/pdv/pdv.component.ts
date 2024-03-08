@@ -110,6 +110,8 @@ export class PdvComponent {
         if (response.results) {
           this.currentSale = response.results[0] as Sales;
 
+          console.log(this.currentSale);
+          this.total = 0;
           this.currentSale.products?.forEach(product => {
             this.total += Number(product.total);
           });

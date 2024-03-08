@@ -14,11 +14,13 @@ export class AsideService {
 
   open() {
     if (this.isOpened) {
-      document.querySelector('nav')?.classList.add('close');
+      document.querySelector('aside')?.classList.add('close');
       document.querySelector('main')?.classList.add('main-close');
+      document.querySelector('footer')?.classList.add('footer-close');
     } else {
-      document.querySelector('nav')?.classList.remove('close');
+      document.querySelector('aside')?.classList.remove('close');
       document.querySelector('main')?.classList.remove('main-close');
+      document.querySelector('footer')?.classList.add('footer-close');
     }
 
     this.isOpened = !this.isOpened;

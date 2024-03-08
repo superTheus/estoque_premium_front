@@ -10,7 +10,6 @@ export class HeaderComponent {
   constructor(private asideService: AsideService) { }
 
   menuClick() {
-    console.log('menuClick')
     this.asideService.open();
   }
 }

@@ -149,10 +149,16 @@ footer {
 }
 
 .main-close {
-  margin: 80px auto !important;
+  margin: 50px auto !important;
 }
 
 .close {
+  display: none !important;
   width: 0px !important;
   padding: 0px !important;
+}
+
+.footer-close {
+  margin-left: 0px !important;
+  width: 100vw;
 }
