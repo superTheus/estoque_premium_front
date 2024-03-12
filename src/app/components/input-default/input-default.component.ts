@@ -11,10 +11,17 @@ export class InputDefaultComponent {
   @Input() icon: string = '';
   @Input() type: string = '';
   @Input() placeHolder: string = '';
+  @Input() classname: string = '';
   @Input() control: FormControl;
   @Input() disabled: boolean = false;
+  @Output() change = new EventEmitter();
 
   constructor() {
     this.control = new FormControl();
+  }
+
+  onChange(event: any) {
+    console.log(event);
+    this.change.emit(event);
   }
 }

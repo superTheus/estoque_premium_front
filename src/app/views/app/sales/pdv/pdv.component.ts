@@ -23,6 +23,7 @@ declare var $: any;
 export class PdvComponent {
   isEdit = false;
   currentSale!: Sales;
+  currentProduct!: Products;
   search = new FormControl('');
 
   description = new FormControl('');
@@ -46,9 +47,19 @@ export class PdvComponent {
     { label: 'Não', value: 'N' }
   ]
 
+  quantity = new FormControl(1);
+  desconto = new FormControl(0);
+  desconto_percentual = new FormControl(0);
+  total_value = new FormControl(0);
+  value = new FormControl(0);
+  value_sale = new FormControl(0);
+
+
   products: Products[] = [];
 
   total = 0;
+  totalPayment = 0;
+  troco = 0;
 
   constructor(
     private apiService: ApiService,
@@ -89,8 +100,44 @@ export class PdvComponent {
     }
   }
 
+  openModalAddProduct = () => {
+    const element = document.getElementById('modalAddProduct');
+
+    if (element) {
+      var myModal = new bootstrap.Modal(element, {});
+      myModal.show();
+    }
+  }
+
+  openModalPayment = () => {
+    const element = document.getElementById('modalPayment');
+
+    if (element) {
+      var myModal = new bootstrap.Modal(element, {});
+      myModal.show();
+    }
+  }
+
   closeModal = () => {
-    const element = document.getElementById('modalListProduct');
+    let element = document.getElementById('modalListProduct');
+
+    if (element) {
+      var myModal = bootstrap.Modal.getInstance(element);
+      if (myModal) {
+        myModal.hide();
+      }
+    }
+
+    element = document.getElementById('modalAddProduct');
+
+    if (element) {
+      var myModal = bootstrap.Modal.getInstance(element);
+      if (myModal) {
+        myModal.hide();
+      }
+    }
+
+    element = document.getElementById('modalPayment');
 
     if (element) {
       var myModal = bootstrap.Modal.getInstance(element);
@@ -156,10 +203,10 @@ export class PdvComponent {
       id: 0,
       id_product: product.id || 0,
       id_sale: this.currentSale.id || 0,
-      quantity: 1,
+      quantity: Number(this.quantity.value),
       desconto: 0,
       desconto_percentual: 0,
-      total: product.price_sale || 0
+      total: Number(this.total_value.value)
     })
 
     if (response && this.isEdit) {
@@ -170,14 +217,34 @@ export class PdvComponent {
   }
 
   verifySale(product: Products) {
+    this.closeModal();
+    this.quantity.setValue(1);
+    this.desconto.setValue(0);
+    this.desconto_percentual.setValue(0);
+    this.total_value.setValue(Number(product.price_sale));
+    this.value.setValue(product.price_cost || 0);
+    this.value_sale.setValue(product.price_sale || 0);
+
+    this.currentProduct = product;
+    this.openModalAddProduct();
+  }
+
+  changeQuantity(quantity: number) {
+    console.log(quantity);
+    this.total_value.setValue(Number(this.value_sale.value) * quantity);
+  }
+
+  addProductToSale() {
     if (this.currentSale) {
-      this.addProduct(product);
+      this.addProduct(this.currentProduct);
     } else {
-      this.createSale(() => this.addProduct(product).then(() => {
+      this.createSale(() => this.addProduct(this.currentProduct).then(() => {
         this.closeModal();
         this.router.navigate(['/app/sales/pdv/' + this.currentSale.id]);
       }));
     }
+
+    this.closeModal();
   }
 
   async deleteProduct(product: SaleProduct): Promise<void> {

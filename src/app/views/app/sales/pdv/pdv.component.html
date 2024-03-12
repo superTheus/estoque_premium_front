@@ -52,7 +52,7 @@
             <span id="totalAmount">
               <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
             </span>
-            <button class="btn btn-success col-md-6">Continuar</button>
+            <button class="btn btn-success col-md-6" (click)="openModalPayment()">Continuar</button>
           </div>
         </div>
       </div>
@@ -129,6 +129,56 @@
     </div>
   </div>
 
+  <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">Adicionar produto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="row">
+              <div class="col-3">
+                <app-input-quantity [control]="quantity" label="Quantidade" placeHolder=""
+                  (change)="changeQuantity($event)"></app-input-quantity>
+              </div>
+              <div class="col-3">
+                <app-input-default [control]="value" type="text" classname="text-center disabled" label="Valor custo"
+                  placeHolder=""></app-input-default>
+              </div>
+              <div class="col-3">
+                <app-input-default [control]="value_sale" classname="text-center" type="text" label="Valor Venda"
+                  placeHolder=""></app-input-default>
+              </div>
+              <div class="col-3">
+                <app-input-default [control]="total_value" classname="text-center" type="text" label="Total"
+                  placeHolder=""></app-input-default>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <app-input-default [control]="desconto_percentual" classname="text-center" type="number"
+                  label="Desconto em %" placeHolder=""></app-input-default>
+              </div>
+              <div class="col-3">
+                <app-input-default [control]="desconto" classname="text-center" type="text" label="Desconto em R$"
+                  placeHolder=""></app-input-default>
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="addProductToSale()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="modalListProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -154,6 +204,118 @@
 
             </tbody>
           </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="modalPayment" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">Finalizar Venda</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="bcard card h-100" style="min-height: 80vh">
+            <div class="card-body p-3">
+              <div class="row">
+
+                <div class="col-12 d-flex justify-content-between">
+                  <button class="btn btn-success col-2 btn-pagamento">DINHEIRO</button>
+                  <button class="btn btn-primary col-2 btn-pagamento">DÉBITO</button>
+                  <button class="btn btn-secondary col-2 btn-pagamento">CRÉDITO</button>
+                  <button class="btn btn-danger col-2 btn-pagamento">PIX</button>
+                </div>
+
+              </div>
+              <hr class="border-none border-t-3 brc-grey-l2 border-double">
+              <div class="row">
+                <div class="col-7 cards-container mt-3 mt-sm-0" id="card-container-6">
+                  <div class="card dcard p-1 bgc-secondary-l3" id="card-6" style="min-height: 60vh">
+                    <div class="card-body p-1 p-sm-2 p-lg-3" id="divFormasPagto"></div>
+                  </div>
+                </div>
+                <div class="col-5 cards-container mt-3 mt-sm-0" id="card-container-6">
+                  <div class="card dcard p-1 bgc-secondary-l3" id="card-6" style="min-height: 60vh">
+                    <div class="card-body p-1 p-sm-2 p-lg-3">
+
+                      <div class="card mt-3" id="card-7">
+                        <div class="card-body p-0">
+                          <table
+                            class="table table-sm table-striped table-bordered table-hover brc-black-tp10 mb-0 text-grey">
+                            <tbody>
+                              <tr class="bgc-h-yellow-l3">
+                                <td class="text-600 text-dark align-middle">
+                                  TROCO
+                                </td>
+
+                                <td class="text-green-m1 text-180 text-600 text-right" id="txtTotTroco">
+                                  <span class="text-dark-tp4 text-sm">R$</span> 0,00
+                                </td>
+                              </tr>
+
+                              <tr class="bgc-h-yellow-l3">
+                                <td class="text-600 text-dark align-middle">
+                                  TOTAL PAGO
+                                </td>
+
+                                <td class="text-green-m1 text-180 text-600 text-right" id="txtTotPago">
+                                  {{ totalPayment | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                                </td>
+                              </tr>
+
+                              <tr class="bgc-h-yellow-l3">
+                                <td class="text-600 text-dark align-middle">
+                                  FALTA PAGAR
+                                </td>
+
+                                <td class="text-orange-m1 text-180 text-600 text-right" id="txtTotAPagar">
+                                  {{ (total - totalPayment) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                                </td>
+                              </tr>
+
+                              <tr class="bgc-h-yellow-l3 d-none" id="trTotCDesconto">
+                                <td class="text-600 text-dark">
+                                  TOTAL C/ DESCONTO
+                                </td>
+
+                                <td class="text-green-m1 text-180 text-600 text-right" id="txtTotCDesconto">
+                                  <span class="text-dark-tp4 text-sm">R$</span> 0,00
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="2" class="text-center">
+                                  <button id=" btnFinalizarVenda" onclick="finalizarVendaPDV(0,1)" type="button"
+                                    class="btn btn-lg btn-success btn-block">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    FINALIZAR
+                                  </button>
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-12 text-140 font-bold" id="txtTotalPagto" style="text-align: end; font-weight: bold;">
+                    TOTAL DA VENDA {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
