@@ -12,6 +12,7 @@ import { Products } from '../../product/product.interface';
 import { SalesService } from '../../../../data/sales.service';
 import { SaleProduct, Sales } from '../sales.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { getCompanyId, getUserId } from '../../../../utils/util';
 
 declare var $: any;
 
@@ -21,6 +22,8 @@ declare var $: any;
   styleUrl: './pdv.component.scss'
 })
 export class PdvComponent {
+  valueBox = new FormControl('0');
+
   isEdit = false;
   currentSale!: Sales;
   currentProduct!: Products;
@@ -74,6 +77,25 @@ export class PdvComponent {
   }
 
   ngOnInit(): void {
+    this.load();
+
+    this.apiService.findBox({
+      filter: {
+        id_company: getCompanyId(),
+        id_user: getUserId(),
+        status: 'AB'
+      }
+    }).then(res => {
+    }).catch(() => {
+      const element = document.getElementById('modalOpenBox');
+
+      if (element) {
+        var myModal = new bootstrap.Modal(element, {
+          backdrop: 'static'
+        });
+        myModal.show();
+      }
+    })
   }
 
   loadProducts(event: KeyboardEvent) {
@@ -155,12 +177,12 @@ export class PdvComponent {
       }).then(response => {
         if (response.results) {
           this.currentSale = response.results[0] as Sales;
-
-          console.log(this.currentSale);
           this.total = 0;
           this.currentSale.products?.forEach(product => {
             this.total += Number(product.total);
           });
+
+          this.updateTotal();
         }
       });
     }
@@ -182,6 +204,25 @@ export class PdvComponent {
     });
 
     $('#modalProduct').modal('hide');
+  }
+
+  saveBox() {
+    this.apiService.createBox({
+      id_company: getCompanyId(),
+      id_user: getUserId(),
+      value_init: Number(this.valueBox.value)
+    }).then(() => {
+      let element = document.getElementById('modalOpenBox');
+
+      if (element) {
+        var myModal = bootstrap.Modal.getInstance(element);
+        if (myModal) {
+          myModal.hide();
+        }
+      }
+
+      this.load();
+    })
   }
 
   createSale(callback?: () => void) {
@@ -208,7 +249,7 @@ export class PdvComponent {
       total: Number(this.total_value.value?.replace('R$', '').replace('.', '').replace(',', '.') || 0)
     })
 
-    if (response && this.isEdit) {
+    if (response) {
       this.search.setValue('');
       this.closeModal();
       this.load(this.currentSale.id);
@@ -284,5 +325,17 @@ export class PdvComponent {
 
   formatValue(value: string | number) {
     return (Number(value) / 100).toFixed(2);
+  }
+
+  updateTotal() {
+    console.log(this.total);
+
+    this.salesService.updateSale({
+      id: this.currentSale.id,
+      total: this.total,
+      status: 'AB'
+    }).then(data => {
+      console.log(data);
+    })
   }
 }

@@ -47,6 +47,7 @@ export class ReceiveComponent {
         deleted: 'N'
       }
     }).then(res => {
+      console.log(res.results);
       this.data = res.results;
       this.compareDate(this.data);
     })
@@ -79,12 +80,13 @@ export class ReceiveComponent {
         deleted: this.financeSelected?.deleted
       }).then(res => {
         this.load();
+        this.updateAccount()
       })
     } else {
       this.apiService.createContasFinanceiro({
         descricao: this.descricao.value ? this.descricao.value : '',
         documento: this.documento.value ? this.documento.value : '',
-        tipo_conta: 'P',
+        tipo_conta: 'R',
         vencimento: this.vencimento.value ? this.vencimento.value : '',
         valor: this.valor.value ? Number(this.valor.value) : 0,
         id_conta: this.id_conta.value ? Number(this.id_conta.value) : 0,
@@ -92,6 +94,7 @@ export class ReceiveComponent {
         id_company: 1
       }).then(res => {
         this.load();
+        this.updateAccount()
       })
     }
 
@@ -108,6 +111,20 @@ export class ReceiveComponent {
     this.status_pagamento.setValue(finance.status_pagamento || 'PE');
     this.isEditMode = true;
     $('#modalProduct').modal('show');
+  }
+
+  updateAccount() {
+    if (this.status_pagamento.value === 'PG') {
+      this.apiService.findContas({
+        filter: {
+          id: Number(this.id_conta.value),
+        }
+      }).then((data) => {
+        const currentAccount: Contas = data.results[0]
+        currentAccount.saldo_inicial = Number(currentAccount.saldo_inicial) + Number(this.valor.value);
+        this.apiService.updateConta(currentAccount).then(data => console.log(data));
+      });
+    }
   }
 
   delete(brand: Finance) {
@@ -128,7 +145,6 @@ export class ReceiveComponent {
   compareDate(finance: Finance[]) {
     this.totalLate = 0;
     this.totalDay = 0;
-    console.log(finance);
     finance.forEach(finance => {
       var inputDate = new Date(finance.vencimento as string);
       var today = new Date();

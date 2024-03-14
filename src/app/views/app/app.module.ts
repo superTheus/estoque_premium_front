@@ -24,6 +24,7 @@ import { ContasComponent } from './contas/contas.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
+import { BoxComponent } from './box/box.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DashboardsComponent } from './dashboards/dashboards.component';
     ContasComponent,
     PaymentComponent,
     ReceiveComponent,
-    DashboardsComponent
+    DashboardsComponent,
+    BoxComponent
   ],
   imports: [
     CommonModule,

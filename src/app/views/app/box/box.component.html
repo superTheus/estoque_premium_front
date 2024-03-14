@@ -1,1 +1,69 @@
-Bem vindo ao sistema
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4">
+    <h3> Caixas </h3>
+  </div>
+
+  <div id="stock-control-container">
+    <div class="search-bar">
+      <div class="input-search">
+        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+
+    <table id="stockTable" *ngIf="data">
+      <thead>
+        <tr>
+          <th class="col-2">ID</th>
+          <th class="col-3">Valor inicial</th>
+          <th class="col-3">Valor final</th>
+          <th class="col-3">Status</th>
+          <th class="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <ng-container *ngFor="let box of data">
+          <tr>
+            <td class="col-2"> {{box.id}} </td>
+            <td class="col-3"> {{box.value_init | currency:'BRL':'symbol':'1.2-2':'pt-BR'}} </td>
+            <td class="col-3"> {{box.value_final | currency:'BRL':'symbol':'1.2-2':'pt-BR'}} </td>
+            <td class="col-3"> {{box.status === 'AB' ? 'Aberto' : 'Fechado'}} </td>
+            <td class="col">
+              <button *ngIf="box.status === 'AB'" class="btn btn-danger" (click)="close(box)">
+                Fechar
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">Fechamento de caixa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="row mt-3">
+              <app-input-default [control]="value" type="text" label="Valor de fechamento"
+                placeHolder="0.00"></app-input-default>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -38,6 +38,7 @@ export class PaymentComponent {
 
   ngOnInit(): void {
     this.load();
+    this.updateAccount();
   }
 
   load() {
@@ -79,6 +80,7 @@ export class PaymentComponent {
         deleted: this.financeSelected?.deleted
       }).then(res => {
         this.load();
+        this.updateAccount();
       })
     } else {
       this.apiService.createContasFinanceiro({
@@ -92,6 +94,7 @@ export class PaymentComponent {
         id_company: 1
       }).then(res => {
         this.load();
+        this.updateAccount();
       })
     }
 
@@ -108,6 +111,20 @@ export class PaymentComponent {
     this.status_pagamento.setValue(finance.status_pagamento || 'PE');
     this.isEditMode = true;
     $('#modalProduct').modal('show');
+  }
+
+  updateAccount() {
+    if (this.status_pagamento.value === 'PG') {
+      this.apiService.findContas({
+        filter: {
+          id: Number(this.id_conta.value),
+        }
+      }).then((data) => {
+        const currentAccount: Contas = data.results[0]
+        currentAccount.saldo_inicial = Number(currentAccount.saldo_inicial) - Number(this.valor.value);
+        this.apiService.updateConta(currentAccount).then(data => console.log(data));
+      });
+    }
   }
 
   delete(brand: Finance) {

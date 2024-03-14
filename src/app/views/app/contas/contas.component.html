@@ -35,7 +35,7 @@
             <td class="col"> {{conta.id}} </td>
             <td class="col-3"> {{conta.tipo_conta_descricao}} </td>
             <td class="col-4"> {{conta.descricao}} </td>
-            <td class="col-3"> {{conta.saldo_inicial}} </td>
+            <td class="col-3"> {{conta.saldo_inicial | currency:'BRL':'symbol':'1.2-2':'pt-BR'}} </td>
             <td class="col d-flex">
               <button class="btn btn-primary me-2" (click)="update(conta)">
                 <i class="fas fa-edit"></i>

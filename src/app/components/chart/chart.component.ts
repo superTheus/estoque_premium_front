@@ -1,14 +1,33 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import Chart from 'chart.js/auto';
+import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import Chart, { ChartTypeRegistry } from 'chart.js/auto';
+
+export interface DatasetChart {
+  label: string,
+  data: number[],
+  backgroundColor: string[],
+  borderColor?: string[],
+  borderWidth?: number
+  fill?: boolean;
+}
+
+export interface ChartData {
+  labels: string[];
+  type: keyof ChartTypeRegistry;
+  data: DatasetChart[];
+  options: Object;
+}
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() chartData!: ChartData;
+
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
   chart!: Chart;
+
 
   ngOnInit() {
     this.chart = new Chart(this.canvas.nativeElement, {
@@ -45,5 +64,32 @@ export class ChartComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['chartData'] && !changes['chartData'].firstChange) {
+      this.generateChart();
+    }
+  }
+
+  generateChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart(this.canvas.nativeElement, {
+      type: this.chartData.type,
+      data: {
+        labels: this.chartData.labels,
+        datasets: this.chartData.data
+      },
+      options: this.chartData.options
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 }

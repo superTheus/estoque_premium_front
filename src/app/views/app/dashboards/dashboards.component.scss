@@ -1,0 +1,16 @@
+.danger {
+  border: 1px solid rgb(255, 0, 0);
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+
+.success {
+  border: 1px solid rgb(57, 131, 57);
+  background-color: rgba(57, 131, 57, 0.1);
+  border-radius: 5px;
+}
+
+p {
+  margin: 0 !important;
+}

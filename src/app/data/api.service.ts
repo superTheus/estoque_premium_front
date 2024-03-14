@@ -14,6 +14,7 @@ import { Categorys } from '../views/app/categorys/categorys.interface';
 import { Products, ProductsRequest } from '../views/app/product/product.interface';
 import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
+import { Box, BoxRequest } from '../views/app/box/box.interface';
 
 interface User {
   id?: number,
@@ -742,6 +743,87 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, finance, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  findBox(box?: BoxRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/caixas/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, box, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  createBox(box: Box): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/caixas/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, box, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateBox(box: Box): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/caixas/update/` + box.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, box, { headers })
         .pipe(
           map((res) => {
             return res;

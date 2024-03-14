@@ -45,7 +45,7 @@
             <td class="col"> {{conta.id}} </td>
             <td class="col-2"> {{conta.documento}} </td>
             <td class="col-4"> {{conta.descricao}} </td>
-            <td class="col-2"> {{conta.valor}} </td>
+            <td class="col-2"> {{conta.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
             <td class="col-2"> {{ formatDate(conta.vencimento || '') }} </td>
             <td class="col d-flex">
               <button class="btn btn-primary me-2" (click)="update(conta)">
