@@ -48,12 +48,11 @@ export class PdvComponent {
   ]
 
   quantity = new FormControl(1);
-  desconto = new FormControl(0);
+  desconto = new FormControl('R$ 0,00');
   desconto_percentual = new FormControl(0);
-  total_value = new FormControl(0);
-  value = new FormControl(0);
-  value_sale = new FormControl(0);
-
+  total_value = new FormControl('0');
+  value = new FormControl('0');
+  value_sale = new FormControl('0');
 
   products: Products[] = [];
 
@@ -204,9 +203,9 @@ export class PdvComponent {
       id_product: product.id || 0,
       id_sale: this.currentSale.id || 0,
       quantity: Number(this.quantity.value),
-      desconto: 0,
-      desconto_percentual: 0,
-      total: Number(this.total_value.value)
+      desconto: Number(this.desconto.value?.replace('R$', '').replace('.', '').replace(',', '.') || 0) || 0,
+      desconto_percentual: Number(this.desconto_percentual.value) || 0,
+      total: Number(this.total_value.value?.replace('R$', '').replace('.', '').replace(',', '.') || 0)
     })
 
     if (response && this.isEdit) {
@@ -219,19 +218,43 @@ export class PdvComponent {
   verifySale(product: Products) {
     this.closeModal();
     this.quantity.setValue(1);
-    this.desconto.setValue(0);
+    this.desconto.setValue('R$ 0,00');
     this.desconto_percentual.setValue(0);
-    this.total_value.setValue(Number(product.price_sale));
-    this.value.setValue(product.price_cost || 0);
-    this.value_sale.setValue(product.price_sale || 0);
+    this.total_value.setValue(this.formatValueCurrency(product.price_sale ? product.price_sale : 0));
+    this.value.setValue(this.formatValueCurrency(product.price_cost || 0));
+    this.value_sale.setValue(this.formatValueCurrency(product.price_sale || 0));
 
     this.currentProduct = product;
     this.openModalAddProduct();
   }
 
   changeQuantity(quantity: number) {
-    console.log(quantity);
-    this.total_value.setValue(Number(this.value_sale.value) * quantity);
+    let valueFormated = this.formatValue(this.value_sale.value?.replace(/[^0-9]/g, '') || 0);
+
+    this.total_value.setValue(this.formatValueCurrency(Number(valueFormated) * quantity));
+  }
+
+  changeDiscount() {
+    if (Number(this.desconto_percentual.value) <= 0) {
+      this.desconto_percentual.setValue(0);
+    }
+
+    let valueDiscount = (Number(this.desconto_percentual.value) * (Number(this.currentProduct.price_sale) * Number(this.quantity.value))) / 100
+
+    this.desconto.setValue(this.formatValueCurrency(valueDiscount))
+    this.total_value.setValue(this.formatValueCurrency((Number(this.currentProduct.price_sale) * Number(this.quantity.value)) - valueDiscount))
+  }
+
+  changeDiscountValue() {
+    let newValue = this.formatValue(this.desconto.value?.replace(/[^0-9]/g, '') || 0);
+    if (Number(newValue) <= 0) {
+      this.desconto.setValue('0');
+    }
+
+    let valueWhitDiscount = (Number(this.currentProduct.price_sale) * Number(this.quantity.value)) - Number(newValue);
+    this.total_value.setValue(this.formatValueCurrency(valueWhitDiscount));
+    this.desconto_percentual.setValue(Number(((Number(newValue) * 100) / (Number(this.currentProduct.price_sale) * Number(this.quantity.value))).toFixed(2)));
+    this.desconto.setValue(this.formatValueCurrency(newValue));
   }
 
   addProductToSale() {
@@ -253,5 +276,13 @@ export class PdvComponent {
     if (response && this.isEdit) {
       this.load(this.currentSale.id);
     }
+  }
+
+  formatValueCurrency(value: string | number) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value));
+  }
+
+  formatValue(value: string | number) {
+    return (Number(value) / 100).toFixed(2);
   }
 }

@@ -146,26 +146,26 @@
               </div>
               <div class="col-3">
                 <app-input-default [control]="value" type="text" classname="text-center disabled" label="Valor custo"
-                  placeHolder=""></app-input-default>
+                  placeHolder="" [disabled]="true"></app-input-default>
               </div>
               <div class="col-3">
                 <app-input-default [control]="value_sale" classname="text-center" type="text" label="Valor Venda"
-                  placeHolder=""></app-input-default>
+                  placeHolder="" [disabled]="true"></app-input-default>
               </div>
               <div class="col-3">
                 <app-input-default [control]="total_value" classname="text-center" type="text" label="Total"
-                  placeHolder=""></app-input-default>
+                  placeHolder="" [disabled]="true"></app-input-default>
               </div>
             </div>
 
             <div class="row">
               <div class="col-3">
                 <app-input-default [control]="desconto_percentual" classname="text-center" type="number"
-                  label="Desconto em %" placeHolder=""></app-input-default>
+                  label="Desconto em %" placeHolder="" (change)="changeDiscount()"></app-input-default>
               </div>
               <div class="col-3">
                 <app-input-default [control]="desconto" classname="text-center" type="text" label="Desconto em R$"
-                  placeHolder=""></app-input-default>
+                  placeHolder="" (change)="changeDiscountValue()"></app-input-default>
               </div>
             </div>
           </form>
@@ -196,8 +196,10 @@
               <ng-container *ngFor="let product of products">
                 <tr>
                   <td class="col-11"> {{ product.description }} </td>
-                  <td class="col d-flex"> <button class="btn text-white bg-success" (click)="verifySale(product)"> <i
-                        class="fa fa-plus"></i> </button>
+                  <td class="col d-flex">
+                    <button class="btn text-white bg-success" (click)="verifySale(product)">
+                      <i class="fa fa-plus"></i>
+                    </button>
                   </td>
                 </tr>
               </ng-container>
@@ -209,7 +211,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="modal fade" id="modalPayment" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">

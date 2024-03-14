@@ -17,13 +17,15 @@ import { SuppliersComponent } from './supplier/supplier.component';
 import { ContasComponent } from './contas/contas.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
+import { DashboardsComponent } from './dashboards/dashboards.component';
 
 let routes: Routes = [
   {
     path: '',
     component: AppComponent,
     children: [
-      { path: '', redirectTo: 'box', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboards', pathMatch: 'full' },
+      { path: 'dashboards', component: DashboardsComponent },
       { path: 'brands', component: BrandsComponent },
       { path: 'categorys', component: CategorysComponent },
       { path: 'subcategorys', component: SubcategorysComponent },

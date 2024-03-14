@@ -20,8 +20,7 @@ export class InputDefaultComponent {
     this.control = new FormControl();
   }
 
-  onChange(event: any) {
-    console.log(event);
-    this.change.emit(event);
+  onChange = (event: any) => {
+    this.change.emit(this.control.value);
   }
 }

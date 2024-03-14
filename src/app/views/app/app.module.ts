@@ -23,6 +23,7 @@ import { ClientComponent } from './client/client.component';
 import { ContasComponent } from './contas/contas.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
+import { DashboardsComponent } from './dashboards/dashboards.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ReceiveComponent } from './receive/receive.component';
     ClientComponent,
     ContasComponent,
     PaymentComponent,
-    ReceiveComponent
+    ReceiveComponent,
+    DashboardsComponent
   ],
   imports: [
     CommonModule,
