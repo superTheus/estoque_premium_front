@@ -4,6 +4,8 @@ import { Contas } from '../contas/contas.interface';
 import { ApiService } from '../../../data/api.service';
 import { ChartData, DatasetChart } from '../../../components/chart/chart.component';
 import { Finance } from '../payment/payment.interface';
+import { SalesService } from '../../../data/sales.service';
+import { Sales } from '../sales/sales.interface';
 
 
 @Component({
@@ -14,8 +16,8 @@ import { Finance } from '../payment/payment.interface';
 export class DashboardsComponent implements OnInit {
   currentAccount!: Contas;
 
-  isFinanceView = true;
-  isSaleView = false;
+  isFinanceView = false;
+  isSaleView = true;
 
   totalReceber: number = 0;
   totalPagar: number = 0;
@@ -23,6 +25,12 @@ export class DashboardsComponent implements OnInit {
   qtdPagarVencidas: number = 0;
 
   chartFinancePrimary!: ChartData;
+  chartSalesPrimary!: ChartData;
+
+  salesOpen = 0;
+  salesClose = 0;
+  salesCancelad = 0;
+
 
   labelsYear = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
@@ -31,7 +39,10 @@ export class DashboardsComponent implements OnInit {
     red: 'rgb(219, 80, 74)'
   };
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private saleService: SalesService
+  ) { }
 
   ngOnInit(): void {
     this.load();
@@ -63,6 +74,14 @@ export class DashboardsComponent implements OnInit {
     ).then((data) => {
       this.generateChartsLineFinance(data);
       this.generateCardInfos(data.results);
+    })
+
+    this.saleService.findSales({}).then(data => {
+      this.salesOpen = data.results.filter((sale: Sales) => sale.status === 'AB').length;
+      this.salesClose = data.results.filter((sale: Sales) => sale.status === 'FE').length;
+      this.salesCancelad = data.results.filter((sale: Sales) => sale.status === 'CA').length;
+
+      this.generateChartsLineSales(data);
     })
   }
 
@@ -183,6 +202,66 @@ export class DashboardsComponent implements OnInit {
     }
 
     this.chartFinancePrimary = config;
+  }
+
+  generateChartsLineSales(data: {
+    message: string;
+    results: any;
+  }) {
+    let values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    data.results.forEach((sale: Sales) => {
+      const dateString = sale.date_hour as string;
+      const date = new Date(dateString);
+      const month = date.getMonth() + 1
+
+      for (let i = 1; i <= 12; i++) {
+        if (month === i)
+          values[i]++;
+      }
+    });
+
+    let dataset: DatasetChart[] = [
+      {
+        label: 'Vendas',
+        backgroundColor: [this.CHART_COLORS.green],
+        borderColor: [this.CHART_COLORS.green],
+        borderWidth: 1,
+        data: values,
+        fill: false
+      },
+    ]
+
+    const config: ChartData = {
+      type: 'line',
+      data: dataset,
+      labels: this.labelsYear,
+      options: {
+        responsive: true,
+        plugins: {
+          filler: {
+            propagate: false,
+          },
+          title: {
+            display: true,
+            text: 'Vendas x Período'
+          }
+        },
+        interaction: {
+          intersect: false,
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
+        }
+      },
+    }
+
+    this.chartSalesPrimary = config;
   }
 
 }

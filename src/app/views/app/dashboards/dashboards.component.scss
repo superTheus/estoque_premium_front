@@ -11,6 +11,18 @@
   border-radius: 5px;
 }
 
+.primary {
+  border: 1px solid rgb(0, 123, 255);
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 5px;
+}
+
+.warning {
+  border: 1px solid rgb(255, 193, 7);
+  background-color: rgba(255, 193, 7, 0.1);
+  border-radius: 5px;
+}
+
 p {
   margin: 0 !important;
 }
