@@ -4,10 +4,6 @@ import * as bootstrap from 'bootstrap';
 
 import { Options } from '../../../../components/select-default/select-default.interface';
 import { ApiService } from '../../../../data/api.service';
-import { Brands } from '../../brands/brands.interface';
-import { Categorys } from '../../categorys/categorys.interface';
-import { Subcategorys } from '../../subcategorys/subcategorys.interface';
-import { Suppliers } from '../../supplier/supplier.interface';
 import { Products } from '../../product/product.interface';
 import { SalesService } from '../../../../data/sales.service';
 import { SaleProduct, Sales } from '../sales.interface';
@@ -15,6 +11,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getCompanyId, getUserId } from '../../../../utils/util';
 
 declare var $: any;
+
+interface PaymentForms {
+  id: number;
+  label: 'DINHEIRO' | 'CARTÃO DE DÉBITO' | 'CARTÃO DE CRÉDITO' | 'PIX';
+  value: number;
+  icon: 'far fa-credit-card' | 'far fa-money-bill-alt' | 'far fa-credit-card' | 'fas fa-qrcode';
+  class: 'bg-success' | 'bg-primary' | 'bg-secondary' | 'bg-danger';
+}
 
 @Component({
   selector: 'app-pdv',
@@ -56,12 +60,16 @@ export class PdvComponent {
   total_value = new FormControl('0');
   value = new FormControl('0');
   value_sale = new FormControl('0');
+  paymentValue = new FormControl();
 
   products: Products[] = [];
 
   total = 0;
   totalPayment = 0;
   troco = 0;
+
+  paymentSelected!: | 1 | 2 | 3 | 4;
+  paymentForms: PaymentForms[] = [];
 
   constructor(
     private apiService: ApiService,
@@ -139,6 +147,21 @@ export class PdvComponent {
     }
   }
 
+  openModalPaymentValue = (payment: 1 | 2 | 3 | 4) => {
+    this.closeModal();
+
+    setTimeout(() => {
+      this.paymentSelected = payment;
+
+      const element = document.getElementById('modalValorVenda');
+
+      if (element) {
+        var myModal = new bootstrap.Modal(element, {});
+        myModal.show();
+      }
+    }, 500)
+  }
+
   closeModal = () => {
     let element = document.getElementById('modalListProduct');
 
@@ -159,6 +182,15 @@ export class PdvComponent {
     }
 
     element = document.getElementById('modalPayment');
+
+    if (element) {
+      var myModal = bootstrap.Modal.getInstance(element);
+      if (myModal) {
+        myModal.hide();
+      }
+    }
+
+    element = document.getElementById('modalValorVenda');
 
     if (element) {
       var myModal = bootstrap.Modal.getInstance(element);
@@ -337,5 +369,73 @@ export class PdvComponent {
     }).then(data => {
       console.log(data);
     })
+  }
+
+  applyPayment() {
+    if (this.paymentSelected !== 1 && Number(this.paymentValue.value) > (this.total - this.totalPayment)) {
+      alert('O valor do pagamento não pode ser maior que o valor total da venda!');
+      return;
+    }
+
+    if (this.paymentSelected === 1 && Number(this.paymentValue.value) > (this.total - this.totalPayment)) {
+      this.troco = Number(this.paymentValue.value) - (this.total - this.totalPayment);
+    }
+
+    switch (this.paymentSelected) {
+      case 1:
+        this.paymentForms.push({
+          id: 1,
+          label: 'DINHEIRO',
+          value: Number(this.paymentValue.value),
+          icon: 'far fa-money-bill-alt',
+          class: 'bg-success'
+        });
+        break;
+      case 2:
+        this.paymentForms.push({
+          id: 2,
+          label: 'CARTÃO DE DÉBITO',
+          value: Number(this.paymentValue.value),
+          icon: 'far fa-credit-card',
+          class: 'bg-primary'
+        });
+        break;
+      case 3:
+        this.paymentForms.push({
+          id: 3,
+          label: 'CARTÃO DE CRÉDITO',
+          value: Number(this.paymentValue.value),
+          icon: 'far fa-credit-card',
+          class: 'bg-secondary'
+        });
+        break;
+      case 4:
+        this.paymentForms.push({
+          id: 4,
+          label: 'PIX',
+          value: Number(this.paymentValue.value),
+          icon: 'fas fa-qrcode',
+          class: 'bg-danger'
+        });
+        break;
+    }
+
+    this.totalPayment += Number(this.paymentValue.value);
+    this.paymentValue.setValue('');
+    this.closeModal();
+
+    setTimeout(() => {
+      this.openModalPayment();
+    }, 200)
+  }
+
+  deletPaymentForm(payment: PaymentForms) {
+    this.paymentForms = this.paymentForms.filter(item => item.id !== payment.id);
+    this.totalPayment -= payment.value;
+    this.troco = this.totalPayment - this.total;
+
+    if (this.troco < 0) {
+      this.troco = 0;
+    }
   }
 }

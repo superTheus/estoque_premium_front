@@ -226,10 +226,12 @@
               <div class="row">
 
                 <div class="col-12 d-flex justify-content-between">
-                  <button class="btn btn-success col-2 btn-pagamento">DINHEIRO</button>
-                  <button class="btn btn-primary col-2 btn-pagamento">DÉBITO</button>
-                  <button class="btn btn-secondary col-2 btn-pagamento">CRÉDITO</button>
-                  <button class="btn btn-danger col-2 btn-pagamento">PIX</button>
+                  <button class="btn btn-success col-2 btn-pagamento"
+                    (click)="openModalPaymentValue(1)">DINHEIRO</button>
+                  <button class="btn btn-primary col-2 btn-pagamento" (click)="openModalPaymentValue(2)">DÉBITO</button>
+                  <button class="btn btn-secondary col-2 btn-pagamento"
+                    (click)="openModalPaymentValue(3)">CRÉDITO</button>
+                  <button class="btn btn-danger col-2 btn-pagamento" (click)="openModalPaymentValue(4)">PIX</button>
                 </div>
 
               </div>
@@ -237,7 +239,34 @@
               <div class="row">
                 <div class="col-7 cards-container mt-3 mt-sm-0" id="card-container-6">
                   <div class="card dcard p-1 bgc-secondary-l3" id="card-6" style="min-height: 60vh">
-                    <div class="card-body p-1 p-sm-2 p-lg-3" id="divFormasPagto"></div>
+                    <div class="card-body p-1 p-sm-2 p-lg-3" id="divFormasPagto">
+
+                      <div *ngFor="let form of paymentForms; let index = index"
+                        class="card h-100 d-flex flex-column mt-2 mx-2 px-2 py-3">
+                        <div class="row">
+                          <div class="col-2">
+                            <span class="form-icon {{ form.class }}">
+                              <i class="text-white {{ form.icon }} text-170"></i>
+                            </span>
+                          </div>
+                          <div class="col-5 mt-3">
+                            <p class="text-130 font-bold mb-0">{{ form.label }}</p>
+                          </div>
+                          <div class="col-3 text-right mt-3">
+                            <p class="text-130 font-bold mb-0 mr-3">{{ form.value |
+                              currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                          </div>
+                          <div class="col-2 text-right mt-3 text-center">
+                            <button type="button"
+                              class="mx-2px btn radius-1 border-2 btn-xs btn-brc-tp btn-light-secondary btn-h-lighter-danger btn-a-lighter-danger"
+                              (click)="deletPaymentForm(form)">
+                              <i class="fa fa-trash-alt fa-2x"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
                 </div>
                 <div class="col-5 cards-container mt-3 mt-sm-0" id="card-container-6">
@@ -254,8 +283,8 @@
                                   TROCO
                                 </td>
 
-                                <td class="text-green-m1 text-180 text-600 text-right" id="txtTotTroco">
-                                  <span class="text-dark-tp4 text-sm">R$</span> 0,00
+                                <td class="text-green-m1 text-180 text-600 text-right">
+                                  {{ troco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                                 </td>
                               </tr>
 
@@ -275,7 +304,9 @@
                                 </td>
 
                                 <td class="text-orange-m1 text-180 text-600 text-right" id="txtTotAPagar">
-                                  {{ (total - totalPayment) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                                  {{ (total - totalPayment) >= 0 ? (total - totalPayment |
+                                  currency:'BRL':'symbol':'1.2-2':'pt-BR' ) : 0 |
+                                  currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                                 </td>
                               </tr>
 
@@ -342,6 +373,25 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" (click)="saveBox()">Abrir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalValorVenda" tabindex="-1" data-backdrop="static" data-keyboard="false"
+    aria-labelledby="modalImpressaoLabel">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header d-none">
+          <h5 class="modal-title" id="modalValorVendaTitle"></h5>
+        </div>
+        <div class="modal-body d-flex flex-wrap justify-content-center">
+          <input type="text" [formControl]="paymentValue" class="input-money mask-money col-10">
+
+          <button type="button" class="btn btn-danger col-3 m-3" (click)="closeModal()"> SAIR
+          </button>
+          <button type="button" class="btn btn-success col-4 m-3" (click)="applyPayment()"> APLICAR
+          </button>
         </div>
       </div>
     </div>
