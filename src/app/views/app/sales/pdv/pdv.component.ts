@@ -438,4 +438,14 @@ export class PdvComponent {
       this.troco = 0;
     }
   }
+
+  finishedSale() {
+    let newSaleValue = this.currentSale;
+    newSaleValue.status = 'FE';
+
+    this.salesService.updateSale(newSaleValue).then((data) => {
+      alert('Venda finalizada com sucesso!');
+      window.location.href = location.origin + '/app/sales/list';
+    });
+  }
 }
