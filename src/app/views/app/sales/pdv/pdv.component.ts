@@ -10,6 +10,8 @@ import { SaleProduct, Sales } from '../sales.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getCompanyId, getUserId } from '../../../../utils/util';
 
+import Swal from 'sweetalert2';
+
 declare var $: any;
 
 interface PaymentForms {
@@ -440,12 +442,19 @@ export class PdvComponent {
   }
 
   finishedSale() {
+    this.closeModal();
     let newSaleValue = this.currentSale;
     newSaleValue.status = 'FE';
 
     this.salesService.updateSale(newSaleValue).then((data) => {
-      alert('Venda finalizada com sucesso!');
-      window.location.href = location.origin + '/app/sales/list';
+      Swal.fire({
+        title: 'Sucesso!',
+        text: 'Venda realizada com sucesso.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = location.origin + '/app/sales/list';
+      });
     });
   }
 }
