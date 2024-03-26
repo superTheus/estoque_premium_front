@@ -18,6 +18,7 @@ import { ContasComponent } from './contas/contas.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
+import { CompanyComponent } from './company/company.component';
 
 let routes: Routes = [
   {
@@ -42,6 +43,7 @@ let routes: Routes = [
       { path: 'contas', component: ContasComponent },
       { path: 'payment', component: PaymentComponent },
       { path: 'receive', component: ReceiveComponent },
+      { path: 'company', component: CompanyComponent },
     ]
   }
 ];

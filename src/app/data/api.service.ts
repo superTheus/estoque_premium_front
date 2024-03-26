@@ -15,6 +15,7 @@ import { Products, ProductsRequest } from '../views/app/product/product.interfac
 import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
 import { Box, BoxRequest } from '../views/app/box/box.interface';
+import { Company } from '../views/app/company/company.interface';
 
 interface User {
   id?: number,
@@ -39,6 +40,60 @@ interface resultInterface {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   constructor(private http: HttpClient) {
+  }
+
+  findCompany(company?: UserRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/company/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, company, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  updateCompany(company: Company): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/company/update/` + company.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, company, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
   }
 
   getUser(user: UserRequest) {

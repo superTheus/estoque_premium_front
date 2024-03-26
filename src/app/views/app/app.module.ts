@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app.routing';
 import { ProductComponent } from './product/product.component';
 import { FormsModule } from '@angular/forms';
 import { LayoutModule } from '../../containers/layout/layout.module';
-import { InputDefaultComponent } from '../../components/input-default/input-default.component';
 import { UserComponent } from './user/user.component';
 import { ComponentsModule } from '../../components/components.module';
 import { BrandsComponent } from './brands/brands.component';
@@ -25,6 +24,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
 import { BoxComponent } from './box/box.component';
+import { CompanyComponent } from './company/company.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,8 @@ import { BoxComponent } from './box/box.component';
     PaymentComponent,
     ReceiveComponent,
     DashboardsComponent,
-    BoxComponent
+    BoxComponent,
+    CompanyComponent
   ],
   imports: [
     CommonModule,

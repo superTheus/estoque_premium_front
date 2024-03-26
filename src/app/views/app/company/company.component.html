@@ -1,0 +1,52 @@
+<div class="container-main d-flex flex-column">
+  <div class="row mt-4">
+    <h3> Empresa </h3>
+  </div>
+
+  <form>
+    <div class="row mt-3">
+      <div class="col-12">
+        <app-input-default [control]="razao_social" type="text" label="Razão Social"
+          placeHolder="Ex: Coca Cola"></app-input-default>
+      </div>
+      <div class="col-12">
+        <app-input-default [control]="nome_fantasia" type="text" label="Nome Fantasia"
+          placeHolder="Ex: Coca Cola"></app-input-default>
+      </div>
+      <div class="col-12">
+        <app-input-default [control]="cnpj" type="text" label="CNPJ"
+          placeHolder="Ex: 00.000.000/0001-00"></app-input-default>
+      </div>
+
+      <div class="col-12">
+        <app-input-default [control]="email" type="text" label="Email" placeHolder="Email"></app-input-default>
+      </div>
+
+      <div class="col-12">
+        <app-input-default [control]="cep" type="text" label="CEP" placeHolder="CEP"></app-input-default>
+      </div>
+
+      <div class="col-12">
+        <app-input-default [control]="logradouro" type="text" label="Logradouro"
+          placeHolder="Logradouro"></app-input-default>
+      </div>
+
+      <div class="d-flex">
+        <div class="col-4">
+          <app-input-default [control]="bairro" type="text" label="Bairro" placeHolder="Bairro"></app-input-default>
+        </div>
+        <div class="col-4 px-2">
+          <app-input-default [control]="cidade" type="text" label="Cidade" placeHolder="Cidade"></app-input-default>
+        </div>
+        <div class="col-4">
+          <app-input-default [control]="uf" type="text" label="Estado" placeHolder="Estado"></app-input-default>
+        </div>
+      </div>
+
+      <div class="row justify-content-end mb-4">
+        <button type="button" class="btn btn-primary col-2" (click)="save()">Salvar</button>
+      </div>
+
+    </div>
+  </form>
+</div>
