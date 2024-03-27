@@ -1,6 +1,5 @@
 <div class="container-login">
 
-
   <div class="col-12 col-md-6 col-lg-5 card p-4 d-flex justify-content-center">
     <div class="logo">
       <img src="../../../../assets/images/ep.png" alt="">
@@ -26,6 +25,12 @@
 
       <div class="row mt-2">
         <app-button-default text="Entrar" (clickAction)="login()"></app-button-default>
+      </div>
+
+      <div>
+        <div class="row mt-4">
+          <p> Não tem uma conta ? <a routerLink="../register"> Cadastre-se </a> </p>
+        </div>
       </div>
     </div>
 

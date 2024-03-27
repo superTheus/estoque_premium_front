@@ -4,13 +4,12 @@ import { ScrollerModule } from 'primeng/scroller';
 import { UserComponent } from './user.component';
 import { UserRoutingModule } from './user.routing';
 import { LoginComponent } from './login/login.component';
-import { ButtonDefaultComponent } from '../../components/button-default/button-default.component';
-import { InputDefaultComponent } from '../../components/input-default/input-default.component';
 import { ComponentsModule } from '../../components/components.module';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
-  declarations: [UserComponent, LoginComponent],
+  declarations: [UserComponent, LoginComponent, RegisterComponent],
   imports: [
     CommonModule,
     UserRoutingModule,

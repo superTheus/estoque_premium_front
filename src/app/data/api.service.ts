@@ -69,6 +69,33 @@ export class ApiService {
     });
   }
 
+  createCompany(company: Company): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/company/insert/`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, company, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
   updateCompany(company: Company): Promise<resultInterface> {
     const url = `${environment.baseUrl}/company/update/` + company.id;
 

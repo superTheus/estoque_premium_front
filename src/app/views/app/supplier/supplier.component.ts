@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../../data/api.service';
 import { Suppliers } from './supplier.interface';
 import { FormControl, Validators } from '@angular/forms';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -28,6 +29,7 @@ export class SuppliersComponent {
   load() {
     this.apiService.findSuppliers({
       filter: {
+        id_company: getCompanyId(),
         deleted: 'N'
       }
     }).then((res: any) => {

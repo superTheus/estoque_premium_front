@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../../data/api.service';
 import { Clients } from './client.interface';
 import { FormControl } from '@angular/forms';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -60,6 +61,7 @@ export class ClientComponent {
   load() {
     this.apiService.findClient({
       filter: {
+        id_company: getCompanyId(),
         deleted: 'N'
       }
     }).then(res => {
