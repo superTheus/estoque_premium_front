@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SalesService } from '../../../../data/sales.service';
 import { Sales } from '../sales.interface';
+import { FormControl } from '@angular/forms';
+import { getCompanyId } from '../../../../utils/util';
 
 @Component({
   selector: 'app-list',
@@ -10,6 +12,8 @@ import { Sales } from '../sales.interface';
 export class ListComponent implements OnInit {
   data: Sales[] = [];
 
+  filter = new FormControl('AB');
+
   constructor(
     private salesService: SalesService
   ) {
@@ -17,9 +21,14 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
     this.salesService.findSales({
       filter: {
-        status: 'AB'
+        status: this.filter.value as 'AB' | 'CA' | 'FE' || 'AB',
+        id_company: getCompanyId()
       }
     }).then((response) => {
       this.data = response.results;

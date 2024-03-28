@@ -239,6 +239,7 @@ export class DashboardsComponent implements OnInit {
       options: {
         responsive: true,
         plugins: {
+
           filler: {
             propagate: false,
           },
