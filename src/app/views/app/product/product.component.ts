@@ -7,6 +7,7 @@ import { Brands } from '../brands/brands.interface';
 import { Categorys } from '../categorys/categorys.interface';
 import { Subcategorys } from '../subcategorys/subcategorys.interface';
 import { Suppliers } from '../supplier/supplier.interface';
+import { getCompanyId } from '../../../utils/util';
 
 declare var $: any;
 
@@ -52,27 +53,32 @@ export class ProductComponent {
     const [brands, category, subcategory, supplier, products] = await Promise.all([
       this.apiService.findBrands({
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }),
       this.apiService.findCategorys({
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }),
       this.apiService.findSubcategorys({
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }),
       this.apiService.findSuppliers({
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }),
       this.apiService.findProducts({
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }),
     ]);

@@ -8,6 +8,7 @@ export interface Brands {
 export interface BrandsRequest {
   filter?: {
     id?: number;
+    id_company?: number;
     description?: string;
     deleted?: 'S' | 'N';
   };

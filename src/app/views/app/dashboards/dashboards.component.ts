@@ -6,6 +6,7 @@ import { ChartData, DatasetChart } from '../../../components/chart/chart.compone
 import { Finance } from '../payment/payment.interface';
 import { SalesService } from '../../../data/sales.service';
 import { Sales } from '../sales/sales.interface';
+import { getCompanyId } from '../../../utils/util';
 
 
 @Component({
@@ -51,7 +52,8 @@ export class DashboardsComponent implements OnInit {
   load() {
     this.apiService.findContas({
       filter: {
-        deleted: "N"
+        deleted: "N",
+        id_company: getCompanyId()
       }
     }).then(data => {
       this.currentAccount = data.results[0]
@@ -59,16 +61,16 @@ export class DashboardsComponent implements OnInit {
 
     this.apiService.findContasFinanceiro({
       filter: {
-        deleted: "N"
+        deleted: "N",
+        id_company: getCompanyId()
       }
-    }).then(data => {
-      console.log(data);
     });
 
     this.apiService.findContasFinanceiro(
       {
         filter: {
-          deleted: 'N'
+          deleted: 'N',
+          id_company: getCompanyId()
         }
       }
     ).then((data) => {
@@ -76,7 +78,11 @@ export class DashboardsComponent implements OnInit {
       this.generateCardInfos(data.results);
     })
 
-    this.saleService.findSales({}).then(data => {
+    this.saleService.findSales({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(data => {
       this.salesOpen = data.results.filter((sale: Sales) => sale.status === 'AB').length;
       this.salesClose = data.results.filter((sale: Sales) => sale.status === 'FE').length;
       this.salesCancelad = data.results.filter((sale: Sales) => sale.status === 'CA').length;

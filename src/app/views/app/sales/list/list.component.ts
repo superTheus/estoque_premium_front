@@ -4,6 +4,9 @@ import { Sales } from '../sales.interface';
 import { FormControl } from '@angular/forms';
 import { getCompanyId } from '../../../../utils/util';
 
+import { jsPDF } from 'jspdf';
+import { ReportsService } from '../../../../shared/reports.service';
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -15,7 +18,8 @@ export class ListComponent implements OnInit {
   filter = new FormControl('AB');
 
   constructor(
-    private salesService: SalesService
+    private salesService: SalesService,
+    private reportsService: ReportsService
   ) {
 
   }
@@ -43,5 +47,9 @@ export class ListComponent implements OnInit {
     var dateTimeParts = dateTimeString.split(' ');
     var dateParts = dateTimeParts[0].split('-');
     return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${dateTimeParts[1]}`;
+  }
+
+  generatePDF(sale: Sales) {
+    this.reportsService.salesReport(sale);
   }
 }

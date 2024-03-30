@@ -13,6 +13,7 @@ export interface SubcategorysRequest {
   filter?: {
     id?: number;
     description?: string;
+    id_company?: number;
     deleted?: 'S' | 'N';
   };
   limit?: number;

@@ -30,6 +30,7 @@ export interface ClientsRequest {
 export interface CategorysRequest {
   filter?: {
     id?: number;
+    id_company?: number;
     description?: string;
     deleted?: 'S' | 'N';
   };

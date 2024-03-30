@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Brands } from './brands.interface';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -25,7 +26,8 @@ export class BrandsComponent implements OnInit {
   load() {
     this.apiService.findBrands({
       filter: {
-        deleted: 'N'
+        deleted: 'N',
+        id_company: getCompanyId()
       }
     }).then(res => {
       this.data = res.results;

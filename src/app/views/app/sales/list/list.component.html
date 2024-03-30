@@ -45,8 +45,13 @@
             <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
             <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
             <td class="col text-center d-flex">
-              <a [routerLink]="['/app/sales/pdv/' + sale.id]" class="btn btn-primary me-2">Ver</a>
-              <a (click)="delete(sale.id || 0)" class="btn btn-danger">Cancelar</a>
+              <a (click)="generatePDF(sale)" class="btn btn-secondary me-2" data-toggle="tooltip" data-placement="top"
+                title="Comprovante"> <i class="fas fa-print"></i> </a>
+              <a [routerLink]="['/app/sales/pdv/' + sale.id]" class="btn btn-primary me-2" data-toggle="tooltip"
+                data-placement="top" title="Ver compra"> <i class="fas fa-eye"></i>
+              </a>
+              <a (click)="delete(sale.id || 0)" class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+                title="Cancelar venda"> <i class="fas fa-trash"></i> </a>
             </td>
           </tr>
         </ng-container>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -29,7 +30,8 @@ export class UserComponent {
   load() {
     this.apiService.getUser({
       filter: {
-        ativo: 'S'
+        ativo: 'S',
+        company: getCompanyId()
       }
     }).subscribe((res: any) => {
       console.log(res);
