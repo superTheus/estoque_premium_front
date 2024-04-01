@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, from, throwError } from 'rxjs';
 
 import { ApiService } from '../data/api.service';
-import { setCompanyId, setUserEmail, setUserId } from '../utils/util';
+import { clearSession, setCompanyId, setUserEmail, setUserId } from '../utils/util';
 
 export interface ISignInCredentials {
   email: string;
@@ -46,5 +46,10 @@ export class AuthService {
         error => reject(error)
       )
     });
+  }
+
+  lougtOut() {
+    clearSession();
+    window.location.href = window.location.origin + '/user/login';
   }
 }

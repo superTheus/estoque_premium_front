@@ -79,6 +79,7 @@ export const setUserEmail = (email: string) => {
 
 export const clearSession = () => {
   sessionStorage.clear();
+  localStorage.clear();
 }
 
 // export const getBaseUrl = () => {

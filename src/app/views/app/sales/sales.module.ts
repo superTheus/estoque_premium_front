@@ -9,6 +9,7 @@ import { PdvComponent } from "./pdv/pdv.component";
 import { ListComponent } from "./list/list.component";
 import { ComponentsModule } from "../../../components/components.module";
 import { SalesService } from "../../../data/sales.service";
+import { BalanceService } from "../../../data/balance.service";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,6 @@ import { SalesService } from "../../../data/sales.service";
     ComponentsModule,
     ReactiveFormsModule
   ],
-  providers: [ApiService, SalesService],
+  providers: [ApiService, SalesService, BalanceService],
 })
 export class SalesModule { }

@@ -11,6 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getCompanyId, getUserId } from '../../../../utils/util';
 
 import Swal from 'sweetalert2';
+import { Brands } from '../../brands/brands.interface';
+import { Categorys } from '../../categorys/categorys.interface';
+import { Subcategorys } from '../../subcategorys/subcategorys.interface';
+import { Suppliers } from '../../supplier/supplier.interface';
+import { Clients } from '../../client/client.interface';
+import { BalanceService } from '../../../../data/balance.service';
 
 declare var $: any;
 
@@ -47,14 +53,17 @@ export class PdvComponent {
   id_subcategory = new FormControl('');
   id_supplier = new FormControl('');
 
-  brandsSelect: Options[] = []
-  categorySelect: Options[] = []
-  subcategorySelect: Options[] = []
-  supplierSelect: Options[] = []
+  id_client = new FormControl(0);
+
+  clientsSelect: Options[] = [];
+  brandsSelect: Options[] = [];
+  categorySelect: Options[] = [];
+  subcategorySelect: Options[] = [];
+  supplierSelect: Options[] = [];
   controlStock = [
     { label: 'Sim', value: 'S' },
     { label: 'Não', value: 'N' }
-  ]
+  ];
 
   quantity = new FormControl(1);
   desconto = new FormControl('R$ 0,00');
@@ -78,6 +87,7 @@ export class PdvComponent {
     private salesService: SalesService,
     private router: Router,
     private routeParam: ActivatedRoute,
+    private balanceService: BalanceService
   ) {
     this.routeParam.paramMap.subscribe(async (params) => {
       const id = params.get('id');
@@ -112,7 +122,8 @@ export class PdvComponent {
     if (event.key.toLocaleUpperCase() === 'ENTER') {
       this.apiService.findProducts({
         filter: {
-          deleted: "N"
+          deleted: "N",
+          id_company: getCompanyId()
         },
         search: this.search.value || ''
       }).then(response => {
@@ -203,6 +214,51 @@ export class PdvComponent {
   }
 
   async load(id?: number) {
+    this.apiService.findBrands({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+      this.brandsSelect = response.results.map((item: Brands) => ({ label: item.description, value: item.id }));
+    });
+
+    this.apiService.findCategorys({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+      this.categorySelect = response.results.map((item: Categorys) => ({ label: item.description, value: item.id }));
+    });
+
+    this.apiService.findSubcategorys({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+      this.subcategorySelect = response.results.map((item: Subcategorys) => ({ label: item.description, value: item.id }));
+    });
+
+    this.apiService.findSuppliers({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+      this.supplierSelect = response.results.map((item: Suppliers) => ({ label: item.name, value: item.id }));
+    });
+
+    this.apiService.findClient({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+
+
+      console.log(response.results);
+
+      this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
+      this.clientsSelect.unshift({ label: 'Consumidor Final', value: 0 });
+    });
+
     if (id) {
       this.salesService.findSales({
         filter: {
@@ -235,9 +291,9 @@ export class PdvComponent {
       control_stock: this.control_stock.value || 'S',
       stock: Number(this.stock.value) || 0,
       id_company: 1
+    }).then(() => {
+      $('#modalProduct').modal('hide');
     });
-
-    $('#modalProduct').modal('hide');
   }
 
   saveBox() {
@@ -362,11 +418,20 @@ export class PdvComponent {
   }
 
   updateTotal() {
-    console.log(this.total);
-
     this.salesService.updateSale({
       id: this.currentSale.id,
       total: this.total,
+      status: 'AB'
+    }).then(data => {
+      console.log(data);
+    })
+  }
+
+  updateClient() {
+    this.salesService.updateSale({
+      id: this.currentSale.id,
+      total: this.total,
+      id_client: Number(this.id_client.value) > 0 ? Number(this.id_client.value) : null,
       status: 'AB'
     }).then(data => {
       console.log(data);
@@ -453,7 +518,14 @@ export class PdvComponent {
         icon: 'success',
         confirmButtonText: 'OK'
       }).then(() => {
-        window.location.href = location.origin + '/app/sales/list';
+        let promises = this.currentSale.products?.map(product => {
+          return this.balanceService.newMoviment(product.product as Products, product.quantity);
+        })
+
+        Promise.all(promises as any[]).then(() => {
+          window.location.href = location.origin + '/app/sales/list';
+        });
+
       });
     });
   }

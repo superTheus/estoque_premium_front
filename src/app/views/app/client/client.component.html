@@ -32,7 +32,7 @@
         <ng-container *ngFor="let client of data">
           <tr>
             <td class="col-2"> {{client.id}} </td>
-            <td class="col-5"> {{client.nome}} </td>
+            <td class="col-5"> {{client.name}} </td>
             <td class="col-4"> {{client.documento}} </td>
             <td class="col d-flex">
               <button class="btn btn-primary me-2" (click)="update(client)">

@@ -85,7 +85,7 @@ export class ClientComponent {
         endereco: this.endereco.value || '',
         genero: this.genero.value || '',
         icms: this.icms.value || '',
-        nome: this.nome.value || '',
+        name: this.nome.value || '',
         numero: this.numero.value || '',
         razao_social: this.razao_social.value || '',
         rg_inscricao: this.rg_inscricao.value || '',
@@ -108,7 +108,7 @@ export class ClientComponent {
         endereco: this.endereco.value || '',
         genero: this.genero.value || '',
         icms: this.icms.value || '',
-        nome: this.nome.value || '',
+        name: this.nome.value || '',
         numero: this.numero.value || '',
         razao_social: this.razao_social.value || '',
         rg_inscricao: this.rg_inscricao.value || '',
@@ -127,7 +127,7 @@ export class ClientComponent {
     this.clientSelected = client;
     this.isEditMode = true;
 
-    this.nome.setValue(client.nome || '');
+    this.nome.setValue(client.name || '');
     this.apelido.setValue(client.apelido || '');
     this.razao_social.setValue(client.razao_social || '');
     this.rg_inscricao.setValue(client.rg_inscricao || '');

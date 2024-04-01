@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Options } from './select-default.interface';
 
@@ -13,7 +13,13 @@ export class SelectDefaultComponent {
   @Input() control: FormControl;
   @Input() items: Options[] = [];
 
+  @Output() change = new EventEmitter();
+
   constructor() {
     this.control = new FormControl();
+  }
+
+  onChange() {
+    this.change.emit();
   }
 }

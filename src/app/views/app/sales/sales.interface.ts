@@ -1,3 +1,4 @@
+import { Clients } from "../client/client.interface";
 import { Products } from "../product/product.interface";
 import { Users } from "../user/users.interface";
 
@@ -5,12 +6,14 @@ export interface Sales {
   id?: number,
   id_company?: number,
   id_user?: number,
+  id_client?: number | null,
   total?: number,
   status?: 'AB' | 'FE' | 'CA',
   date_hour?: string,
   deleted?: string,
   products?: SaleProduct[]
-  user?: Users
+  user?: Users,
+  client?: Clients
 }
 
 export interface SalesRequest {

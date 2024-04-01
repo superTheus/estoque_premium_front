@@ -1,7 +1,7 @@
 export interface Clients {
   id?: number;
   id_company?: number;
-  nome?: string,
+  name?: string,
   apelido?: string,
   razao_social?: string,
   rg_inscricao?: string,

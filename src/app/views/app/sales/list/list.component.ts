@@ -36,11 +36,20 @@ export class ListComponent implements OnInit {
       }
     }).then((response) => {
       this.data = response.results;
+    }).catch((error) => {
+      this.data = [];
     });
   }
 
-  delete(id: number) {
-
+  delete(sale: Sales) {
+    this.salesService.updateSale({
+      id: sale.id,
+      total: sale.total,
+      id_client: Number(sale.id_client) > 0 ? Number(sale.id_client) : null,
+      status: 'CA'
+    }).then(data => {
+      this.loadData();
+    })
   }
 
   formatDateTime(dateTimeString: string) {
