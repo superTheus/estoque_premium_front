@@ -4,6 +4,8 @@ import { Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
 import { getCompanyId } from '../../../utils/util';
 
+import Swal from 'sweetalert2';
+
 declare const $: any;
 
 @Component({
@@ -85,12 +87,23 @@ export class UserComponent {
   }
 
   delete(user: Users) {
-    this.apiService.updateUser({
-      id: user?.id,
-      ativo: 'N'
-    }).then((res) => {
-      console.log(res);
-      this.load();
+    Swal.fire({
+      title: "Realmente deseja deletar este usuário?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiService.updateUser({
+          id: user?.id,
+          ativo: 'N'
+        }).then((res) => {
+          this.load();
+          Swal.fire("Usuário deletado", "", "info");
+        });
+      }
     });
   }
 }

@@ -3,6 +3,7 @@ import { ApiService } from '../../../data/api.service';
 import { Suppliers } from './supplier.interface';
 import { FormControl, Validators } from '@angular/forms';
 import { getCompanyId } from '../../../utils/util';
+import Swal from 'sweetalert2';
 
 declare const $: any;
 
@@ -78,12 +79,23 @@ export class SuppliersComponent {
   }
 
   delete(supplier: Suppliers) {
-    this.apiService.updateSupplier({
-      id: supplier.id,
-      deleted: 'S'
-    }).then((res) => {
-      console.log(res);
-      this.load();
+    Swal.fire({
+      title: "Realmente deseja deletar este fornecedor?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiService.updateSupplier({
+          id: supplier.id,
+          deleted: 'S'
+        }).then((res) => {
+          this.load();
+          Swal.fire("Fornecedor deletado", "", "info");
+        });
+      }
     });
   }
 }

@@ -1,0 +1,134 @@
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-2 mt-3">
+    <h3> Vendas por período </h3>
+  </div>
+
+  <div class="row px-3 mt-2">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Filtros</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <app-select-default (change)="load()" [control]="client" label="Cliente"
+                [items]="clientsSelected"></app-select-default>
+            </div>
+
+            <div class="col-12">
+              <app-input-default type="date" [control]="dateInit" label="Data Inicial"></app-input-default>
+            </div>
+
+            <div class="col-12">
+              <app-input-default type="date" [control]="dateEnd" label="Data Final"></app-input-default>
+            </div>
+
+            <div class="col-12">
+              <app-button-default (click)="load()" text="Gerar Relatório"></app-button-default>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-8 col-lg-9">
+      <ng-container *ngIf="view === 'table'; then table; else chart"></ng-container>
+    </div>
+
+
+    <ng-template #table>
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <p class="mb-0"> Dados de Vendas </p>
+
+          <div class="d-flex">
+            <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
+              title="Relatórios">
+              <i class="fas fa-file-alt"></i>
+            </button>
+            <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
+              title="Gráficos">
+              <i class="fas fa-chart-pie"></i>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!sales.length" class="card-body text-center">
+          Nenhum resultado encontrado.
+        </div>
+
+        <div *ngIf="sales.length" class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Venda</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sale of sales">
+                <td> {{ '#' + sale.id?.toString()?.padStart(6, '0')}} </td>
+                <td> {{sale.id_client ? sale.client?.name : 'Consumidor Final'}} </td>
+                <td> {{sale.date_hour | date: 'dd/MM/yyyy'}} </td>
+                <td> {{sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR'}} </td>
+                <td>
+                  <button class="btn btn-secondary" (click)="generatePDF(sale)" data-toggle="tooltip"
+                    data-placement="top" title="Relatório">
+                    <i class="fas fa-print"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer">
+          <div class="d-flex justify-content-between">
+            <p> Total </p>
+            <p> {{total | currency:'BRL':'symbol':'1.2-2':'pt-BR'}} </p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p> Total de Vendas </p>
+            <p> {{sales.length}} </p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #chart>
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <p class="mb-0"> Dados de Vendas </p>
+
+          <div class="d-flex">
+            <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
+              title="Relatórios">
+              <i class="fas fa-file-alt"></i>
+            </button>
+            <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
+              title="Gráficos">
+              <i class="fas fa-chart-pie"></i>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!sales.length" class="card-body text-center">
+          Nenhum resultado encontrado.
+        </div>
+
+        <div *ngIf="sales.length" class="card-body text-center">
+          <div class="row mt-3">
+            <div class="col-12 col-md-6">
+              <app-chart [chartData]="chartPieClient"></app-chart>
+            </div>
+            <div class="col-12 col-md-6">
+              <app-chart [chartData]="chartPieClientTotal"></app-chart>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer"></div>
+      </div>
+    </ng-template>
+  </div>

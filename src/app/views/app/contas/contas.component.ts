@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Contas } from './contas.interface';
 import { ApiService } from '../../../data/api.service';
 import { Options } from '../../../components/select-default/select-default.interface';
+import Swal from 'sweetalert2';
 
 declare var $: any;
 
@@ -105,12 +106,24 @@ export class ContasComponent {
   }
 
   delete(conta: Contas) {
-    var newConta = { ...conta };
-    newConta.deleted = 'S';
-    this.contaSelected = newConta;
+    Swal.fire({
+      title: "Realmente deseja deletar esta conta?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var newConta = { ...conta };
+        newConta.deleted = 'S';
+        this.contaSelected = newConta;
 
-    this.apiService.updateConta(newConta).then(res => {
-      this.load();
-    })
+        this.apiService.updateConta(newConta).then(res => {
+          this.load();
+          Swal.fire("Conta deletada", "", "info");
+        })
+      }
+    });
   }
 }

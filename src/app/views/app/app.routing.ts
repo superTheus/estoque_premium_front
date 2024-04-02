@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BoxComponent } from './box/box.component';
-import { SalesComponent } from './sales/sales.component';
 import { ShoppComponent } from './shopp/shopp.component';
-import { RoutineComponent } from './routine/routine.component';
 import { StockComponent } from './stock/stock.component';
 import { FinanceComponent } from './finance/finance.component';
 import { UserComponent } from './user/user.component';
@@ -34,7 +32,7 @@ let routes: Routes = [
       { path: 'box', component: BoxComponent },
       { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
       { path: 'shopp', component: ShoppComponent },
-      { path: 'routine', component: RoutineComponent },
+      { path: 'routine', loadChildren: () => import('./routine/routine.module').then(m => m.RoutineModule) },
       { path: 'stock', component: StockComponent },
       { path: 'finance', component: FinanceComponent },
       { path: 'user', component: UserComponent },

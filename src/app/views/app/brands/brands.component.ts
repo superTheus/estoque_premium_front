@@ -4,6 +4,8 @@ import { ApiService } from '../../../data/api.service';
 import { Brands } from './brands.interface';
 import { getCompanyId } from '../../../utils/util';
 
+import Swal from 'sweetalert2';
+
 declare const $: any;
 
 @Component({
@@ -66,16 +68,28 @@ export class BrandsComponent implements OnInit {
   }
 
   delete(brand: Brands) {
-    var newBrand = { ...brand };
-    newBrand.deleted = 'S';
-    this.brandSelected = newBrand;
+    Swal.fire({
+      title: "Realmente deseja deletar esta marca?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var newBrand = { ...brand };
+        newBrand.deleted = 'S';
+        this.brandSelected = newBrand;
 
-    this.apiService.updateBrands({
-      id: this.brandSelected?.id,
-      description: this.description.value ? this.description.value : '',
-      deleted: this.brandSelected?.deleted
-    }).then(res => {
-      this.load();
-    })
+        this.apiService.updateBrands({
+          id: this.brandSelected?.id,
+          description: this.description.value ? this.description.value : '',
+          deleted: this.brandSelected?.deleted
+        }).then(res => {
+          this.load();
+          Swal.fire("Marca deletado", "", "info");
+        })
+      }
+    });
   }
 }

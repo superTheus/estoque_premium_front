@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import Chart, { ChartTypeRegistry } from 'chart.js/auto';
+import Chart, { BubbleDataPoint, ChartTypeRegistry } from 'chart.js/auto';
+import { Point } from 'chart.js/dist/core/core.controller';
 
 export interface DatasetChart {
   label: string,
-  data: number[],
+  data: number[] | string[],
   backgroundColor: string[],
   borderColor?: string[],
   borderWidth?: number
@@ -30,8 +31,8 @@ export class ChartComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnInit() {
-    this.chart = new Chart(this.canvas.nativeElement, {
-      type: 'bar',
+    this.chart = new Chart<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>(this.canvas.nativeElement, {
+      type: 'pie',
       data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
@@ -77,11 +78,14 @@ export class ChartComponent implements OnInit, OnDestroy, OnChanges {
       this.chart.destroy();
     }
 
-    this.chart = new Chart(this.canvas.nativeElement, {
+    this.chart = new Chart<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>(this.canvas.nativeElement, {
       type: this.chartData.type,
       data: {
         labels: this.chartData.labels,
-        datasets: this.chartData.data
+        datasets: this.chartData.data.map(dataset => ({
+          ...dataset,
+          data: dataset.data as (number | [number, number] | Point | BubbleDataPoint | null)[]
+        }))
       },
       options: this.chartData.options
     });

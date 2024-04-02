@@ -3,6 +3,7 @@ import { ApiService } from '../../../data/api.service';
 import { Clients } from './client.interface';
 import { FormControl } from '@angular/forms';
 import { getCompanyId } from '../../../utils/util';
+import Swal from 'sweetalert2';
 
 declare const $: any;
 
@@ -149,14 +150,26 @@ export class ClientComponent {
   }
 
   delete(client: Clients) {
-    var newClient = { ...client };
-    newClient.deleted = 'S';
+    Swal.fire({
+      title: "Realmente deseja deletar este cliente ?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-    this.apiService.updateClient(newClient).then(res => {
-      console.log(res);
-      this.load();
-    })
+        var newClient = { ...client };
+        newClient.deleted = 'S';
 
-    this.clientSelected = newClient;
+        this.apiService.updateClient(newClient).then(res => {
+          this.load();
+          Swal.fire("Cliente deletado", "", "info");
+        })
+
+        this.clientSelected = newClient;
+      }
+    });
   }
 }

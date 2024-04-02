@@ -14,8 +14,6 @@ export class ReportsService {
   constructor() { }
 
   salesReport(sale: Sales) {
-    console.log(sale);
-
     let doc = new jsPDF();
 
     doc.addFileToVFS("Roboto-Regular.ttf", roboto);

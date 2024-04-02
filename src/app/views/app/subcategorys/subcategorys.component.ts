@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Subcategorys } from './subcategorys.interface';
 import { Categorys } from '../categorys/categorys.interface';
+import Swal from 'sweetalert2';
 
 declare const $: any;
 
@@ -91,17 +92,29 @@ export class SubcategorysComponent implements OnInit {
   }
 
   delete(subcategory: Subcategorys) {
-    var newsubcategory = { ...subcategory };
-    newsubcategory.deleted = 'S';
-    this.Subcategoryselected = newsubcategory;
+    Swal.fire({
+      title: "Realmente deseja deletar esta conta?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var newsubcategory = { ...subcategory };
+        newsubcategory.deleted = 'S';
+        this.Subcategoryselected = newsubcategory;
 
-    this.apiService.updateSubcategory({
-      id: this.Subcategoryselected?.id,
-      description: this.Subcategoryselected.id ? this.Subcategoryselected.description : '',
-      id_category: this.Subcategoryselected.id_category ? Number(this.Subcategoryselected.id_category) : 0,
-      deleted: this.Subcategoryselected?.deleted
-    }).then(res => {
-      this.load();
-    })
+        this.apiService.updateSubcategory({
+          id: this.Subcategoryselected?.id,
+          description: this.Subcategoryselected.id ? this.Subcategoryselected.description : '',
+          id_category: this.Subcategoryselected.id_category ? Number(this.Subcategoryselected.id_category) : 0,
+          deleted: this.Subcategoryselected?.deleted
+        }).then(res => {
+          this.load();
+          Swal.fire("Conta deletada", "", "info");
+        })
+      }
+    });
   }
 }

@@ -62,7 +62,6 @@ export class CompanyComponent implements OnInit {
       cidade: this.cidade.value || '',
       uf: this.uf.value || ''
     }).then(() => {
-
       Swal.fire({
         title: 'Sucesso!',
         text: 'Empresa atualizada com sucesso.',

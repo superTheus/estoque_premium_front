@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Categorys } from './categorys.interface';
+import Swal from 'sweetalert2';
 
 declare const $: any;
 
@@ -64,16 +65,26 @@ export class CategorysComponent implements OnInit {
   }
 
   delete(brand: Categorys) {
-    var newBrand = { ...brand };
-    newBrand.deleted = 'S';
-    this.Categoryselected = newBrand;
+    Swal.fire({
+      title: "Realmente deseja deletar esta categoria?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      var newBrand = { ...brand };
+      newBrand.deleted = 'S';
+      this.Categoryselected = newBrand;
 
-    this.apiService.updateCategory({
-      id: this.Categoryselected?.id,
-      description: this.description.value ? this.description.value : '',
-      deleted: this.Categoryselected?.deleted
-    }).then(res => {
-      this.load();
-    })
+      this.apiService.updateCategory({
+        id: this.Categoryselected?.id,
+        description: this.description.value ? this.description.value : '',
+        deleted: this.Categoryselected?.deleted
+      }).then(res => {
+        this.load();
+        Swal.fire("Categoria deletada", "", "info");
+      })
+    });
   }
 }

@@ -9,6 +9,8 @@ import { Subcategorys } from '../subcategorys/subcategorys.interface';
 import { Suppliers } from '../supplier/supplier.interface';
 import { getCompanyId } from '../../../utils/util';
 
+import Swal from 'sweetalert2';
+
 declare var $: any;
 
 
@@ -151,12 +153,25 @@ export class ProductComponent {
   }
 
   delete(product: Products) {
-    var newProduct = { ...product };
-    newProduct.deleted = 'S';
-    this.productSelected = newProduct;
+    Swal.fire({
+      title: "Realmente deseja deletar este produto?",
+      showDenyButton: true,
+      confirmButtonText: "Sim Deletar",
+      denyButtonText: `Não, cancelar`,
+      confirmButtonColor: '#d33',
+      denyButtonColor: '#3085d6',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var newProduct = { ...product };
+        newProduct.deleted = 'S';
+        this.productSelected = newProduct;
 
-    this.apiService.updateProduct(newProduct).then(res => {
-      this.load();
-    })
+        this.apiService.updateProduct(newProduct).then(res => {
+          this.load();
+
+          Swal.fire("Produto deletado", "", "info");
+        })
+      }
+    });
   }
 }
