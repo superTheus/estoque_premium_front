@@ -17,15 +17,17 @@
             </div>
 
             <div class="col-12">
-              <app-input-default type="date" [control]="dateInit" label="Data Inicial"></app-input-default>
+              <app-input-default (change)="load()" type="date" [control]="dateInit"
+                label="Data Inicial"></app-input-default>
             </div>
 
             <div class="col-12">
-              <app-input-default type="date" [control]="dateEnd" label="Data Final"></app-input-default>
+              <app-input-default (change)="load()" type="date" [control]="dateEnd"
+                label="Data Final"></app-input-default>
             </div>
 
             <div class="col-12">
-              <app-button-default (click)="load()" text="Gerar Relatório"></app-button-default>
+              <app-button-default (click)="reportAllSales()" text="Gerar Impressão"></app-button-default>
             </div>
           </div>
         </div>
@@ -38,7 +40,7 @@
 
 
     <ng-template #table>
-      <div class="card">
+      <div class="card mb-4">
         <div class="card-header d-flex justify-content-between">
           <p class="mb-0"> Dados de Vendas </p>
 
@@ -98,7 +100,7 @@
       </div>
     </ng-template>
     <ng-template #chart>
-      <div class="card">
+      <div class="card mb-4">
         <div class="card-header d-flex justify-content-between">
           <p class="mb-0"> Dados de Vendas </p>
 

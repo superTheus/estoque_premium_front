@@ -243,8 +243,6 @@ export class SalesRoutineComponent implements OnInit {
       }
     ]
 
-    console.log(dataset);
-
     const config: ChartData = {
       type: 'pie',
       data: dataset,
@@ -275,6 +273,10 @@ export class SalesRoutineComponent implements OnInit {
     }
 
     this.chartPieClientTotal = config;
+  }
+
+  reportAllSales() {
+    this.reportsService.salesAllReport(this.sales);
   }
 
   private generateRandomColor() {

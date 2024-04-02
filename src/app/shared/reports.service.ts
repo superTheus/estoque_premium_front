@@ -48,6 +48,39 @@ export class ReportsService {
     window.open(blobURL);
   }
 
+  salesAllReport(sales: Sales[]) {
+    let doc = new jsPDF();
+
+    doc.addFileToVFS("Roboto-Regular.ttf", roboto);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    doc.setFontSize(16);
+    sales.forEach(sale => {
+      (doc as any).autoTable({
+        body: [
+          ['Venda', sale.id?.toString().padStart(6, '0')],
+          ['Data', this.formatDate(sale.date_hour ?? '')],
+          ['Cliente', sale.id_client ? sale.client?.name : 'Consumidor Final'],
+          ['Vendedor', sale.user?.name],
+          ['Valor Total', 'R$ ' + this.formatCurrency(sale.total ?? 0)],
+        ],
+      });
+
+      (doc as any).autoTable({
+        head: [['Produto', 'Quantidade', 'Valor', 'Total']],
+        body: sale.products ? sale.products.map(p => [p.product?.description, p.quantity, 'R$ ' + this.formatCurrency(p.product?.price_sale ?? 0), 'R$ ' + this.formatCurrency(p.quantity * (p.product?.price_sale ? p.product?.price_sale : 0) ?? 0)]) : [],
+        styles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], lineColor: [0, 0, 0] },
+        headStyles: { fillColor: [41, 40, 40], textColor: [255, 255, 255] },
+      });
+    });
+
+    const pdfOutput = doc.output();
+    const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+    const blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
+  }
+
   private formatDate(dateString: string) {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
