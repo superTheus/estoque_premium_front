@@ -16,21 +16,7 @@ import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
 import { Box, BoxRequest } from '../views/app/box/box.interface';
 import { Company } from '../views/app/company/company.interface';
-
-interface User {
-  id?: number,
-  name?: string,
-  email?: string,
-  password?: string,
-  photo?: string,
-  company?: number,
-  ativo?: 'S' | 'N';
-}
-
-interface UserRequest {
-  filter?: User;
-  limit?: number;
-}
+import { Users, UsersRequest } from '../views/app/user/users.interface';
 
 interface resultInterface {
   message: string;
@@ -42,7 +28,7 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  findCompany(company?: UserRequest): Promise<resultInterface> {
+  findCompany(company?: UsersRequest): Promise<resultInterface> {
     const url = `${environment.baseUrl}/company/list`;
 
     const headers = new HttpHeaders({
@@ -123,7 +109,7 @@ export class ApiService {
     })
   }
 
-  getUser(user: UserRequest) {
+  getUser(user: UsersRequest) {
     const url = `${environment.baseUrl}/user/list`;
 
     const headers = new HttpHeaders({
@@ -141,7 +127,7 @@ export class ApiService {
       );
   }
 
-  createUser(user: User): Promise<resultInterface> {
+  createUser(user: Users): Promise<resultInterface> {
     const url = `${environment.baseUrl}/user/insert`;
 
     const headers = new HttpHeaders({
@@ -168,7 +154,7 @@ export class ApiService {
     })
   }
 
-  updateUser(user: User): Promise<resultInterface> {
+  updateUser(user: Users): Promise<resultInterface> {
     const url = `${environment.baseUrl}/user/update/` + user.id;
 
     const headers = new HttpHeaders({

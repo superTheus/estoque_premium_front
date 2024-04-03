@@ -56,7 +56,13 @@ export class ReportsService {
     doc.setFont("Roboto");
 
     doc.setFontSize(16);
-    sales.forEach(sale => {
+    sales.forEach((sale, index) => {
+
+      let id = sale.id?.toString().padStart(6, '0');
+      let title = "Venda nº " + id;
+
+      doc.text(title, 80, (index + 1) * 10);
+
       (doc as any).autoTable({
         body: [
           ['Venda', sale.id?.toString().padStart(6, '0')],

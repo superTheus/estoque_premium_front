@@ -21,9 +21,10 @@
     <table id="stockTable" *ngIf="data">
       <thead>
         <tr>
-          <th class="col-2">ID</th>
+          <th class="col">ID</th>
           <th class="col-5">Descricão</th>
           <th class="col-4">Email</th>
+          <th class="col">Perfil</th>
           <th class="col"></th>
         </tr>
       </thead>
@@ -33,7 +34,8 @@
           <tr>
             <td class="col-2"> {{user.id}} </td>
             <td class="col-5"> {{user.name}} </td>
-            <td class="col-4"> {{user.email}} </td>
+            <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
+            <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
             <td class="col d-flex">
               <button class="btn btn-primary me-2" (click)="update(user)">
                 <i class="fas fa-edit"></i>
@@ -59,17 +61,33 @@
         </div>
         <div class="modal-body">
 
-          <form>
-            <div class="row mt-2">
-              <div class="col-6">
-                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
-              </div>
-              <div class="col-6">
-                <app-input-default [control]="lastName" type="text" label="Sobrenome"
-                  placeHolder="Sobrenome"></app-input-default>
+          <div class="row mt-2">
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="lastName" type="text" label="Sobrenome"
+                placeHolder="Sobrenome"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12">
+              <app-select-default [control]="profile" label="Perfil" [items]="profileOptions"></app-select-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-start">
+              <label for=""> Acesso ao sistema ? </label>
+              <div class="mx-3">
+                <p-toggleButton [(ngModel)]="use_system" onLabel="Sim" offLabel="Não">
+                  offLabel="Não"></p-toggleButton>
               </div>
             </div>
+          </div>
 
+          <ng-container *ngIf="use_system">
             <div class="row mt-2">
               <div class="col-12">
                 <app-input-default [control]="email" type="email" label="E-mail"
@@ -83,7 +101,7 @@
                   placeHolder="Senha"></app-input-default>
               </div>
             </div>
-          </form>
+          </ng-container>
 
         </div>
         <div class="modal-footer">

@@ -5,6 +5,7 @@ import { ApiService } from '../../../data/api.service';
 import { getCompanyId } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
+import { Options } from '../../../components/select-default/select-default.interface';
 
 declare const $: any;
 
@@ -16,8 +17,16 @@ declare const $: any;
 export class UserComponent {
   name = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
-  email = new FormControl('', [Validators.required]);
-  password = new FormControl('', [Validators.required]);
+  profile = new FormControl('');
+  email = new FormControl('');
+  password = new FormControl('');
+
+  use_system = true;
+
+  profileOptions: Options[] = [
+    { value: 'ADMIN', label: 'Administrador' },
+    { value: 'STORE', label: 'Vendedor' }
+  ]
 
   isEditMode = false;
   userSelected?: Users;
@@ -53,10 +62,10 @@ export class UserComponent {
       name: this.name.value + ' ' + this.lastName.value,
       email: this.email.value ?? '',
       password: this.password.value ?? '',
-      photo: '',
+      profile: this.profile.value as 'ADMIN' | 'STORE' ?? 'ADMIN',
       company: 1,
+      use_system: this.use_system ? 'Y' : 'N'
     }).then((res) => {
-      console.log(res);
       this.load();
     });
   }
@@ -67,8 +76,9 @@ export class UserComponent {
       name: this.name.value + ' ' + this.lastName.value,
       email: this.email.value ?? '',
       password: this.password.value ?? '',
-      photo: '',
       company: 1,
+      profile: this.profile.value as 'ADMIN' | 'STORE' ?? 'ADMIN',
+      use_system: this.use_system ? 'Y' : 'N'
     }).then((res) => {
       console.log(res);
       this.load();
@@ -77,10 +87,10 @@ export class UserComponent {
 
   update(user: Users) {
     this.userSelected = user;
-    this.name.setValue(user.name?.split(' ')[0]);
-    this.lastName.setValue(user.name?.split(' ')[1]);
-    this.email.setValue(user.email);
-    this.password.setValue(user.password);
+    this.name.setValue(user.name?.split(' ')[0] ?? '');
+    this.lastName.setValue(user.name?.split(' ')[1] ?? '');
+    this.email.setValue(user.email ?? null);
+    this.password.setValue(user.password ?? null);
 
     this.isEditMode = true;
     $('#modalProduct').modal('show');
@@ -98,7 +108,10 @@ export class UserComponent {
       if (result.isConfirmed) {
         this.apiService.updateUser({
           id: user?.id,
-          ativo: 'N'
+          ativo: 'N',
+          use_system: this.use_system ? 'Y' : 'N',
+          profile: this.profile.value as 'ADMIN' | 'STORE' ?? 'ADMIN',
+          company: 1 // Add the missing 'company' property
         }).then((res) => {
           this.load();
           Swal.fire("Usuário deletado", "", "info");

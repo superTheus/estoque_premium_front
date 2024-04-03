@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/auth.service';
+import { getCompanyId } from '../../../utils/util';
 
 @Component({
   selector: 'app-login',

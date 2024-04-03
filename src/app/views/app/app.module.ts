@@ -25,6 +25,7 @@ import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
 import { BoxComponent } from './box/box.component';
 import { CompanyComponent } from './company/company.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { CompanyComponent } from './company/company.component';
     RatingModule,
     TagModule,
     DataViewModule,
-    ComponentsModule
+    ComponentsModule,
+    ToggleButtonModule
   ],
   providers: [ApiService],
 })
