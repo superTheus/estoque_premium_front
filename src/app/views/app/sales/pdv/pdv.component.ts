@@ -17,6 +17,7 @@ import { Subcategorys } from '../../subcategorys/subcategorys.interface';
 import { Suppliers } from '../../supplier/supplier.interface';
 import { Clients } from '../../client/client.interface';
 import { BalanceService } from '../../../../data/balance.service';
+import { Users } from '../../user/users.interface';
 
 declare var $: any;
 
@@ -54,8 +55,10 @@ export class PdvComponent {
   id_supplier = new FormControl('');
 
   id_client = new FormControl(0);
+  id_seller = new FormControl('');
 
   clientsSelect: Options[] = [];
+  sellerSelect: Options[] = [];
   brandsSelect: Options[] = [];
   categorySelect: Options[] = [];
   subcategorySelect: Options[] = [];
@@ -251,12 +254,17 @@ export class PdvComponent {
         id_company: getCompanyId()
       }
     }).then(response => {
-
-
-      console.log(response.results);
-
       this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
       this.clientsSelect.unshift({ label: 'Consumidor Final', value: 0 });
+    });
+
+    this.apiService.getUser({
+      filter: {
+        company: getCompanyId(),
+        profile: 'STORE'
+      }
+    }).subscribe(response => {
+      this.sellerSelect = response.results.map((item: Users) => ({ label: item.name, value: item.id }));
     });
 
     if (id) {
@@ -317,8 +325,7 @@ export class PdvComponent {
 
   createSale(callback?: () => void) {
     this.salesService.createSale({
-      id_company: 1,
-      id_user: 1,
+      id_company: getCompanyId(),
       total: 0
     }).then(response => {
       this.currentSale = response.results as Sales;
@@ -510,6 +517,8 @@ export class PdvComponent {
     this.closeModal();
     let newSaleValue = this.currentSale;
     newSaleValue.status = 'FE';
+    newSaleValue.id_user = this.id_seller.value ? Number(this.id_seller.value) : getUserId();
+    newSaleValue.id_client = Number(this.id_client.value) ?? null;
 
     this.salesService.updateSale(newSaleValue).then((data) => {
       Swal.fire({

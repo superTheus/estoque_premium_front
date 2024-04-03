@@ -119,7 +119,7 @@ export class ApiService {
     return this.http.post(url, user, { headers })
       .pipe(
         map((res) => {
-          return res;
+          return res as resultInterface;
         }),
         catchError(errorRes => {
           return throwError(errorRes);

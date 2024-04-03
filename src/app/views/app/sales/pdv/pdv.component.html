@@ -222,9 +222,12 @@
         <div class="modal-body">
 
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 col-md-6">
               <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente"
                 [items]="clientsSelect"></app-select-default>
+            </div>
+            <div class="col-12 col-md-6">
+              <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
             </div>
           </div>
 

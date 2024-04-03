@@ -30,7 +30,8 @@
       <thead>
         <tr>
           <th class="col">ID</th>
-          <th class="col-3">Descricão</th>
+          <th class="col-2">Cliente</th>
+          <th class="col-2">Vendedor</th>
           <th class="col-2">Valor</th>
           <th class="col-3">Data Hora</th>
           <th *ngIf="filter.value !== 'CA'" class="col-2"></th>
@@ -41,7 +42,8 @@
         <ng-container *ngFor="let sale of data">
           <tr>
             <td class="col"> {{ sale.id }} </td>
-            <td class="col-3"> {{ sale.user?.name }} </td>
+            <td class="col-2"> {{ sale.id_client ? sale.client?.name : 'Consumidor Final' }} </td>
+            <td class="col-2"> {{ sale.id_user ? sale.user?.name : '--' }} </td>
             <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
             <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
             <td *ngIf="filter.value !== 'CA'" class="col text-center d-flex">

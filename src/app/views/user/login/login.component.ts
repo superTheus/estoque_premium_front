@@ -22,7 +22,8 @@ export class LoginComponent {
   login() {
     this.authService.signIn({
       email: this.email.value || '',
-      password: this.password.value || ''
+      password: this.password.value || '',
+      use_system: 'Y'
     }).then((data) => {
       this.router.navigate(['/app'])
     }).catch((error) => {

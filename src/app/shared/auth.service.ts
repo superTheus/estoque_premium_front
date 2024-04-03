@@ -7,6 +7,7 @@ import { clearSession, setCompanyId, setUserEmail, setUserId } from '../utils/ut
 export interface ISignInCredentials {
   email: string;
   password: string;
+  use_system?: 'Y' | 'N';
 }
 
 export interface ICreateCredentials {
