@@ -10,6 +10,7 @@ import { Options } from './select-default.interface';
 export class SelectDefaultComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
+  @Input() className?: string = '';
   @Input() control: FormControl;
   @Input() items: Options[] = [];
 

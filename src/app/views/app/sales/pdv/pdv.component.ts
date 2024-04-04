@@ -528,7 +528,7 @@ export class PdvComponent {
         confirmButtonText: 'OK'
       }).then(() => {
         let promises = this.currentSale.products?.map(product => {
-          return this.balanceService.newMoviment(product.product as Products, product.quantity);
+          return this.balanceService.newMoviment(product.product as Products, product.quantity, 'S');
         })
 
         Promise.all(promises as any[]).then(() => {

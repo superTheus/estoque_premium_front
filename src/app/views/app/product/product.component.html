@@ -108,8 +108,8 @@
                 <app-select-default [control]="control_stock" label="Controla Estoque"
                   [items]="controlStock"></app-select-default>
               </div>
-              <div class="col-6">
-                <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
+              <div *ngIf="!isEditMode" class="col-6">
+                <app-input-default [control]="stock" type="number" label="Estoque" placeHolder="Estoque"
                   [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
               </div>
             </div>

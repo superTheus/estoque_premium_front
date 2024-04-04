@@ -10,6 +10,7 @@ import { Suppliers } from '../supplier/supplier.interface';
 import { getCompanyId } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
+import { BalanceService } from '../../../data/balance.service';
 
 declare var $: any;
 
@@ -45,7 +46,10 @@ export class ProductComponent {
     { label: 'Não', value: 'N' }
   ]
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private balanceService: BalanceService
+  ) { }
 
   ngOnInit(): void {
     this.load();
@@ -129,7 +133,8 @@ export class ProductComponent {
         stock: Number(this.stock.value) || 0,
         id_company: 1
       }).then(res => {
-        this.data.push(res.results);
+        this.load();
+        this.balanceService.firstMoviment(res.results, Number(this.stock.value) || 0);
       })
     }
 

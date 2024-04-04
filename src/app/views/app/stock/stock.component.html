@@ -1,1 +1,111 @@
-<p>stock works!</p>
+<div class="container-main d-flex flex-column">
+  <div class="row my-2">
+    <h3> Entradas </h3>
+  </div>
+
+  <div id="stock-control-container" style="overflow-y: auto;">
+    <div class="search-bar">
+      <div class="input-search">
+        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+
+    <div class="row align-items-center justify-content-between mt-3">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3 d-flex justify-content-end">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Entrada</button>
+      </div>
+    </div>
+
+    <table id="stockTable" *ngIf="data">
+      <thead>
+        <tr>
+          <th class="col">ID</th>
+          <th class="col-7">Documento</th>
+          <th class="col-3"> Quantidade de Produtos </th>
+          <th class="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <ng-container *ngFor="let insert of data">
+          <tr>
+            <td class="col"> {{insert.id}} </td>
+            <td class="col-8"> {{insert.documento}} </td>
+            <td class="col-3 text-center"> {{insert.products.length}} </td>
+            <td class="col">
+              <button (click)="print(insert)" class="btn btn-secondary me-2" data-toggle="tooltip" data-placement="top"
+                title="Comprovante"> <i class="fas fa-print"></i> </button>
+            </td>
+          </tr>
+        </ng-container>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel">Nova Entrada</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form>
+            <div class="row mt-3">
+              <div class="col-12">
+                <app-input-default [control]="document" type="text" label="Documento"></app-input-default>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-12 col-md-6">
+                <app-select-default [control]="id_product" label="Produto" [items]="productSelected"
+                  className="selectedProduct"></app-select-default>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-input-default [control]="quantity" type="number" label="Quantidade"></app-input-default>
+              </div>
+              <div class="col">
+                <app-button-default (click)=" addProduct()" text="Adicionar"></app-button-default>
+              </div>
+            </div>
+
+            <div *ngIf="productsList.length" class="row mt-3">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th class="col-6">Produto</th>
+                      <th class="col-5">Quantidade</th>
+                      <th class="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of productsList">
+                      <td> {{product.description}} </td>
+                      <td> {{product.quantity}} </td>
+                      <td>
+                        <button class="btn btn-danger" (click)="removeProduct(product)">Remover</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

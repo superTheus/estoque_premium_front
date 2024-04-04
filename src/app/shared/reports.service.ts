@@ -4,6 +4,7 @@ import { Sales } from '../views/app/sales/sales.interface';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { roboto } from './data.font';
+import { Inputs } from '../data/balance.service';
 
 
 @Injectable({
@@ -79,6 +80,40 @@ export class ReportsService {
         styles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], lineColor: [0, 0, 0] },
         headStyles: { fillColor: [41, 40, 40], textColor: [255, 255, 255] },
       });
+    });
+
+    const pdfOutput = doc.output();
+    const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+    const blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
+  }
+
+  inputReport(input: Inputs) {
+    let doc = new jsPDF();
+
+    doc.addFileToVFS("Roboto-Regular.ttf", roboto);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    let id = input.id?.toString().padStart(6, '0');
+    let title = "Entrada nº " + id;
+
+    doc.setFontSize(16);
+    doc.text(title, 80, 10);
+
+    (doc as any).autoTable({
+      body: [
+        ['Data', this.formatDate(input.date_hour ?? '')],
+        ['Documento', input.documento],
+        ['Usuario', input.user?.name],
+      ],
+    });
+
+    (doc as any).autoTable({
+      head: [['Produto', 'Quantidade', 'Saldo Atual', 'Saldo Anterior']],
+      body: input.products.map(p => [p.product?.description, p.quantity, p.product?.stock, (p.product?.stock ?? 0) - p.quantity]),
+      styles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], lineColor: [0, 0, 0] },
+      headStyles: { fillColor: [41, 40, 40], textColor: [255, 255, 255] },
     });
 
     const pdfOutput = doc.output();
