@@ -41,6 +41,29 @@ export interface InputsRequest {
   };
 }
 
+export interface Moviment {
+  id: number,
+  id_product: number,
+  id_company: number,
+  balance_preview: number,
+  balance_new: number,
+  type: 'C' | 'S' | 'I',
+  date_hour: string,
+}
+
+export interface MovimentRequest {
+  filter?: {
+    id?: number,
+    id_product?: number,
+    id_company: number,
+  };
+  limit?: number;
+  order?: {
+    field: string,
+    order: string
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class BalanceService {
   constructor(private http: HttpClient) {
@@ -134,6 +157,33 @@ export class BalanceService {
 
     return new Promise((resolve, reject) => {
       this.http.post(url, input, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  async findMoviment(params: MovimentRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/balance/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, params, { headers })
         .pipe(
           map((res) => {
             return res as resultInterface;

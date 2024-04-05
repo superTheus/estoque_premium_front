@@ -4,7 +4,8 @@ import { Sales } from '../views/app/sales/sales.interface';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { roboto } from './data.font';
-import { Inputs } from '../data/balance.service';
+import { Inputs, Moviment } from '../data/balance.service';
+import { Products } from '../views/app/product/product.interface';
 
 
 @Injectable({
@@ -13,6 +14,41 @@ import { Inputs } from '../data/balance.service';
 export class ReportsService {
 
   constructor() { }
+
+  productReport({ product, moviments }: { product: Products, moviments: Moviment[] }) {
+    let doc = new jsPDF();
+
+    doc.addFileToVFS("Roboto-Regular.ttf", roboto);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    doc.setFontSize(16);
+
+    (doc as any).autoTable({
+      body: [
+        ['Produto', product.description],
+        ['Preco Custo', this.formatCurrency(product.price_cost ?? 0)],
+        ['Preco Venda', this.formatCurrency(product.price_sale ?? 0)],
+        ['NCM', product.ncm],
+        ['Estoque', product.stock],
+        ['Custo de Estoque', this.formatCurrency((product.price_cost ?? 0) * (product.stock ?? 0))],
+        ['Venda de Estoque', this.formatCurrency((product.price_sale ?? 0) * (product.stock ?? 0))],
+        ['Lucro previsto', this.formatCurrency(((product.price_sale ?? 0) * (product.stock ?? 0)) - ((product.price_cost ?? 0) * (product.stock ?? 0)))],
+      ]
+    });
+
+    (doc as any).autoTable({
+      head: [['Tipo movimentacao', 'Saldo anterior', 'Novo Saldo', 'Data hora']],
+      body: moviments.map(p => [p.type === 'C' ? 'Saldo Inicial' : p.type === 'I' ? 'Entrada' : 'Venda', p.balance_preview, p.balance_new, this.formatDate(p.date_hour)]),
+      styles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], lineColor: [0, 0, 0] },
+      headStyles: { fillColor: [41, 40, 40], textColor: [255, 255, 255] },
+    });
+
+    const pdfOutput = doc.output();
+    const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+    const blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
+  }
 
   salesReport(sale: Sales) {
     let doc = new jsPDF();

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RoutineComponent } from './routine.component';
 import { MenuComponent } from './menu/menu.component';
-import { StockComponent } from '../stock/stock.component';
 import { SalesRoutineComponent } from './sales/salesRoutine.component';
+import { StockComponent } from './stock/stock.component';
 
 const routes: Routes = [
   {

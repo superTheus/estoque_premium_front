@@ -26,6 +26,7 @@ import { DashboardsComponent } from './dashboards/dashboards.component';
 import { BoxComponent } from './box/box.component';
 import { CompanyComponent } from './company/company.component';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { StockComponent } from './stock/stock.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     ReceiveComponent,
     DashboardsComponent,
     BoxComponent,
-    CompanyComponent
+    CompanyComponent,
+    StockComponent
   ],
   imports: [
     CommonModule,
