@@ -15,7 +15,7 @@ import { Products, ProductsRequest } from '../views/app/product/product.interfac
 import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
 import { Box, BoxRequest } from '../views/app/box/box.interface';
-import { Company } from '../views/app/company/company.interface';
+import { Company, CompanyRequest } from '../views/app/company/company.interface';
 import { Users, UsersRequest } from '../views/app/user/users.interface';
 
 interface resultInterface {
@@ -28,7 +28,7 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  findCompany(company?: UsersRequest): Promise<resultInterface> {
+  findCompany(company?: CompanyRequest): Promise<resultInterface> {
     const url = `${environment.baseUrl}/company/list`;
 
     const headers = new HttpHeaders({

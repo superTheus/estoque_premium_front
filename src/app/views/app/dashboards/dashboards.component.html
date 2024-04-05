@@ -110,7 +110,23 @@
         <app-chart [chartData]="chartSalesPrimary"></app-chart>
       </div>
 
-      <div class="col-12 col-md-4"> </div>
+      <div class="col-12 col-md-4">
+        <div *ngIf="company.certificate" class="card">
+          <div class="card-body">
+
+          </div>
+        </div>
+
+        <div *ngIf="!company.certificate" class="card h-100">
+          <div class="card-body text-center">
+            <img class="certificate" src="../../../../assets/images/not_certificate.svg" alt="Certificate Banner"
+              srcset="">
+
+            <p class="mt-4"> O certificado digital não foi detectado <a routerLink="../company"> Clique aqui para
+                resolver </a> </p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </ng-template>

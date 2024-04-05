@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { getCompanyId } from '../../../utils/util';
 
@@ -23,7 +23,17 @@ export class CompanyComponent implements OnInit {
   cidade = new FormControl('');
   uf = new FormControl('');
 
-  constructor(private apiService: ApiService) { }
+  certificate = new FormControl('');
+  password = new FormControl('');
+  csc = new FormControl('');
+  csc_id = new FormControl('');
+
+  certificateForm!: FormGroup;
+
+  constructor(
+    private apiService: ApiService,
+    private formBuild: FormBuilder,
+  ) { }
 
   ngOnInit() {
     this.apiService.findCompany({
@@ -69,5 +79,32 @@ export class CompanyComponent implements OnInit {
         confirmButtonText: 'OK'
       });
     });
+  }
+
+  saveCertificate() {
+
+    console.log(this.certificateForm.value);
+
+    // this.apiService.updateCompany({
+    //   id: getCompanyId(),
+    //   cnpj: this.cnpj.value || '',
+    //   razao_social: this.razao_social.value || '',
+    //   nome_fantasia: this.nome_fantasia.value || '',
+    //   telefone: this.telefone.value || '',
+    //   email: this.email.value || '',
+    //   cep: this.cep.value || '',
+    //   logradouro: this.logradouro.value || '',
+    //   numero: Number(this.numero.value) || 0,
+    //   bairro: this.bairro.value || '',
+    //   cidade: this.cidade.value || '',
+    //   uf: this.uf.value || ''
+    // }).then(() => {
+    //   Swal.fire({
+    //     title: 'Sucesso!',
+    //     text: 'Empresa atualizada com sucesso.',
+    //     icon: 'success',
+    //     confirmButtonText: 'OK'
+    //   });
+    // });
   }
 }

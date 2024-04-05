@@ -11,4 +11,13 @@ export interface Company {
   bairro?: string,
   cidade?: string,
   uf?: string,
+  certificate?: string,
+  password?: string,
+  csc?: string,
+  csc_id?: string,
+}
+
+export interface CompanyRequest {
+  filter?: Company;
+  limit?: number;
 }

@@ -9,7 +9,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { ProductComponent } from './product/product.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../../containers/layout/layout.module';
 import { UserComponent } from './user/user.component';
 import { ComponentsModule } from '../../components/components.module';
@@ -57,7 +57,8 @@ import { StockComponent } from './stock/stock.component';
     TagModule,
     DataViewModule,
     ComponentsModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    ReactiveFormsModule
   ],
   providers: [ApiService],
 })

@@ -7,6 +7,7 @@ import { Finance } from '../payment/payment.interface';
 import { SalesService } from '../../../data/sales.service';
 import { Sales } from '../sales/sales.interface';
 import { getCompanyId } from '../../../utils/util';
+import { Company } from '../company/company.interface';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class DashboardsComponent implements OnInit {
   salesClose = 0;
   salesCancelad = 0;
 
+  company!: Company;
 
   labelsYear = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
@@ -50,6 +52,14 @@ export class DashboardsComponent implements OnInit {
   }
 
   load() {
+    this.apiService.findCompany({
+      filter: {
+        id: getCompanyId()
+      }
+    }).then(data => {
+      this.company = data.results[0];
+    })
+
     this.apiService.findContas({
       filter: {
         deleted: "N",
