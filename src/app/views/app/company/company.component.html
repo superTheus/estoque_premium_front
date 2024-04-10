@@ -59,7 +59,8 @@
 
     <div class="row mt-3">
       <div class="col-12">
-        <app-input-default [control]="certificate" type="file" label="Certificado" placeHolder=""></app-input-default>
+        <app-input-default [control]="certificate" type="file" label="Certificado" placeHolder="" accept=".pfx"
+          (change)="onFileChange($event)"></app-input-default>
       </div>
     </div>
     <div class="row mt-3">

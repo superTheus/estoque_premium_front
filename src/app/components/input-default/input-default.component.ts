@@ -13,6 +13,7 @@ export class InputDefaultComponent {
   @Input() placeHolder: string = '';
   @Input() classname: string = '';
   @Input() control: FormControl;
+  @Input() accept: string = '';
   @Input() disabled: boolean = false;
   @Output() change = new EventEmitter();
 

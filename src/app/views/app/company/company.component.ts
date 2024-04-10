@@ -23,12 +23,11 @@ export class CompanyComponent implements OnInit {
   cidade = new FormControl('');
   uf = new FormControl('');
 
-  certificate = new FormControl('');
+  fileCertificate!: File;
+  certificate = new FormControl();
   password = new FormControl('');
   csc = new FormControl('');
   csc_id = new FormControl('');
-
-  certificateForm!: FormGroup;
 
   constructor(
     private apiService: ApiService,
@@ -81,9 +80,19 @@ export class CompanyComponent implements OnInit {
     });
   }
 
+
+  onFileChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file: File = target.files[0];
+      this.fileCertificate = file;
+    }
+  }
+
   saveCertificate() {
 
-    console.log(this.certificateForm.value);
+    console.log(this.fileCertificate);
+    console.log(this.certificate.value);
 
     // this.apiService.updateCompany({
     //   id: getCompanyId(),
