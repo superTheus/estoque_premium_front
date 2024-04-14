@@ -3,16 +3,14 @@
     <ul class="nav flex-column">
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['dashboards']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['dashboards']">
           Dashboards
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-
         <div class="list-group list-group-flush rounded">
-
-          <a href="#submenu1" data-bs-toggle="collapse" class="nav-link">Cadastros</a>
+          <a (click)="changeMenuState(true)" href="#submenu1" data-bs-toggle="collapse" class="nav-link">Cadastros</a>
 
           <div id="submenu1" class="collapse">
             <a [routerLink]="['company']" class="nav-link">Empresa</a>
@@ -29,37 +27,37 @@
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['box']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['box']">
           Caixa
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['sales']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['sales']">
           Portal de vendas
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['shopp']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['shopp']">
           Portal de compras
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['routine']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['routine']">
           Relatório e rotinas
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a class="nav-link" [routerLink]="['stock']">
+        <a (click)="changeMenuState(false)" class="nav-link" [routerLink]="['stock']">
           Controle de estoque
         </a>
       </li>
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
-        <a href="#submenufinanceiro" data-bs-toggle="collapse" class="nav-link">
+        <a (click)="changeMenuState(true)" href="#submenufinanceiro" data-bs-toggle="collapse" class="nav-link">
           Financeiro
         </a>
 
