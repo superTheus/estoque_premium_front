@@ -15,7 +15,7 @@ import { ReportsService } from '../../../../shared/reports.service';
 export class ListComponent implements OnInit {
   data: Sales[] = [];
 
-  filter = new FormControl('AB');
+  filter = new FormControl('');
 
   constructor(
     private salesService: SalesService,
@@ -29,11 +29,20 @@ export class ListComponent implements OnInit {
   }
 
   loadData() {
+
+    let filter: {
+      status?: 'AB' | 'CA' | 'FE' | 'AB'
+      id_company: number
+    } = {
+      id_company: getCompanyId()
+    }
+
+    if (this.filter.value) {
+      filter.status = this.filter.value as 'AB' | 'CA' | 'FE' || 'AB';
+    }
+
     this.salesService.findSales({
-      filter: {
-        status: this.filter.value as 'AB' | 'CA' | 'FE' || 'AB',
-        id_company: getCompanyId()
-      }
+      filter: filter
     }).then((response) => {
       this.data = response.results;
     }).catch((error) => {

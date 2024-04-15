@@ -343,6 +343,8 @@ export class PdvComponent {
       if (id) {
         this.id_client.setValue(id);
         this.updateClient();
+      } else if (this.currentSale) {
+        this.id_client.setValue(this.currentSale.id_client as number);
       }
     });
   }

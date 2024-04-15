@@ -13,6 +13,7 @@
     <div class="d-flex align-items-center justify-content-between mt-3">
       <div class="col-3 px-2">
         <select name="" id="" class="form-control" [formControl]="filter" (change)="loadData()">
+          <option value="">Todos</option>
           <option value="AB">Em aberto</option>
           <option value="FE">Finalizada</option>
           <option value="CA">Cancelada</option>
@@ -46,7 +47,7 @@
             <td class="col-2"> {{ sale.id_user ? sale.user?.name : '--' }} </td>
             <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
             <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
-            <td *ngIf="filter.value !== 'CA'" class="col text-center d-flex">
+            <td *ngIf="filter.value !== 'CA'" class="col text-center" [ngClass]="{'d-flex': sale.status !== 'CA'}">
               <a *ngIf="sale.status === 'FE'" (click)="generatePDF(sale)" class="btn btn-secondary me-2"
                 data-toggle="tooltip" data-placement="top" title="Comprovante"> <i class="fas fa-print"></i> </a>
               <a *ngIf="sale.status === 'AB'" [routerLink]="['/app/sales/pdv/' + sale.id]" class="btn btn-primary me-2"
