@@ -13,8 +13,10 @@ export class SelectDefaultComponent {
   @Input() className?: string = '';
   @Input() control: FormControl;
   @Input() items: Options[] = [];
+  @Input() showButton = false;
 
   @Output() change = new EventEmitter();
+  @Output() buttonAction = new EventEmitter();
 
   constructor() {
     this.control = new FormControl();
@@ -22,5 +24,9 @@ export class SelectDefaultComponent {
 
   onChange() {
     this.change.emit();
+  }
+
+  onButtonAction() {
+    this.buttonAction.emit();
   }
 }

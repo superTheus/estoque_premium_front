@@ -85,6 +85,43 @@ export class PdvComponent {
   paymentSelected!: | 1 | 2 | 3 | 4;
   paymentForms: PaymentForms[] = [];
 
+
+  nome = new FormControl('');
+  apelido = new FormControl('');
+  razao_social = new FormControl('');
+  rg_inscricao = new FormControl('');
+  email = new FormControl('');
+  celular = new FormControl('');
+  telefone = new FormControl('');
+  endereco = new FormControl('');
+  cep = new FormControl('');
+  documento = new FormControl('');
+  cidade = new FormControl('');
+  numero = new FormControl('');
+  bairro = new FormControl('');
+  complemento = new FormControl('');
+  data_nascimento = new FormControl('');
+  icms = new FormControl('');
+  genero = new FormControl('');
+
+  generoOptions: {
+    value: string;
+    label: string;
+  }[] = [
+      {
+        label: 'Masculino',
+        value: 'M'
+      },
+      {
+        label: 'Feminino',
+        value: 'F'
+      },
+      {
+        label: 'Outros',
+        value: 'O'
+      }
+    ]
+
   constructor(
     private apiService: ApiService,
     private salesService: SalesService,
@@ -101,7 +138,7 @@ export class PdvComponent {
 
   ngOnInit(): void {
     this.load();
-
+    this.loadClients();
     this.apiService.findBox({
       filter: {
         id_company: getCompanyId(),
@@ -163,6 +200,15 @@ export class PdvComponent {
     }
   }
 
+  openModalClient = () => {
+    const element = document.getElementById('modalClient');
+
+    if (element) {
+      var myModal = new bootstrap.Modal(element, {});
+      myModal.show();
+    }
+  }
+
   openModalPaymentValue = (payment: 1 | 2 | 3 | 4) => {
     this.closeModal();
 
@@ -214,6 +260,15 @@ export class PdvComponent {
         myModal.hide();
       }
     }
+
+    element = document.getElementById('modalClient');
+
+    if (element) {
+      var myModal = bootstrap.Modal.getInstance(element);
+      if (myModal) {
+        myModal.hide();
+      }
+    }
   }
 
   async load(id?: number) {
@@ -249,15 +304,6 @@ export class PdvComponent {
       this.supplierSelect = response.results.map((item: Suppliers) => ({ label: item.name, value: item.id }));
     });
 
-    this.apiService.findClient({
-      filter: {
-        id_company: getCompanyId()
-      }
-    }).then(response => {
-      this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
-      this.clientsSelect.unshift({ label: 'Consumidor Final', value: 0 });
-    });
-
     this.apiService.getUser({
       filter: {
         company: getCompanyId(),
@@ -284,6 +330,21 @@ export class PdvComponent {
         }
       });
     }
+  }
+
+  loadClients(id?: number) {
+    this.apiService.findClient({
+      filter: {
+        id_company: getCompanyId()
+      }
+    }).then(response => {
+      this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
+      this.clientsSelect.unshift({ label: 'Consumidor Final', value: 0 });
+      if (id) {
+        this.id_client.setValue(id);
+        this.updateClient();
+      }
+    });
   }
 
   save() {
@@ -537,5 +598,49 @@ export class PdvComponent {
 
       });
     });
+  }
+
+  saveClient() {
+    this.apiService.createClient({
+      apelido: this.apelido.value || '',
+      bairro: this.bairro.value || '',
+      celular: this.celular.value || '',
+      cep: this.cep.value || '',
+      cidade: this.cidade.value || '',
+      complemento: this.complemento.value || '',
+      data_nascimento: this.data_nascimento.value || '',
+      documento: this.documento.value || '',
+      email: this.email.value || '',
+      endereco: this.endereco.value || '',
+      genero: this.genero.value || '',
+      icms: this.icms.value || '',
+      name: this.nome.value || '',
+      numero: this.numero.value || '',
+      razao_social: this.razao_social.value || '',
+      rg_inscricao: this.rg_inscricao.value || '',
+      telefone: this.telefone.value || '',
+      id_company: 1,
+    }).then(res => {
+      this.apelido.setValue('');
+      this.bairro.setValue('');
+      this.celular.setValue('');
+      this.cep.setValue('');
+      this.cidade.setValue('');
+      this.complemento.setValue('');
+      this.data_nascimento.setValue('');
+      this.documento.setValue('');
+      this.email.setValue('');
+      this.endereco.setValue('');
+      this.genero.setValue('');
+      this.icms.setValue('');
+      this.nome.setValue('');
+      this.numero.setValue('');
+      this.razao_social.setValue('');
+      this.rg_inscricao.setValue('');
+      this.telefone.setValue('');
+      this.loadClients(res.results.id);
+    })
+
+    this.closeModal();
   }
 }
