@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
 import { Options } from '../../../../components/select-default/select-default.interface';
 import { ApiService } from '../../../../data/api.service';
@@ -18,6 +19,7 @@ import { Suppliers } from '../../supplier/supplier.interface';
 import { Clients } from '../../client/client.interface';
 import { BalanceService } from '../../../../data/balance.service';
 import { Users } from '../../user/users.interface';
+import { formatNumber } from '@angular/common';
 
 declare var $: any;
 
@@ -104,6 +106,8 @@ export class PdvComponent {
   icms = new FormControl('');
   genero = new FormControl('');
 
+  paymentType = new FormControl(1)
+
   generoOptions: {
     value: string;
     label: string;
@@ -121,6 +125,25 @@ export class PdvComponent {
         value: 'O'
       }
     ]
+
+  paymentTypeOptions: Options[] = [
+    {
+      label: 'DINHEIRO',
+      value: 1
+    },
+    {
+      label: 'DÉBITO',
+      value: 2
+    },
+    {
+      label: 'CRÉDITO',
+      value: 3
+    },
+    {
+      label: 'PIX',
+      value: 4
+    }
+  ]
 
   constructor(
     private apiService: ApiService,
@@ -197,6 +220,8 @@ export class PdvComponent {
     if (element) {
       var myModal = new bootstrap.Modal(element, {});
       myModal.show();
+
+      this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
     }
   }
 
@@ -207,21 +232,6 @@ export class PdvComponent {
       var myModal = new bootstrap.Modal(element, {});
       myModal.show();
     }
-  }
-
-  openModalPaymentValue = (payment: 1 | 2 | 3 | 4) => {
-    this.closeModal();
-
-    setTimeout(() => {
-      this.paymentSelected = payment;
-
-      const element = document.getElementById('modalValorVenda');
-
-      if (element) {
-        var myModal = new bootstrap.Modal(element, {});
-        myModal.show();
-      }
-    }, 500)
   }
 
   closeModal = () => {
@@ -509,21 +519,24 @@ export class PdvComponent {
   }
 
   applyPayment() {
-    if (this.paymentSelected !== 1 && Number(this.paymentValue.value) > (this.total - this.totalPayment)) {
+    let value = Number(this.paymentValue.value.replace('R$', '').replace('.', '').replace(',', '.').trim());
+    let form = Number(this.paymentType.value);
+
+    if (form !== 1 && value > (this.total - this.totalPayment)) {
       alert('O valor do pagamento não pode ser maior que o valor total da venda!');
       return;
     }
 
-    if (this.paymentSelected === 1 && Number(this.paymentValue.value) > (this.total - this.totalPayment)) {
-      this.troco = Number(this.paymentValue.value) - (this.total - this.totalPayment);
+    if (form === 1 && value > (this.total - this.totalPayment)) {
+      this.troco = value - (this.total - this.totalPayment);
     }
 
-    switch (this.paymentSelected) {
+    switch (form) {
       case 1:
         this.paymentForms.push({
           id: 1,
           label: 'DINHEIRO',
-          value: Number(this.paymentValue.value),
+          value: value,
           icon: 'far fa-money-bill-alt',
           class: 'bg-success'
         });
@@ -532,7 +545,7 @@ export class PdvComponent {
         this.paymentForms.push({
           id: 2,
           label: 'CARTÃO DE DÉBITO',
-          value: Number(this.paymentValue.value),
+          value: value,
           icon: 'far fa-credit-card',
           class: 'bg-primary'
         });
@@ -541,7 +554,7 @@ export class PdvComponent {
         this.paymentForms.push({
           id: 3,
           label: 'CARTÃO DE CRÉDITO',
-          value: Number(this.paymentValue.value),
+          value: value,
           icon: 'far fa-credit-card',
           class: 'bg-secondary'
         });
@@ -550,20 +563,15 @@ export class PdvComponent {
         this.paymentForms.push({
           id: 4,
           label: 'PIX',
-          value: Number(this.paymentValue.value),
+          value: value,
           icon: 'fas fa-qrcode',
           class: 'bg-danger'
         });
         break;
     }
 
-    this.totalPayment += Number(this.paymentValue.value);
-    this.paymentValue.setValue('');
-    this.closeModal();
-
-    setTimeout(() => {
-      this.openModalPayment();
-    }, 200)
+    this.totalPayment += value;
+    this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
   }
 
   deletPaymentForm(payment: PaymentForms) {
@@ -574,6 +582,8 @@ export class PdvComponent {
     if (this.troco < 0) {
       this.troco = 0;
     }
+
+    this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
   }
 
   finishedSale() {
@@ -644,5 +654,17 @@ export class PdvComponent {
     })
 
     this.closeModal();
+  }
+
+  changeValueFormat() {
+    let value = this.paymentValue.value;
+
+    if (value) {
+      value = value.replace(/[^0-9]/g, '')
+      value = value.replace('.', '').replace(',', '.');
+      value = Number(value) / 100;
+      value = this.formatValueCurrency(value);
+      this.paymentValue.setValue(value);
+    }
   }
 }
