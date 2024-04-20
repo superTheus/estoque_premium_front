@@ -1,4 +1,30 @@
 <div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4 mt-3">
+    <h3> Financeiro </h3>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row px-4 mt-3">
+        <form [formGroup]="clientForm" class="row">
+          <div class="col-12 col-md-10">
+            <label class="mb-2"><span> Cliente </span></label>
+            <p-dropdown [options]="clients" formControlName="client" optionValue="id" optionLabel="name" [filter]="true"
+              placeholder="Pesquisar por cliente" emptyMessage="Nenhum cliente encontrado" [showClear]="true"
+              emptyFilterMessage="Nenhum cliente encontrado" [resetFilterOnHide]="true">
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary col-12 mt-2 mt-md-4"> Novo </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-main d-flex flex-column">
   <div class="row px-3 mb-4">
     <h3> Contas a Pagar </h3>
   </div>
@@ -115,4 +141,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

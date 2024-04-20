@@ -27,6 +27,8 @@ import { BoxComponent } from './box/box.component';
 import { CompanyComponent } from './company/company.component';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { StockComponent } from './stock/stock.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { FinanceComponent } from './finance/finance.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { StockComponent } from './stock/stock.component';
     DashboardsComponent,
     BoxComponent,
     CompanyComponent,
-    StockComponent
+    StockComponent,
+    FinanceComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +61,8 @@ import { StockComponent } from './stock/stock.component';
     DataViewModule,
     ComponentsModule,
     ToggleButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropdownModule
   ],
   providers: [ApiService],
 })

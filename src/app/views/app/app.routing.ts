@@ -42,6 +42,7 @@ let routes: Routes = [
       { path: 'payment', component: PaymentComponent },
       { path: 'receive', component: ReceiveComponent },
       { path: 'company', component: CompanyComponent },
+      { path: 'finance', component: FinanceComponent },
     ]
   }
 ];

@@ -58,10 +58,11 @@
 
       <li class="nav-item border-primary border shadow-lg rounded mt-2">
         <a (click)="changeMenuState(true)" href="#submenufinanceiro" data-bs-toggle="collapse" class="nav-link">
-          Financeiro
+          Finanças
         </a>
 
         <div id="submenufinanceiro" class="collapse">
+          <a [routerLink]="['finance']" class="nav-link">Financeiro</a>
           <a [routerLink]="['payment']" class="nav-link">Contas a pagar</a>
           <a [routerLink]="['receive']" class="nav-link">Contas a receber</a>
           <a [routerLink]="['contas']" class="nav-link">Contas Bancárias</a>

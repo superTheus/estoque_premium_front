@@ -1,1 +1,146 @@
-<p>finance works!</p>
+<div class="container-main d-flex flex-column">
+  <div class="row px-3 mb-4 mt-3">
+    <h3> Financeiro </h3>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row px-4 mt-3">
+        <form [formGroup]="clientForm" class="row">
+          <div class="col-12 col-md-10">
+            <label class="mb-2"><span> Cliente </span></label>
+            <p-dropdown [options]="clients" formControlName="client" optionValue="id" optionLabel="name" [filter]="true"
+              placeholder="Pesquisar por cliente" emptyMessage="Nenhum cliente encontrado" [showClear]="true"
+              emptyFilterMessage="Nenhum cliente encontrado" [resetFilterOnHide]="true">
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-md-2 d-flex align-items-end">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modalProduct"
+              class="btn btn-primary col-12 mt-2 mt-md-4"> Novo </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="stock-control-container" class="mt-3">
+    <div *ngIf="totalLate > 0 || totalDay > 0" class="row align-items-center justify-content-between mt-3 px-5">
+      <div *ngIf="totalLate > 0" class="alert alert-danger col-12" role="alert">
+        Você tem <strong> {{ totalLate }} </strong> contas atrasadas
+      </div>
+      <div *ngIf="totalDay > 0" class="alert alert-warning col-12" role="alert">
+        Você tem <strong> {{ totalDay }} </strong> contas que venceram hoje
+      </div>
+    </div>
+
+    <table id="stockTable" *ngIf="data">
+      <thead>
+        <tr>
+          <th class="col">ID</th>
+          <th class="col-2">Credor</th>
+          <th class="col-2">Valor</th>
+          <th class="col-3">Data de Compra</th>
+          <th class="col-3">Data de vencimento</th>
+          <th class="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <ng-container *ngFor="let conta of finances">
+          <tr>
+            <td class="col"> {{conta.id}} </td>
+            <td class="col-2"> {{ conta.clientData?.name }} </td>
+            <td class="col-4"> {{ conta.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+            <td class="col-2"> {{ conta.date_finance | date:'dd/MM/yyyy HH:mm:ss' }} </td>
+            <td class="col-2"> {{ conta.date_expiration | date:'dd/MM/yyyy HH:mm:ss' }} </td>
+            <td class="col d-flex">
+              <button class="btn btn-primary me-2" (click)="update(conta)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" (click)="delete(conta)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Conta' : 'Adicionar nova conta' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form (ngSubmit)="save()">
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <app-input-default [control]="value" type="text" label="Valor"
+                placeHolder="Documento"></app-input-default>
+            </div>
+
+            <div class="col-12 col-md-8">
+              <app-select-default [control]="payform" label="Forma de Pagamento" [items]="formPay"></app-select-default>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <app-select-default [control]="client" label="Cliente/Parceiro"
+                [items]="clientOptions"></app-select-default>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="number_order" type="text" label="Número do pedido"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <app-select-default [control]="wild" label="Natureza" [items]="wildOptions"></app-select-default>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <app-select-default [control]="type" label="Tipo" [items]="typeOptions"></app-select-default>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <app-input-default [control]="portion_value" type="text" label="Parcela"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="date_finance" type="datetime-local"
+                label="Data Financeiro"></app-input-default>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="date_expiration" type="datetime-local"
+                label="Data Vencimento"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <app-input-default [control]="observation" type="text" label="Observações"></app-input-default>
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

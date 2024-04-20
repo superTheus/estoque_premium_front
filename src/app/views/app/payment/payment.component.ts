@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Finance } from './payment.interface';
-import { FormControl } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Options } from '../../../components/select-default/select-default.interface';
 import { Contas } from '../contas/contas.interface';
+import { Clients } from '../client/client.interface';
 
 declare const $: any;
 
@@ -13,6 +14,10 @@ declare const $: any;
   styleUrl: './payment.component.scss'
 })
 export class PaymentComponent {
+
+  clientForm!: UntypedFormGroup;
+  clients!: Clients[];
+
   documento = new FormControl('');
   vencimento = new FormControl('');
   descricao = new FormControl('');
@@ -64,6 +69,10 @@ export class PaymentComponent {
         }
       });
     })
+
+    this.apiService.findClient().then((data) => {
+      this.clients = data.results;
+    });
   }
 
   save() {

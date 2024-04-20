@@ -17,6 +17,7 @@ import { Finance, FinanceRequest } from '../views/app/payment/payment.interface'
 import { Box, BoxRequest } from '../views/app/box/box.interface';
 import { Company, CompanyRequest } from '../views/app/company/company.interface';
 import { Users, UsersRequest } from '../views/app/user/users.interface';
+import { FinanceData, FinanceDataRequest } from '../views/app/finance/finance.interface';
 
 interface resultInterface {
   message: string;
@@ -908,5 +909,32 @@ export class ApiService {
           }
         );
     })
+  }
+
+  findFinance(conta: FinanceDataRequest): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/conta/list`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res as resultInterface;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as resultInterface);
+          },
+          error => {
+            reject(error);
+          }
+        );
+    });
   }
 }
