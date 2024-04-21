@@ -937,4 +937,58 @@ export class ApiService {
         );
     });
   }
+
+  createFinance(conta: FinanceData): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/conta/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateFinance(conta: FinanceData): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/conta/update/` + conta.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
 }

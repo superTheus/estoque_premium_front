@@ -197,88 +197,27 @@ export class PdvComponent {
   }
 
   openModal = () => {
-    const element = document.getElementById('modalListProduct');
-
-    if (element) {
-      var myModal = new bootstrap.Modal(element, {});
-      myModal.show();
-    }
+    $('#modalListProduct').modal('show');
   }
 
   openModalAddProduct = () => {
-    const element = document.getElementById('modalAddProduct');
-
-    if (element) {
-      var myModal = new bootstrap.Modal(element, {});
-      myModal.show();
-    }
+    $('#modalAddProduct').modal('show');
   }
 
   openModalPayment = () => {
-    const element = document.getElementById('modalPayment');
-
-    if (element) {
-      var myModal = new bootstrap.Modal(element, {});
-      myModal.show();
-
-      this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
-    }
+    $('#modalPayment').modal('show');
   }
 
   openModalClient = () => {
-    const element = document.getElementById('modalClient');
-
-    if (element) {
-      var myModal = new bootstrap.Modal(element, {});
-      myModal.show();
-    }
+    $('#modalClient').modal('show');
   }
 
   closeModal = () => {
-    let element = document.getElementById('modalListProduct');
-
-    if (element) {
-      var myModal = bootstrap.Modal.getInstance(element);
-      if (myModal) {
-        myModal.hide();
-      }
-    }
-
-    element = document.getElementById('modalAddProduct');
-
-    if (element) {
-      var myModal = bootstrap.Modal.getInstance(element);
-      if (myModal) {
-        myModal.hide();
-      }
-    }
-
-    element = document.getElementById('modalPayment');
-
-    if (element) {
-      var myModal = bootstrap.Modal.getInstance(element);
-      if (myModal) {
-        myModal.hide();
-      }
-    }
-
-    element = document.getElementById('modalValorVenda');
-
-    if (element) {
-      var myModal = bootstrap.Modal.getInstance(element);
-      if (myModal) {
-        myModal.hide();
-      }
-    }
-
-    element = document.getElementById('modalClient');
-
-    if (element) {
-      var myModal = bootstrap.Modal.getInstance(element);
-      if (myModal) {
-        myModal.hide();
-      }
-    }
+    $('#modalListProduct').modal('hide');
+    $('#modalAddProduct').modal('hide');
+    $('#modalPayment').modal('hide');
+    $('#modalValorVenda').modal('hide');
+    $('#modalClient').modal('hide');
   }
 
   async load(id?: number) {

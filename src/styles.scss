@@ -107,7 +107,7 @@ main {
   .container-main {
     width: 95%;
     margin: auto;
-    height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px);
   }
 }
 
@@ -198,4 +198,13 @@ a {
 .card-green {
   background-color: #27AE60;
   color: #fff;
+}
+
+.text-success {
+  color: #27AE60;
+}
+
+.p-dropdown-clear-icon {
+  position: absolute;
+  top: 10px;
 }

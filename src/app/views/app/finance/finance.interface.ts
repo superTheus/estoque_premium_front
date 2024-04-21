@@ -2,7 +2,7 @@ import { Clients } from "../client/client.interface";
 
 export interface FinanceData {
   id?: number,
-  value: string,
+  value: number,
   payform: number,
   client: number,
   number_order: string,
@@ -15,6 +15,13 @@ export interface FinanceData {
   status: string,
   clientData?: Clients,
   company: number,
+  deleted?: string,
+  payments?: {
+    id?: number,
+    conta: number,
+    form: number,
+    date: string,
+  }[]
 }
 
 export interface FinanceDataRequest {
@@ -32,7 +39,9 @@ export interface FinanceDataRequest {
     observation?: string,
     status?: string,
     clientData?: Clients,
-    company: number
+    company: number,
+    deleted?: string
   };
+  where?: string;
   limit?: number;
 }
