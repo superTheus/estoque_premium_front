@@ -206,6 +206,7 @@ export class PdvComponent {
 
   openModalPayment = () => {
     $('#modalPayment').modal('show');
+    this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
   }
 
   openModalClient = () => {
