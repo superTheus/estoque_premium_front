@@ -102,7 +102,9 @@ export class ProductComponent implements OnInit {
         this.data = res.results;
       })
     } else {
-      this.data = [];
+      setTimeout(() => {
+        this.data = [];
+      })
     }
   }
 
