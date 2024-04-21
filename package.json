@@ -1,6 +1,6 @@
 {
   "name": "estoque-premium",
-  "version": "1.0.1",
+  "version": "1.0.11",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -99,11 +99,11 @@ export class ProductComponent implements OnInit {
         },
         search: this.search.value
       }).then(res => {
-        this.data = res.results;
-      })
-    } else {
-      setTimeout(() => {
-        this.data = [];
+        if (this.search.value) {
+          this.data = res.results;
+        } else {
+          this.data = [];
+        }
       })
     }
   }
