@@ -1,56 +1,61 @@
 <div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-4">
+  <div class="row px-3 mb-4 mt-3">
     <h3> Produtos </h3>
   </div>
-  <div id="stock-control-container">
-    <div class="search-bar">
-      <div class="input-search">
-        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-        <i class="fas fa-search"></i>
+
+  <div id="stock-control-container" class="card">
+    <div class="card-header p-0">
+      <div class="search-bar">
+        <div class="input-search">
+          <input type="text" [formControl]="search" class="" (keyup)="loadProducts()" (keypress)="loadProducts()"
+            (keydown)="loadProducts()" placeholder="Pesquisar" aria-label="Pesquisar...">
+          <i class="fas fa-search"></i>
+        </div>
       </div>
     </div>
-
-    <div class="row align-items-center justify-content-between mt-3">
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-      <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Produto</button>
-      </div>
-    </div>
-
-    <table id="stockTable" *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col">ID</th>
-          <th class="col-3">Descricão</th>
-          <th class="col-3">Estoque</th>
-          <th class="col-2">Categoria</th>
-          <th class="col-2">Subcategoria</th>
-          <th class="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <ng-container *ngFor="let product of data">
+    <div class="card-body" [ngClass]="{'p-0': !data.length }">
+      <table id="stockTable" *ngIf="data.length">
+        <thead>
           <tr>
-            <td class="col"> {{product.id}} </td>
-            <td class="col-3"> {{product.description}} </td>
-            <td class="col-2"> {{product.stock}} </td>
-            <td class="col-2"> {{product.category?.description}} </td>
-            <td class="col-2"> {{product.subcategory?.description}} </td>
-            <td class="col d-flex">
-              <button class="btn btn-primary me-2" (click)="update(product)">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-danger" (click)="delete(product)">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
+            <th class="col">ID</th>
+            <th class="col-3">Descricão</th>
+            <th class="col-3">Estoque</th>
+            <th class="col-2">Categoria</th>
+            <th class="col-2">Subcategoria</th>
+            <th class="col"></th>
           </tr>
-        </ng-container>
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+          <ng-container *ngFor="let product of data">
+            <tr>
+              <td class="col"> {{product.id}} </td>
+              <td class="col-3"> {{product.description}} </td>
+              <td class="col-2"> {{product.stock}} </td>
+              <td class="col-2"> {{product.category?.description}} </td>
+              <td class="col-2"> {{product.subcategory?.description}} </td>
+              <td class="col d-flex">
+                <button class="btn btn-primary me-2" (click)="update(product)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" (click)="delete(product)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-12 d-flex justify-content-end">
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo
+            Produto</button>
+        </div>
+      </div>
+    </div>
 
   </div>
 

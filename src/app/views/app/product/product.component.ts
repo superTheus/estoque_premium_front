@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Products } from './product.interface';
 import { ApiService } from '../../../data/api.service';
@@ -20,7 +20,8 @@ declare var $: any;
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
+  search = new FormControl('');
   description = new FormControl('');
   price_sale = new FormControl('');
   price_cost = new FormControl('');
@@ -51,12 +52,12 @@ export class ProductComponent {
     private balanceService: BalanceService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.load();
   }
 
   async load() {
-    const [brands, category, subcategory, supplier, products] = await Promise.all([
+    const [brands, category, subcategory, supplier] = await Promise.all([
       this.apiService.findBrands({
         filter: {
           deleted: 'N',
@@ -80,21 +81,29 @@ export class ProductComponent {
           deleted: 'N',
           id_company: getCompanyId()
         }
-      }),
-      this.apiService.findProducts({
-        filter: {
-          deleted: 'N',
-          id_company: getCompanyId()
-        }
-      }),
+      })
     ]);
 
     this.brandsSelect = brands.results.map((brand: Brands): Options => { return { label: brand.description, value: brand.id || 0 } })
     this.categorySelect = category.results.map((category: Categorys): Options => { return { label: category.description, value: category.id || 0 } })
     this.subcategorySelect = subcategory.results.map((subcategorys: Subcategorys): Options => { return { label: subcategorys.description, value: subcategorys.id || 0 } })
     this.supplierSelect = supplier.results.map((supplier: Suppliers): Options => { return { label: supplier.name || '', value: supplier.id || 0 } })
+  }
 
-    this.data = products.results;
+  loadProducts() {
+    if (this.search.value) {
+      this.apiService.findProducts({
+        filter: {
+          deleted: 'N',
+          id_company: getCompanyId()
+        },
+        search: this.search.value
+      }).then(res => {
+        this.data = res.results;
+      })
+    } else {
+      this.data = [];
+    }
   }
 
   save() {
