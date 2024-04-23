@@ -66,6 +66,7 @@ export class AuthService {
 
   lougtOut() {
     clearSession();
+    this.user = getUser();
     this.router.navigate(['/user/login']);
   }
 }
