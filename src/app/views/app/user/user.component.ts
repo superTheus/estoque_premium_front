@@ -95,6 +95,18 @@ export class UserComponent {
     $('#modalProduct').modal('hide');
   }
 
+  openModal() {
+    this.name.setValue('');
+    this.lastName.setValue('');
+    this.email.setValue('');
+    this.password.setValue('');
+    this.document.setValue('');
+    this.telephone.setValue('');
+    this.profile.setValue('');
+    this.isEditMode = false;
+    $('#modalProduct').modal('show');
+  }
+
   createUser() {
     if (this.isAdmin) {
       this.apiService.createCompany({

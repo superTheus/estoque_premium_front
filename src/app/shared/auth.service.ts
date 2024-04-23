@@ -4,6 +4,7 @@ import { catchError, from, throwError } from 'rxjs';
 import { ApiService } from '../data/api.service';
 import { clearSession, getUser, setCompanyId, setUser, setUserEmail, setUserId } from '../utils/util';
 import { User } from './auth.interface';
+import { Router } from '@angular/router';
 
 export interface ISignInCredentials {
   email: string;
@@ -27,7 +28,8 @@ export class AuthService {
   user!: User;
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) {
     let user = getUser();
 
@@ -64,6 +66,6 @@ export class AuthService {
 
   lougtOut() {
     clearSession();
-    window.location.href = window.location.origin + '/user/login';
+    this.router.navigate(['/user/login']);
   }
 }

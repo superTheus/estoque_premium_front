@@ -8,14 +8,11 @@ import { clearSession } from '../utils/util';
 export class AuthGuard {
   constructor(private authService: AuthService, private router: Router, private utilsService: UtilsService) { }
 
-  async canActivate(state: RouterStateSnapshot): Promise<boolean> {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     const currentUser = this.authService.user;
 
     if (currentUser) {
-      if (this.utilsService.hasOneDayDifference(currentUser.dateLogin) >= 1) {
-        clearSession();
-        this.router.navigate(['/user/login']);
-      } else if (state.url === '/user/login') {
+      if (state.url === '/user/login') {
         this.router.navigate(['/app'])
       }
 
@@ -24,15 +21,11 @@ export class AuthGuard {
     return true;
   }
 
-  async canActivateChild(state: RouterStateSnapshot): Promise<boolean> {
+  async canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     const currentUser = this.authService.user;
 
     if (currentUser) {
-
-      if (this.utilsService.hasOneDayDifference(currentUser.dateLogin) >= 1) {
-        clearSession();
-        this.router.navigate(['/user/login']);
-      } else if (state.url === '/user/login') {
+      if (state.url === '/user/login') {
         this.router.navigate(['/app'])
       }
     } else {
