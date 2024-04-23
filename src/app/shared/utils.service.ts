@@ -3,7 +3,6 @@ import { AbstractControl, FormControl } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class UtilsService {
-
   static validatePass(control: AbstractControl): { [key: string]: boolean } | null {
     const strongPasswordPattern = /^(?=.*[a-zA-Z])(?=.*\d).+/;
     const isValid = strongPasswordPattern.test(control.value);
@@ -58,5 +57,60 @@ export class UtilsService {
     } else {
       return { invalid: true };
     }
+  }
+
+  public padWithZeros(value?: number): string {
+    if (!value) {
+      return '';
+    }
+    let str = value.toString();
+    return str.padStart(4, '0').substr(-4);
+  }
+
+  public formatDocument(document?: string): string {
+    if (!document) {
+      return '';
+    }
+    document = document.replace(/[^\d]+/g, '');
+
+    if (document.length === 11) {
+      return document.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else if (document.length === 14) {
+      return document.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+
+    return document;
+  }
+
+  public formatPhoneNumber(phoneNumber?: string): string {
+    if (!phoneNumber) {
+      return '';
+    }
+    phoneNumber = phoneNumber.replace(/[^\d]+/g, '');
+
+    if (phoneNumber.length === 10) {
+      return phoneNumber.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (phoneNumber.length === 11) {
+      return phoneNumber.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    }
+
+    return phoneNumber;
+  }
+
+  public generatePassword(id: string): string {
+    let date = new Date();
+    let timestamp = date.getTime();
+    let randomNum = Math.floor(Math.random() * 9000) + 1000;
+    return `${id}${timestamp}${randomNum}`;
+  }
+
+  public hasOneDayDifference(inputDate: string): number {
+    let date1 = new Date(inputDate);
+    date1.setHours(0, 0, 0, 0);
+    let date2 = new Date();
+    date2.setHours(0, 0, 0, 0);
+    let differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+    let differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
+    return differenceInDays;
   }
 }

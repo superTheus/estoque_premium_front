@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AsideService } from '../aside/aside.service';
 import { AuthService } from '../../../shared/auth.service';
+import { ApiService } from '../../../data/api.service';
+import { UtilsService } from '../../../shared/utils.service';
 
 @Component({
   selector: 'app-header',
@@ -9,8 +11,10 @@ import { AuthService } from '../../../shared/auth.service';
 })
 export class HeaderComponent {
   constructor(
-    private asideService: AsideService,
-    private authService: AuthService
+    public apiService: ApiService,
+    public authService: AuthService,
+    public utilsService: UtilsService,
+    private asideService: AsideService
   ) { }
 
   menuClick() {

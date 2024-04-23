@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from '../../../data/api.service';
 
 declare const $: any;
 
@@ -9,10 +10,9 @@ declare const $: any;
 })
 export class AsideComponent {
   menuIsOpen = false;
-  constructor() { }
+  constructor(public apiService: ApiService) { }
 
   changeMenuState(isCompoustMenu: boolean) {
-    console.log('changeMenuState', isCompoustMenu);
     if (this.menuIsOpen) {
       setTimeout(() => {
         $('.collapse').collapse('hide');

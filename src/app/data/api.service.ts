@@ -110,7 +110,7 @@ export class ApiService {
     })
   }
 
-  getUser(user: UsersRequest) {
+  getUser(user?: UsersRequest) {
     const url = `${environment.baseUrl}/user/list`;
 
     const headers = new HttpHeaders({
@@ -974,6 +974,36 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, conta, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  createLastPass(pass: {
+    id_user: number,
+    last_pass: string
+  }): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/log/lastpass`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, pass, { headers })
         .pipe(
           map((res) => {
             return res;

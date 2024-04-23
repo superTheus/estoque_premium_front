@@ -34,7 +34,9 @@
           <img src="../../../../assets/images/icons/notification.svg" alt="">
         </button>
 
-        <span class="user-name me-3">Olá Matheus Souza </span>
+        <span class="user-name me-3"> Olá {{ authService.user.name }}#{{
+          utilsService.padWithZeros(authService.user.id)
+          }} </span>
 
         <button class="btn btn-logout" (click)="logout()"> Sair </button>
         <!-- <img src="../../../../assets/images/user.png" alt="User" class="user"> -->

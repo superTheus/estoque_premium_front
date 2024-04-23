@@ -1,54 +1,101 @@
 <div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-4">
+  <div class="row px-3 mb-4 mt-3">
     <h3> Usuário </h3>
   </div>
   <div id="stock-control-container">
-    <div class="search-bar">
-      <div class="input-search">
-        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-        <i class="fas fa-search"></i>
-      </div>
-    </div>
-
     <div class="row align-items-center justify-content-between mt-3">
-      <div class="col-3"></div>
+      <div class="col-3 mx-3">
+        <ng-container *ngIf="isAdmin">
+          <app-input-default [control]="code" type="text" label="Código" placeHolder="0000" (change)="formatCode()"
+            [maxlenght]="4"></app-input-default>
+        </ng-container>
+      </div>
       <div class="col-3"></div>
       <div class="col-3 d-flex justify-content-end">
         <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Usuário</button>
       </div>
     </div>
 
-    <table id="stockTable" *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col">ID</th>
-          <th class="col-5">Descricão</th>
-          <th class="col-4">Email</th>
-          <th class="col">Perfil</th>
-          <th class="col"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <ng-container *ngIf="isAdmin; then isAdminUser; else notAdmin"></ng-container>
 
-        <ng-container *ngFor="let user of data">
+    <ng-template #notAdmin>
+      <table id="stockTable" *ngIf="data">
+        <thead>
           <tr>
-            <td class="col-2"> {{user.id}} </td>
-            <td class="col-5"> {{user.name}} </td>
-            <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
-            <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
-            <td class="col d-flex">
-              <button class="btn btn-primary me-2" (click)="update(user)">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-danger" (click)="delete(user)">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
+            <th class="col">ID</th>
+            <th class="col-5">Descricão</th>
+            <th class="col-4">Email</th>
+            <th class="col">Perfil</th>
+            <th class="col"></th>
           </tr>
-        </ng-container>
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+          <ng-container *ngFor="let user of data">
+            <tr>
+              <td class="col-2"> {{user.id}} </td>
+              <td class="col-5"> {{user.name}} </td>
+              <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
+              <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
+              <td class="col d-flex">
+                <button class="btn btn-primary me-2" (click)="update(user)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" (click)="delete(user)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="!data.length" class="text-center">
+            <td colspan="5"> Nenhum usuário encontrado </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </ng-template>
+
+    <ng-template #isAdminUser>
+      <table id="stockTable" *ngIf="data">
+        <thead>
+          <tr>
+            <th class="col">Código</th>
+            <th class="col-4">Nome</th>
+            <th class="col-3">Email</th>
+            <th class="col-3">Documento</th>
+            <th class="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <ng-container *ngFor="let user of data">
+            <tr>
+              <td class="col"> #{{ utilsService.padWithZeros(user.id) }} </td>
+              <td class="col-4"> {{user.name}} </td>
+              <td class="col-3"> {{user.email ? user.email : ' -- '}} </td>
+              <td class="col-3"> {{ utilsService.formatDocument(user.companyData?.cnpj) }} </td>
+              <td class="col">
+                <div class="d-flex">
+                  <button class="btn btn-primary me-2" (click)="update(user)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="delete(user)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="!data.length">
+            <td colspan="5" class="text-center"> Nenhum usuário encontrado </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </ng-template>
+
   </div>
 
   <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
@@ -60,48 +107,101 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <ng-container *ngIf="isAdmin; then isAdminUserForm; else notAdminForm"></ng-container>
 
-          <div class="row mt-2">
-            <div class="col-12 col-md-6">
-              <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6">
-              <app-input-default [control]="lastName" type="text" label="Sobrenome"
-                placeHolder="Sobrenome"></app-input-default>
-            </div>
-          </div>
-
-          <div class="row mt-2">
-            <div class="col-12">
-              <app-select-default [control]="profile" label="Perfil" [items]="profileOptions"></app-select-default>
-            </div>
-          </div>
-
-          <div class="row mt-2">
-            <div class="col-12 d-flex justify-content-start">
-              <label for=""> Acesso ao sistema ? </label>
-              <div class="mx-3">
-                <p-toggleButton [(ngModel)]="use_system" onLabel="Sim" offLabel="Não">
-                  offLabel="Não"></p-toggleButton>
-              </div>
-            </div>
-          </div>
-
-          <ng-container *ngIf="use_system">
+          <ng-template #notAdminForm>
             <div class="row mt-2">
-              <div class="col-12">
-                <app-input-default [control]="email" type="email" label="E-mail"
-                  placeHolder="E-mail"></app-input-default>
+              <div class="col-12 col-md-6">
+                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-input-default [control]="lastName" type="text" label="Sobrenome"
+                  placeHolder="Sobrenome"></app-input-default>
               </div>
             </div>
 
             <div class="row mt-2">
               <div class="col-12">
-                <app-input-default [control]="password" type="password" label="Senha"
-                  placeHolder="Senha"></app-input-default>
+                <app-select-default [control]="profile" label="Perfil" [items]="profileOptions"></app-select-default>
               </div>
             </div>
-          </ng-container>
+
+            <div class="row mt-2">
+              <div class="col-12 d-flex justify-content-start">
+                <label for=""> Acesso ao sistema ? </label>
+                <div class="mx-3">
+                  <p-toggleButton [(ngModel)]="use_system" onLabel="Sim" offLabel="Não">
+                    offLabel="Não"></p-toggleButton>
+                </div>
+              </div>
+            </div>
+
+            <ng-container *ngIf="use_system">
+              <div class="row mt-2">
+                <div class="col-12">
+                  <app-input-default [control]="email" type="email" label="E-mail"
+                    placeHolder="E-mail"></app-input-default>
+                </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-12">
+                  <app-input-default [control]="password" type="password" label="Senha"
+                    placeHolder="Senha"></app-input-default>
+                </div>
+              </div>
+            </ng-container>
+          </ng-template>
+
+          <ng-template #isAdminUserForm>
+            <div class="row mt-2">
+              <div class="col-12 col-md-6">
+                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-input-default [control]="lastName" type="text" label="Sobrenome"
+                  placeHolder="Sobrenome"></app-input-default>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="document" type="text" label="Documento" placeHolder="CNPJ/CPF"
+                  (change)="formatDocument()" [maxlenght]="18"></app-input-default>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="telephone" type="text" label="Telefone" placeHolder="(92) 99999-9999"
+                  (change)="formatTelefone()" [maxlenght]="15"></app-input-default>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="email" type="text" label="E-mail"
+                  placeHolder="exemplo@mail.com"></app-input-default>
+              </div>
+            </div>
+
+
+            <ng-container *ngIf="isEditMode">
+              <hr>
+              <h5> Senha </h5>
+
+              <div class="row mt-2">
+                <div class="col-12 col-md-8">
+                  <app-input-default [control]="password" type="text" label="Ultima senha gerada" placeHolder=""
+                    classcontainer="mb-md-0" [disabled]="true"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-end align-items-end">
+                  <button class="btn btn-primary" (click)="generatePassword()"> Gerar Nova </button>
+                </div>
+              </div>
+
+            </ng-container>
+          </ng-template>
 
         </div>
         <div class="modal-footer">

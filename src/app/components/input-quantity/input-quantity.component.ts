@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
   styleUrl: './input-quantity.component.scss'
 })
 export class InputQuantityComponent {
+  @Input() id: string = '';
   @Input() control!: FormControl;
   @Input() label!: string;
   @Output() change = new EventEmitter<number>();;

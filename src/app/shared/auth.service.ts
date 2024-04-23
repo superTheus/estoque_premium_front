@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { catchError, from, throwError } from 'rxjs';
 
 import { ApiService } from '../data/api.service';
-import { clearSession, setCompanyId, setUserEmail, setUserId } from '../utils/util';
+import { clearSession, getUser, setCompanyId, setUser, setUserEmail, setUserId } from '../utils/util';
+import { User } from './auth.interface';
 
 export interface ISignInCredentials {
   email: string;
@@ -23,9 +24,16 @@ export interface IPasswordReset {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  user!: User;
+
   constructor(
     private apiService: ApiService
-  ) { }
+  ) {
+    let user = getUser();
+
+    if (user)
+      this.user = user;
+  }
 
   signIn(credentials: ISignInCredentials) {
     return new Promise((resolve, reject) => {
@@ -39,6 +47,11 @@ export class AuthService {
       ).subscribe(
         (data: any) => {
           let result = data.results[0];
+
+          this.user = data.results[0];
+          this.user.dateLogin = new Date().toISOString();
+
+          setUser(this.user);
           setCompanyId(result.company);
           setUserId(result.id);
           setUserEmail(result.email);

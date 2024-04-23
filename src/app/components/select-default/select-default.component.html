@@ -1,7 +1,8 @@
 <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">{{label}}</label>
+  <label for="{{ id }}" class="form-label">{{label}}</label>
   <div class="d-flex">
-    <select class="form-control {{className}}" [ngClass]="{'select-group': showButton}" [formControl]="control">
+    <select id="{{ id }}" class="form-control {{className}}" [ngClass]="{'select-group': showButton}"
+      [formControl]="control">
       <option value=""> Selecione </option>
       <option *ngFor="let item of items" [value]="item.value">{{item.label}}</option>
     </select>

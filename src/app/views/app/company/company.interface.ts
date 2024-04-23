@@ -15,6 +15,7 @@ export interface Company {
   password?: string,
   csc?: string,
   csc_id?: string,
+  type?: number
 }
 
 export interface CompanyRequest {

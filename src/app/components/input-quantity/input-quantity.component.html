@@ -1,12 +1,12 @@
 <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">{{label}}</label>
+  <label for="{{ id }}" class="form-label">{{label}}</label>
 
   <div class="d-flex">
     <button class="btn btn-danger" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;"
       (click)="minus()">
       <i class="fas fa-minus"></i>
     </button>
-    <input type="text" class="form-control text-center" id="exampleFormControlInput1" [formControl]="control" readonly>
+    <input type="text" class="form-control text-center" id="{{ id }}" [formControl]="control" readonly>
     <button class="btn btn-success" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;"
       (click)="plus()">
       <i class="fas fa-plus"></i>

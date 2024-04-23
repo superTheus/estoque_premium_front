@@ -8,6 +8,7 @@ import { Options } from './select-default.interface';
   styleUrl: './select-default.component.scss'
 })
 export class SelectDefaultComponent {
+  @Input() id: string = '';
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() className?: string = '';

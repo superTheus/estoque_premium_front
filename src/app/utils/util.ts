@@ -1,4 +1,5 @@
 import { environment } from "../environments/environment";
+import { User } from "../shared/auth.interface";
 
 
 // export const getUserRole = () => {
@@ -74,6 +75,27 @@ export const setUserEmail = (email: string) => {
     sessionStorage.setItem('user_login_email', email);
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUserEmail -> error")
+  }
+}
+
+export const setUser = (user: User) => {
+  try {
+    sessionStorage.setItem('user_data', JSON.stringify(user));
+  } catch (error) {
+    console.log(">>>> src/app/utils/util.js : setUser -> error")
+  }
+}
+
+export const getUser = () => {
+  try {
+    let token = sessionStorage.getItem('user_data');
+    if (token)
+      return JSON.parse(token);
+    else
+      return null;
+  } catch (error) {
+    console.log(">>>> src/app/utils/util.js : getUserEmail -> error", error)
+    return null;
   }
 }
 
