@@ -14,7 +14,6 @@ import { BalanceService } from '../../../data/balance.service';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -108,6 +107,10 @@ export class ProductComponent implements OnInit {
     }
   }
 
+  openModal() {
+    $('#modalProduct').modal('show');
+  }
+
   save() {
     if (this.isEditMode) {
       this.apiService.updateProduct({
@@ -146,10 +149,12 @@ export class ProductComponent implements OnInit {
       }).then(res => {
         this.load();
         this.balanceService.firstMoviment(res.results, Number(this.stock.value) || 0);
+
+        setTimeout(() => {
+          $('#modalProduct').modal('hide');
+        }, 500);
       })
     }
-
-    $('#modalProduct').modal('hide');
   }
 
   update(product: Products) {

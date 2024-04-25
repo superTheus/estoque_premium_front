@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Users } from './users.interface';
+import { Permission, Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
 import { getCompanyId } from '../../../utils/util';
 
@@ -53,6 +53,8 @@ export class UserComponent {
   limite_produtos = new FormControl('');
   limite_clientes = new FormControl('');
   date_expiration = new FormControl('');
+
+  isEditModePermission = false;
 
   constructor(
     private apiService: ApiService,
@@ -239,6 +241,10 @@ export class UserComponent {
     if (this.telephone.value) {
       this.telephone.setValue(this.utilsService.formatPhoneNumber(this.telephone.value));
     }
+
+    if (this.telefone.value) {
+      this.telefone.setValue(this.utilsService.formatPhoneNumber(this.telefone.value));
+    }
   }
 
   formatCode() {
@@ -265,6 +271,86 @@ export class UserComponent {
   }
 
   permission(user: Users) {
-    $('#modalPermission').modal('show');
+    this.userSelected = user;
+
+    this.apiService.findPermission({
+      filter: {
+        id_user: user.id
+      }
+    }).then((res) => {
+      let permission = res.results[0] as Permission;
+      this.userSelected = {
+        ...this.userSelected,
+        permissions: permission
+      };
+
+      if (permission) {
+        this.isEditModePermission = true;
+        this.responsavel.setValue(permission?.responsavel ?? '');
+        this.nome_empresa.setValue(permission?.nome_empresa ?? '');
+        this.telefone.setValue(this.utilsService.formatPhoneNumber(permission?.telefone) ?? '');
+        this.emailPermission.setValue(permission?.email ?? '');
+        this.valor_mensal.setValue(permission.valor_mensal ? this.formatValueCurrency(permission.valor_mensal) : '');
+        this.limite_nfe.setValue(String(permission?.limite_nfe) ?? '');
+        this.limite_nfce.setValue(String(permission?.limite_nfce) ?? '');
+        this.limite_empresas.setValue(String(permission?.limite_empresas) ?? '');
+        this.limite_usuarios.setValue(String(permission?.limite_usuarios) ?? '');
+        this.limite_produtos.setValue(String(permission?.limite_produtos) ?? '');
+        this.limite_clientes.setValue(String(permission?.limite_clientes) ?? '');
+        this.date_expiration.setValue(permission?.date_expiration ?? '');
+      }
+
+      $('#modalPermission').modal('show');
+    })
+  }
+
+  savePermission() {
+    let permission: Permission = {
+      id_company: this.userSelected?.company,
+      id_user: this.userSelected?.id,
+      email: this.emailPermission.value ?? '',
+      limite_clientes: Number(this.limite_clientes.value) ?? 0,
+      limite_empresas: Number(this.limite_empresas.value) ?? 0,
+      limite_nfce: Number(this.limite_nfce.value) ?? 0,
+      limite_nfe: Number(this.limite_nfe.value) ?? 0,
+      limite_produtos: Number(this.limite_produtos.value) ?? 0,
+      limite_usuarios: Number(this.limite_usuarios.value) ?? 0,
+      nome_empresa: this.nome_empresa.value ?? '',
+      responsavel: this.responsavel.value ?? '',
+      telefone: this.telefone.value?.replace(/[^\d]+/g, '') ?? '',
+      valor_mensal: this.valor_mensal.value ? Number(this.valor_mensal.value.replace('R$', '').replace('.', '').replace(',', '.').trim()) : 0,
+      date_expiration: this.date_expiration.value ?? ''
+    }
+
+    if (this.isEditModePermission) {
+      this.apiService.updatePermission({
+        id: this.userSelected?.permissions?.id,
+        ...permission
+      }).then((res) => {
+        $('#modalPermission').modal('hide');
+        this.isEditModePermission = false;
+      })
+    } else {
+      this.apiService.createPermission(permission).then((res) => {
+        $('#modalPermission').modal('hide');
+        this.isEditModePermission = false;
+      })
+    }
+  }
+
+  formatValueCurrency(value: string | number) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value));
+  }
+
+  changeValueFormat() {
+    let value: any = this.valor_mensal.value;
+
+    if (value) {
+      value = value.replace(/[^0-9]/g, '')
+      value = value.replace('.', '').replace(',', '.');
+      value = Number(value) / 100;
+      value = this.formatValueCurrency(value);
+      this.valor_mensal.setValue(value);
+    }
   }
 }

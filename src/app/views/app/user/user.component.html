@@ -230,8 +230,8 @@
                 placeHolder="Responsável"></app-input-default>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-              <app-input-default [control]="telefone" type="text" label="Telefone"
-                placeHolder="Telefone"></app-input-default>
+              <app-input-default [control]="telefone" type="text" label="Telefone" placeHolder="Telefone"
+                (change)="formatTelefone()"></app-input-default>
             </div>
             <div class="col-12 col-lg-4">
               <app-input-default [control]="nome_empresa" type="text" label="Nome empresa"
@@ -245,8 +245,8 @@
                 placeHolder="email"></app-input-default>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-              <app-input-default [control]="valor_mensal" type="text" label="Valor Mensal"
-                placeHolder="Valor Mensal"></app-input-default>
+              <app-input-default [control]="valor_mensal" type="text" label="Valor Mensal" placeHolder="Valor Mensal"
+                (change)="changeValueFormat()"></app-input-default>
             </div>
           </div>
 
@@ -287,7 +287,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          <button type="button" class="btn btn-primary" (click)="savePermission()">Salvar</button>
         </div>
       </div>
     </div>
