@@ -301,6 +301,8 @@ export class UserComponent {
       }
 
       $('#modalPermission').modal('show');
+    }).catch((error) => {
+      $('#modalPermission').modal('show');
     })
   }
 
