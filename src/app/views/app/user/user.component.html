@@ -77,6 +77,9 @@
               <td class="col-3"> {{ utilsService.formatDocument(user.companyData?.cnpj) }} </td>
               <td class="col">
                 <div class="d-flex">
+                  <button class="btn btn-secondary me-2" (click)="permission(user)">
+                    <i class="fas fa-lock"></i>
+                  </button>
                   <button class="btn btn-primary me-2" (click)="update(user)">
                     <i class="fas fa-edit"></i>
                   </button>
@@ -202,6 +205,84 @@
 
             </ng-container>
           </ng-template>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalPermission" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductLabel"> Configuração de Permissões </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+              <app-input-default [control]="responsavel" type="text" label="Responsável"
+                placeHolder="Responsável"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <app-input-default [control]="telefone" type="text" label="Telefone"
+                placeHolder="Telefone"></app-input-default>
+            </div>
+            <div class="col-12 col-lg-4">
+              <app-input-default [control]="nome_empresa" type="text" label="Nome empresa"
+                placeHolder="Nome empresa"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-8">
+              <app-input-default [control]="emailPermission" type="text" label="E-mail"
+                placeHolder="email"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <app-input-default [control]="valor_mensal" type="text" label="Valor Mensal"
+                placeHolder="Valor Mensal"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_nfe" type="number" label="Limite NFe (Mensal)"
+                placeHolder="Limite NFe"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_nfce" type="number" label="Limite NFCe (Mensal)"
+                placeHolder="Limite NFCe"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_empresas" type="number" label="Limite Empresas"
+                placeHolder="Limite Empresas"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_usuarios" type="number" label="Limite usuários"
+                placeHolder="Limite NFCe"></app-input-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_produtos" type="number" label="Limite Produtos"
+                placeHolder="Limite NFe"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <app-input-default [control]="limite_clientes" type="number" label="Limite Clientes"
+                placeHolder="Limite NFCe"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="date_expiration" type="date" label="Vencimento"
+                placeHolder="Vencimento"></app-input-default>
+            </div>
+          </div>
 
         </div>
         <div class="modal-footer">

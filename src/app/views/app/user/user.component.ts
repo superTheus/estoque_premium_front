@@ -41,6 +41,19 @@ export class UserComponent {
   userSelected?: Users;
   data: Users[] = [];
 
+  responsavel = new FormControl('');
+  nome_empresa = new FormControl('');
+  telefone = new FormControl('');
+  emailPermission = new FormControl('');
+  valor_mensal = new FormControl('');
+  limite_nfe = new FormControl('');
+  limite_nfce = new FormControl('');
+  limite_empresas = new FormControl('');
+  limite_usuarios = new FormControl('');
+  limite_produtos = new FormControl('');
+  limite_clientes = new FormControl('');
+  date_expiration = new FormControl('');
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
@@ -249,5 +262,9 @@ export class UserComponent {
       this.apiService.updateUser(user)
       this.load();
     })
+  }
+
+  permission(user: Users) {
+    $('#modalPermission').modal('show');
   }
 }

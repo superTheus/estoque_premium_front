@@ -1021,4 +1021,6 @@ export class ApiService {
         );
     })
   }
+
+  createPermission() { }
 }
