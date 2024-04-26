@@ -21,7 +21,10 @@ $font-size-mobile: 14px;
 .container-right {
   background-color: #f1f1f1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  // animation: slideUp 5.0s ease-out;
+}
+
+.animation {
+  animation: slideUp 3.0s ease-out;
 }
 
 .container-left {

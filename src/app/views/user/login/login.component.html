@@ -13,7 +13,7 @@
     <div class="container container-right col-12 col-md-6 col-lg-3 h-100">
       <img src="../../../../assets/images/23.png" class="foto0" alt="Logo">
 
-      <form [formGroup]="form" class="mt-4" (ngSubmit)="login()">
+      <form [formGroup]="form" class="mt-4 animation" (ngSubmit)="login()">
 
         <div class="form-group">
           <label for="user">Usuário</label>
@@ -29,19 +29,19 @@
         </div>
 
         <button type="submit" class="btn mt-3">Login</button>
+
+        <div class="d-flex flex-wrap social-links mt-3">
+          <div class="col-12 col-sm-6 pe-0 pe-sm-2 mt-2 mt-sm-0">
+            <a href="https://wa.me/SEUNUMERODOWHATSAPP" class="btn whatsapp">WhatsApp</a>
+          </div>
+
+          <div class="col-12 col-sm-6 ps-0 ps-sm-2 mt-2 mt-sm-0">
+            <a href="https://www.instagram.com/SEUINSTAGRAM" class="btn instagram">Instagram</a>
+          </div>
+        </div>
+
+        <img src="../../../../assets/images/26.png" class="premium-img mt-4 mt-md-3" alt="Logo">
       </form>
-
-      <div class="d-flex flex-wrap social-links mt-3">
-        <div class="col-12 col-sm-6 pe-0 pe-sm-2 mt-2 mt-sm-0">
-          <a href="https://wa.me/SEUNUMERODOWHATSAPP" class="btn whatsapp">WhatsApp</a>
-        </div>
-
-        <div class="col-12 col-sm-6 ps-0 ps-sm-2 mt-2 mt-sm-0">
-          <a href="https://www.instagram.com/SEUINSTAGRAM" class="btn instagram">Instagram</a>
-        </div>
-      </div>
-
-      <img src="../../../../assets/images/26.png" class="premium-img mt-4 mt-md-3" alt="Logo">
     </div>
 
     <div class="container container-left col-12 col-md-6 col-lg-9">
