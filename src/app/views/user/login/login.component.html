@@ -1,38 +1,77 @@
-<div class="container-login">
+<!DOCTYPE html>
+<html lang="en">
 
-  <div class="col-12 col-md-6 col-lg-5 card p-4 d-flex justify-content-center">
-    <div class="logo">
-      <img src="../../../../assets/images/ep.png" alt="">
-    </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
 
-    <div class="form mt-5">
-      <div class="row text-center">
-        <h4> Faça seu login </h4>
-        <p> Entre com sua conta e realize suas vendas </p>
-      </div>
+</head>
 
-      <div class="row mt-3">
-        <app-input-default label="Email" type="email" placeHolder="nome@mail.com" [control]="email"></app-input-default>
-      </div>
+<body>
+  <div class="row mb-5 mb-md-0">
+    <div class="container container-right col-12 col-md-6 col-lg-3 h-100">
+      <img src="../../../../assets/images/23.png" class="foto0" alt="Logo">
 
-      <div class="row">
-        <app-input-default label="Senha" type="password" placeHolder="*******" [control]="password"></app-input-default>
-      </div>
+      <form [formGroup]="form" class="mt-4 animation" (ngSubmit)="login()">
 
-      <div class="row px-2 mb-4">
-        <a href=""> Esqueceu sua senha ? </a>
-      </div>
-
-      <div class="row mt-2">
-        <app-button-default text="Entrar" (clickAction)="login()"></app-button-default>
-      </div>
-
-      <div>
-        <div class="row mt-4">
-          <p> Não tem uma conta ? <a routerLink="../register"> Cadastre-se </a> </p>
+        <div class="form-group">
+          <label for="user">Usuário</label>
+          <input type="email" class="form-control" id="user" formControlName="email" aria-describedby="emailHelp">
+          <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
         </div>
-      </div>
+
+        <div class="form-group mt-3">
+          <label for="password">Senha</label>
+          <input type="password" class="form-control" id="password" formControlName="password"
+            aria-describedby="emailHelp">
+          <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+
+        <button type="submit" class="btn mt-3">Login</button>
+
+        <div class="d-flex flex-wrap social-links mt-3">
+          <div class="col-12 col-sm-6 pe-0 pe-sm-2 mt-2 mt-sm-0">
+            <a href="https://wa.me/SEUNUMERODOWHATSAPP" class="btn whatsapp">WhatsApp</a>
+          </div>
+
+          <div class="col-12 col-sm-6 ps-0 ps-sm-2 mt-2 mt-sm-0">
+            <a href="https://www.instagram.com/SEUINSTAGRAM" class="btn instagram">Instagram</a>
+          </div>
+        </div>
+
+        <img src="../../../../assets/images/26.png" class="premium-img mt-4 mt-md-3" alt="Logo">
+      </form>
     </div>
 
+    <div class="container container-left col-12 col-md-6 col-lg-9">
+
+
+
+      <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+        <img src="../../../../assets/images/nota.png" class="img-login" alt="Propaganda">
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+        <img style="" src="../../../../assets/images/33.png" class="img-login" alt="Propaganda">
+      </div>
+
+
+
+
+      <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+        <img style="" src="../../../../assets/images/foto3.png" class="img-login" alt="Propaganda">
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+        <img style="" src="../../../../assets/images/41.png" class="img-login" alt="Propaganda">
+      </div>
+
+
+    </div>
   </div>
-</div>
+
+  <footer class="footer p-3 mt-4">
+    <p>sistema de gestão online que descomplica o seu negócio.</p>
+  </footer>
+</body>
+
+</html>
