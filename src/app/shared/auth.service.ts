@@ -61,7 +61,6 @@ export class AuthService {
             if (data.results.length) {
               setPermision(data.results[0]);
             }
-            console.log('Permissões:', data.results);
           })
 
           setUser(this.user);

@@ -7,7 +7,7 @@ import { Brands } from '../brands/brands.interface';
 import { Categorys } from '../categorys/categorys.interface';
 import { Subcategorys } from '../subcategorys/subcategorys.interface';
 import { Suppliers } from '../supplier/supplier.interface';
-import { getCompanyId } from '../../../utils/util';
+import { getCompanyId, getPermision } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
 import { BalanceService } from '../../../data/balance.service';
@@ -46,10 +46,24 @@ export class ProductComponent implements OnInit {
     { label: 'Não', value: 'N' }
   ]
 
+  permissions = getPermision()
+  disableNew = false;
+
   constructor(
     private apiService: ApiService,
     private balanceService: BalanceService
-  ) { }
+  ) {
+    this.apiService.findProducts({
+      filter: {
+        deleted: 'N',
+        id_company: getCompanyId()
+      }
+    }).then(res => {
+      if (this.permissions?.limite_produtos) {
+        this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
+      }
+    });
+  }
 
   ngOnInit() {
     this.load();
