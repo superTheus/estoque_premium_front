@@ -1,5 +1,6 @@
 import { environment } from "../environments/environment";
 import { User } from "../shared/auth.interface";
+import { Permission } from "../views/app/user/users.interface";
 
 
 // export const getUserRole = () => {
@@ -89,6 +90,27 @@ export const setUser = (user: User) => {
 export const getUser = () => {
   try {
     let token = localStorage.getItem('user_data');
+    if (token)
+      return JSON.parse(token);
+    else
+      return null;
+  } catch (error) {
+    console.log(">>>> src/app/utils/util.js : getUserEmail -> error", error)
+    return null;
+  }
+}
+
+export const setPermision = (user: Permission) => {
+  try {
+    sessionStorage.setItem('user_permission', JSON.stringify(user));
+  } catch (error) {
+    console.log(">>>> src/app/utils/util.js : setUser -> error")
+  }
+}
+
+export const getPermision = (): Permission | null => {
+  try {
+    let token = sessionStorage.getItem('user_permission');
     if (token)
       return JSON.parse(token);
     else

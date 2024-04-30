@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Permission, Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
-import { getCompanyId } from '../../../utils/util';
+import { getCompanyId, setPermision } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
 import { Options } from '../../../components/select-default/select-default.interface';
@@ -323,6 +323,8 @@ export class UserComponent {
       valor_mensal: this.valor_mensal.value ? Number(this.valor_mensal.value.replace('R$', '').replace('.', '').replace(',', '.').trim()) : 0,
       date_expiration: this.date_expiration.value ?? ''
     }
+
+    setPermision(permission);
 
     if (this.isEditModePermission) {
       this.apiService.updatePermission({

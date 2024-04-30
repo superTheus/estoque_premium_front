@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, from, throwError } from 'rxjs';
 
 import { ApiService } from '../data/api.service';
-import { clearSession, getUser, setCompanyId, setUser, setUserEmail, setUserId } from '../utils/util';
+import { clearSession, getUser, setCompanyId, setPermision, setUser, setUserEmail, setUserId } from '../utils/util';
 import { User } from './auth.interface';
 import { Router } from '@angular/router';
 
@@ -52,6 +52,16 @@ export class AuthService {
 
           this.user = data.results[0];
           this.user.dateLogin = new Date().toISOString();
+
+          this.apiService.findPermission({
+            filter: {
+              id_company: result.company,
+            }
+          }).then(data => {
+            if (data.results.length) {
+              setPermision(data.results[0]);
+            }
+          })
 
           setUser(this.user);
           setCompanyId(result.company);
