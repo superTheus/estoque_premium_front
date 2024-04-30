@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Permission, Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
-import { getCompanyId, setPermision } from '../../../utils/util';
+import { getCompanyId, getPermision, setPermision } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
 import { Options } from '../../../components/select-default/select-default.interface';
@@ -56,12 +56,26 @@ export class UserComponent {
 
   isEditModePermission = false;
 
+  permissions = getPermision();
+  disableNew = false;
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     public utilsService: UtilsService
   ) {
     this.isAdmin = this.authService.user.companyData.type === 1 && this.authService.user.profile === 'ADMIN';
+
+    this.apiService.getUser({
+      filter: {
+        ativo: 'S',
+        company: getCompanyId()
+      }
+    }).subscribe(res => {
+      if (this.permissions?.limite_usuarios) {
+        this.disableNew = this.permissions?.limite_usuarios <= res.results.length ? true : false;
+      }
+    });
   }
 
   ngOnInit(): void {

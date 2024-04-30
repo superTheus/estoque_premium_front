@@ -102,7 +102,7 @@ export const getUser = () => {
 
 export const setPermision = (user: Permission) => {
   try {
-    sessionStorage.setItem('user_permission', JSON.stringify(user));
+    localStorage.setItem('user_permission', JSON.stringify(user));
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUser -> error")
   }
@@ -110,7 +110,7 @@ export const setPermision = (user: Permission) => {
 
 export const getPermision = (): Permission | null => {
   try {
-    let token = sessionStorage.getItem('user_permission');
+    let token = localStorage.getItem('user_permission');
     if (token)
       return JSON.parse(token);
     else

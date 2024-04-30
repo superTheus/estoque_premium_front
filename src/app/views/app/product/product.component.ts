@@ -60,6 +60,8 @@ export class ProductComponent implements OnInit {
       }
     }).then(res => {
       if (this.permissions?.limite_produtos) {
+        console.log(this.permissions?.limite_produtos);
+
         this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
       }
     });
