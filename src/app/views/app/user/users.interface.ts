@@ -16,6 +16,7 @@ export interface Users {
     last_pass: string;
   },
   permissions?: Permission;
+  type?: 'owner' | 'simple';
 }
 
 export interface Permission {

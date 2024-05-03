@@ -6,11 +6,11 @@
   <div id="stock-control-container" class="card">
     <div class="card-header p-0">
       <div class="search-bar">
-        <div class="input-search">
-          <input type="text" [formControl]="search" class="" (keyup)="loadProducts()" (keypress)="loadProducts()"
+        <form [formGroup]="formSearch" (ngSubmit)="loadProducts()" class="input-search">
+          <input type="text" formControlName="search" class="" (keyup)="loadProducts()" (keypress)="loadProducts()"
             (keydown)="loadProducts()" placeholder="Pesquisar" aria-label="Pesquisar...">
           <i class="fas fa-search"></i>
-        </div>
+        </form>
       </div>
     </div>
     <div class="card-body" [ngClass]="{'p-0': !data.length }">
@@ -63,69 +63,128 @@
   <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto' }}
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="save()">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto'
+              }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
 
-          <form>
+
             <div class="row">
               <div class="col-6">
-                <app-input-default [control]="description" type="text" label="Descricão"
-                  placeHolder="Ex: Coca Cola em lata"></app-input-default>
+                <div class="mb-3">
+                  <label for="description" class="form-label"> Descricão </label>
+                  <input type="text" class="form-control" id="description" placeholder="Descricão"
+                    formControlName="description">
+                </div>
               </div>
               <div class="col-6">
-                <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
+                <div class="mb-3">
+                  <label for="ncm" class="form-label"> NCM </label>
+                  <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
+                </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-6">
-                <app-input-default [control]="price_sale" type="text" label="Preço de venda"
-                  placeHolder="Preço de venda"></app-input-default>
+                <div class="mb-3">
+                  <label for="price_sale" class="form-label"> Preço de Venda </label>
+                  <input type="text" class="form-control" id="price_sale" placeholder="R$ 0,00"
+                    formControlName="price_sale">
+                </div>
               </div>
               <div class="col-6">
-                <app-input-default [control]="price_cost" type="text" label="Preço de custo"
-                  placeHolder="Preço de custo"></app-input-default>
+                <div class="mb-3">
+                  <label for="price_cost" class="form-label"> Preço de Custo </label>
+                  <input type="text" class="form-control" id="price_cost" placeholder="R$ 0,00"
+                    formControlName="price_cost">
+                </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-6">
-                <app-select-default [control]="id_category" label="Categoria"
-                  [items]="categorySelect"></app-select-default>
+                <div class="mb-3">
+                  <label for="id_category" class="form-label"> Categoria </label>
+                  <div class="d-flex">
+                    <select id="id_category" class="form-control" formControlName="id_category">
+                      <option value=""> Selecione </option>
+                      <option *ngFor="let item of categorySelect" [value]="item.value">{{item.label}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
+
               <div class="col-6">
-                <app-select-default [control]="id_subcategory" label="Subcategoria"
-                  [items]="subcategorySelect"></app-select-default>
+                <div class="mb-3">
+                  <label for="id_subcategory" class="form-label"> Subcategoria </label>
+                  <div class="d-flex">
+                    <select id="id_subcategory" class="form-control" formControlName="id_subcategory">
+                      <option value=""> Selecione </option>
+                      <option *ngFor="let item of subcategorySelect" [value]="item.value">{{item.label}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-6">
-                <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
+                <div class="mb-3">
+                  <label for="id_brand" class="form-label"> Marca </label>
+                  <div class="d-flex">
+                    <select id="id_brand" class="form-control" formControlName="id_brand">
+                      <option value=""> Selecione </option>
+                      <option *ngFor="let item of brandsSelect" [value]="item.value">{{item.label}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
+
               <div class="col-6">
-                <app-select-default [control]="id_supplier" label="Fornecedor"
-                  [items]="supplierSelect"></app-select-default>
+                <div class="mb-3">
+                  <label for="id_supplier" class="form-label"> Fornecedor </label>
+                  <div class="d-flex">
+                    <select id="id_supplier" class="form-control" formControlName="id_supplier">
+                      <option value=""> Selecione </option>
+                      <option *ngFor="let item of supplierSelect" [value]="item.value">{{item.label}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-6">
-                <app-select-default [control]="control_stock" label="Controla Estoque"
-                  [items]="controlStock"></app-select-default>
+                <div class="mb-3">
+                  <label for="control_stock" class="form-label"> Controle de estoque </label>
+                  <div class="d-flex">
+                    <select id="control_stock" class="form-control" formControlName="control_stock" (change)="teste()">
+                      <option value=""> Selecione </option>
+                      <option *ngFor="let item of controlStock" [value]="item.value">{{item.label}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div *ngIf="!isEditMode" class="col-6">
-                <app-input-default [control]="stock" type="number" label="Estoque" placeHolder="Estoque"
-                  [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
+                <div class="mb-3">
+                  <label for="stock" class="form-label"> Estoque </label>
+                  <input type="number" class="form-control" id="stock" placeholder="R$ 0,00" formControlName="stock"
+                    [readOnly]="form.get('control_stock')?.value === 'S' ? false : true">
+                </div>
               </div>
             </div>
-          </form>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
-        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

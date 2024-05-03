@@ -71,7 +71,8 @@ export class UserComponent {
   load() {
     if (this.isAdmin) {
       let filter: Users = {
-        ativo: 'S'
+        ativo: 'S',
+        type: 'owner'
       }
 
       if (Number(this.code.value)) {
@@ -107,7 +108,7 @@ export class UserComponent {
 
   save() {
     this.isEditMode ? this.updateUser() : this.createUser();
-    $('#modalProduct').modal('hide');
+    $('#modalUser').modal('hide');
   }
 
   openModal() {
@@ -119,7 +120,7 @@ export class UserComponent {
     this.telephone.setValue('');
     this.profile.setValue('');
     this.isEditMode = false;
-    $('#modalProduct').modal('show');
+    $('#modalUser').modal('show');
   }
 
   createUser() {
@@ -136,7 +137,8 @@ export class UserComponent {
           password: pass,
           profile: 'ADMIN',
           company: res.results.id,
-          use_system: 'Y'
+          use_system: 'Y',
+          type: 'owner'
         }).then((res) => {
           this.apiService.createLastPass({
             id_user: res.results.id,
@@ -152,8 +154,9 @@ export class UserComponent {
         email: this.email.value ?? '',
         password: this.password.value ?? '',
         profile: this.profile.value as 'ADMIN' | 'STORE' ?? 'ADMIN',
-        company: 1,
-        use_system: this.use_system ? 'Y' : 'N'
+        company: getCompanyId(),
+        use_system: this.use_system ? 'Y' : 'N',
+        type: 'simple'
       }).then((res) => {
         this.load();
       });
@@ -204,7 +207,7 @@ export class UserComponent {
     }
 
     this.isEditMode = true;
-    $('#modalProduct').modal('show');
+    $('#modalUser').modal('show');
   }
 
   delete(user: Users) {

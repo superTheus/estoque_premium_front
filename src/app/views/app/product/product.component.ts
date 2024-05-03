@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Products } from './product.interface';
 import { ApiService } from '../../../data/api.service';
 import { Options } from '../../../components/select-default/select-default.interface';
@@ -20,18 +20,8 @@ declare var $: any;
   styleUrl: './product.component.scss'
 })
 export class ProductComponent implements OnInit {
-  search = new FormControl('');
-  description = new FormControl('');
-  price_sale = new FormControl('');
-  price_cost = new FormControl('');
-  ncm = new FormControl('');
-  control_stock = new FormControl('S');
-  stock = new FormControl('');
-  id_company = new FormControl('');
-  id_brand = new FormControl('');
-  id_category = new FormControl('');
-  id_subcategory = new FormControl('');
-  id_supplier = new FormControl('');
+  form!: FormGroup;
+  formSearch!: FormGroup;
 
   isEditMode = false;
   productSelected?: Products;
@@ -51,8 +41,28 @@ export class ProductComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private balanceService: BalanceService
+    private balanceService: BalanceService,
+    private formBuilder: FormBuilder
   ) {
+
+    this.formSearch = this.formBuilder.group({
+      search: ['', [Validators.required]]
+    })
+
+    this.form = this.formBuilder.group({
+      description: ['', [Validators.required]],
+      price_sale: ['', [Validators.required]],
+      price_cost: [''],
+      ncm: [''],
+      control_stock: ['S'],
+      stock: ['', [Validators.required]],
+      id_company: ['', [Validators.required]],
+      id_brand: [''],
+      id_category: [''],
+      id_subcategory: [''],
+      id_supplier: [''],
+    })
+
     this.apiService.findProducts({
       filter: {
         deleted: 'N',
@@ -104,15 +114,15 @@ export class ProductComponent implements OnInit {
   }
 
   loadProducts() {
-    if (this.search.value) {
+    if (this.formSearch.get('search')?.value) {
       this.apiService.findProducts({
         filter: {
           deleted: 'N',
           id_company: getCompanyId()
         },
-        search: this.search.value
+        search: this.formSearch.get('search')?.value
       }).then(res => {
-        if (this.search.value) {
+        if (this.formSearch.get('search')?.value) {
           this.data = res.results;
         } else {
           this.data = [];
@@ -127,63 +137,63 @@ export class ProductComponent implements OnInit {
 
   save() {
     if (this.isEditMode) {
-      this.apiService.updateProduct({
-        id: this.productSelected?.id,
-        description: this.description.value ? this.description.value : '',
-        id_brand: Number(this.id_brand.value) || 0,
-        id_category: Number(this.id_category.value) || 0,
-        id_subcategory: Number(this.id_subcategory.value) || 0,
-        price_sale: Number(this.price_sale.value) || 0,
-        price_cost: Number(this.price_cost.value) || 0,
-        ncm: this.ncm.value ? this.ncm.value : '',
-        id_fornecedor: Number(this.id_supplier.value) || 0,
-        control_stock: this.control_stock.value || 'S',
-        stock: Number(this.stock.value) || 0,
-        id_company: 1,
-        deleted: this.productSelected?.deleted
-      }).then(res => {
-        let allProducts = [...this.data];
-        let index = allProducts.findIndex(product => product.id === this.productSelected?.id);
-        allProducts[index] = res.results;
-        this.data = allProducts;
-      })
+      // this.apiService.updateProduct({
+      //   id: this.productSelected?.id,
+      //   description: this.description.value ? this.description.value : '',
+      //   id_brand: Number(this.id_brand.value) || 0,
+      //   id_category: Number(this.id_category.value) || 0,
+      //   id_subcategory: Number(this.id_subcategory.value) || 0,
+      //   price_sale: Number(this.price_sale.value) || 0,
+      //   price_cost: Number(this.price_cost.value) || 0,
+      //   ncm: this.ncm.value ? this.ncm.value : '',
+      //   id_fornecedor: Number(this.id_supplier.value) || 0,
+      //   control_stock: this.control_stock.value || 'S',
+      //   stock: Number(this.stock.value) || 0,
+      //   id_company: 1,
+      //   deleted: this.productSelected?.deleted
+      // }).then(res => {
+      //   let allProducts = [...this.data];
+      //   let index = allProducts.findIndex(product => product.id === this.productSelected?.id);
+      //   allProducts[index] = res.results;
+      //   this.data = allProducts;
+      // })
     } else {
-      this.apiService.createProduct({
-        description: this.description.value ? this.description.value : '',
-        id_brand: Number(this.id_brand.value) || 0,
-        id_category: Number(this.id_category.value) || 0,
-        id_subcategory: Number(this.id_subcategory.value) || 0,
-        price_sale: Number(this.price_sale.value) || 0,
-        price_cost: Number(this.price_cost.value) || 0,
-        ncm: this.ncm.value ? this.ncm.value : '',
-        id_fornecedor: Number(this.id_supplier.value) || 0,
-        control_stock: this.control_stock.value || 'S',
-        stock: Number(this.stock.value) || 0,
-        id_company: 1
-      }).then(res => {
-        this.load();
-        this.balanceService.firstMoviment(res.results, Number(this.stock.value) || 0);
+      // this.apiService.createProduct({
+      //   description: this.description.value ? this.description.value : '',
+      //   id_brand: Number(this.id_brand.value) || 0,
+      //   id_category: Number(this.id_category.value) || 0,
+      //   id_subcategory: Number(this.id_subcategory.value) || 0,
+      //   price_sale: Number(this.price_sale.value) || 0,
+      //   price_cost: Number(this.price_cost.value) || 0,
+      //   ncm: this.ncm.value ? this.ncm.value : '',
+      //   id_fornecedor: Number(this.id_supplier.value) || 0,
+      //   control_stock: this.control_stock.value || 'S',
+      //   stock: Number(this.stock.value) || 0,
+      //   id_company: 1
+      // }).then(res => {
+      //   this.load();
+      //   this.balanceService.firstMoviment(res.results, Number(this.stock.value) || 0);
 
-        setTimeout(() => {
-          $('#modalProduct').modal('hide');
-        }, 500);
-      })
+      //   setTimeout(() => {
+      //     $('#modalProduct').modal('hide');
+      //   }, 500);
+      // })
     }
   }
 
   update(product: Products) {
-    this.productSelected = product;
-    this.description.setValue(product.description ? product.description : '');
-    this.id_brand.setValue(product.id_brand ? String(product.id_brand) : '');
-    this.id_category.setValue(product.id_category ? String(product.id_category) : '');
-    this.id_subcategory.setValue(product.id_subcategory ? String(product.id_subcategory) : '');
-    this.price_sale.setValue(product.price_sale ? String(product.price_sale) : '');
-    this.price_cost.setValue(product.price_cost ? String(product.price_cost) : '');
-    this.ncm.setValue(product.ncm ? product.ncm : '');
-    this.id_supplier.setValue(product.id_fornecedor ? String(product.id_fornecedor) : '');
-    this.control_stock.setValue(product.control_stock ? product.control_stock : 'S');
-    this.stock.setValue(product.stock ? String(product.stock) : '');
-    this.isEditMode = true;
+    // this.productSelected = product;
+    // this.description.setValue(product.description ? product.description : '');
+    // this.id_brand.setValue(product.id_brand ? String(product.id_brand) : '');
+    // this.id_category.setValue(product.id_category ? String(product.id_category) : '');
+    // this.id_subcategory.setValue(product.id_subcategory ? String(product.id_subcategory) : '');
+    // this.price_sale.setValue(product.price_sale ? String(product.price_sale) : '');
+    // this.price_cost.setValue(product.price_cost ? String(product.price_cost) : '');
+    // this.ncm.setValue(product.ncm ? product.ncm : '');
+    // this.id_supplier.setValue(product.id_fornecedor ? String(product.id_fornecedor) : '');
+    // this.control_stock.setValue(product.control_stock ? product.control_stock : 'S');
+    // this.stock.setValue(product.stock ? String(product.stock) : '');
+    // this.isEditMode = true;
     $('#modalProduct').modal('show');
   }
 
@@ -208,5 +218,9 @@ export class ProductComponent implements OnInit {
         })
       }
     });
+  }
+
+  teste() {
+    console.log(this.form.get('control_stock')?.value);
   }
 }
