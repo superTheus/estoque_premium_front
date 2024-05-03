@@ -14,7 +14,8 @@
       <div class="col-3"></div>
       <div class="col-3"></div>
       <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Novo Cliente</button>
+        <button class="btn btn-primary me-2" [ngClass]="{'disabled': disableNew}" data-bs-toggle="modal"
+          data-bs-target="#modalProduct">Novo Cliente</button>
       </div>
     </div>
 

@@ -25,7 +25,7 @@ import { Permission } from "../views/app/user/users.interface";
 export const getCompanyId = () => {
   let id = 0
   try {
-    id = Number(sessionStorage.getItem('company_login_id')) || 0;
+    id = Number(localStorage.getItem('company_login_id')) || 0;
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : getUserId -> error", error)
     id = 0;
@@ -35,7 +35,7 @@ export const getCompanyId = () => {
 
 export const setCompanyId = (userId: number) => {
   try {
-    sessionStorage.setItem('company_login_id', String(userId));
+    localStorage.setItem('company_login_id', String(userId));
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUserId -> error")
   }
@@ -44,7 +44,7 @@ export const setCompanyId = (userId: number) => {
 export const getUserId = () => {
   let id = 0
   try {
-    id = Number(sessionStorage.getItem('user_login_id')) || 0;
+    id = Number(localStorage.getItem('user_login_id')) || 0;
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : getUserId -> error", error)
     id = 0;
@@ -54,7 +54,7 @@ export const getUserId = () => {
 
 export const setUserId = (userId: number) => {
   try {
-    sessionStorage.setItem('user_login_id', String(userId));
+    localStorage.setItem('user_login_id', String(userId));
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUserId -> error")
   }
@@ -63,7 +63,7 @@ export const setUserId = (userId: number) => {
 export const getUserEmail = () => {
   let token = '';
   try {
-    token = sessionStorage.getItem('user_login_email') || '';
+    token = localStorage.getItem('user_login_email') || '';
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : getUserEmail -> error", error)
     token = '';
@@ -73,7 +73,7 @@ export const getUserEmail = () => {
 
 export const setUserEmail = (email: string) => {
   try {
-    sessionStorage.setItem('user_login_email', email);
+    localStorage.setItem('user_login_email', email);
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUserEmail -> error")
   }
@@ -81,7 +81,7 @@ export const setUserEmail = (email: string) => {
 
 export const setUser = (user: User) => {
   try {
-    sessionStorage.setItem('user_data', JSON.stringify(user));
+    localStorage.setItem('user_data', JSON.stringify(user));
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUser -> error")
   }
@@ -89,7 +89,7 @@ export const setUser = (user: User) => {
 
 export const getUser = () => {
   try {
-    let token = sessionStorage.getItem('user_data');
+    let token = localStorage.getItem('user_data');
     if (token)
       return JSON.parse(token);
     else
@@ -102,7 +102,7 @@ export const getUser = () => {
 
 export const setPermision = (user: Permission) => {
   try {
-    sessionStorage.setItem('user_permission', JSON.stringify(user));
+    localStorage.setItem('user_permission', JSON.stringify(user));
   } catch (error) {
     console.log(">>>> src/app/utils/util.js : setUser -> error")
   }
@@ -110,7 +110,7 @@ export const setPermision = (user: Permission) => {
 
 export const getPermision = (): Permission | null => {
   try {
-    let token = sessionStorage.getItem('user_permission');
+    let token = localStorage.getItem('user_permission');
     if (token)
       return JSON.parse(token);
     else
@@ -122,7 +122,6 @@ export const getPermision = (): Permission | null => {
 }
 
 export const clearSession = () => {
-  sessionStorage.clear();
   localStorage.clear();
 }
 

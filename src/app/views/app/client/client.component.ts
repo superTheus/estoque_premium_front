@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../../data/api.service';
 import { Clients } from './client.interface';
 import { FormControl } from '@angular/forms';
-import { getCompanyId } from '../../../utils/util';
+import { getCompanyId, getPermision } from '../../../utils/util';
 import Swal from 'sweetalert2';
 
 declare const $: any;
@@ -53,7 +53,23 @@ export class ClientComponent {
   clientSelected: Clients | undefined;
   data: Clients[] = [];
 
-  constructor(private apiService: ApiService) { }
+  permissions = getPermision();
+  disableNew = false;
+
+  constructor(
+    private apiService: ApiService
+  ) {
+    this.apiService.findClient({
+      filter: {
+        deleted: 'N',
+        id_company: getCompanyId()
+      }
+    }).then(res => {
+      if (this.permissions?.limite_clientes) {
+        this.disableNew = this.permissions?.limite_clientes <= res.results.length ? true : false;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.load();
