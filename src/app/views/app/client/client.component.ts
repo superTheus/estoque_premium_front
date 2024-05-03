@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../../data/api.service';
 import { Clients } from './client.interface';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { getCompanyId, getPermision } from '../../../utils/util';
 import Swal from 'sweetalert2';
 
@@ -13,23 +13,7 @@ declare const $: any;
   styleUrl: './client.component.scss'
 })
 export class ClientComponent {
-  nome = new FormControl('');
-  apelido = new FormControl('');
-  razao_social = new FormControl('');
-  rg_inscricao = new FormControl('');
-  email = new FormControl('');
-  celular = new FormControl('');
-  telefone = new FormControl('');
-  endereco = new FormControl('');
-  cep = new FormControl('');
-  documento = new FormControl('');
-  cidade = new FormControl('');
-  numero = new FormControl('');
-  bairro = new FormControl('');
-  complemento = new FormControl('');
-  data_nascimento = new FormControl('');
-  icms = new FormControl('');
-  genero = new FormControl('');
+  form!: FormGroup;
 
   generoOptions: {
     value: string;
@@ -57,8 +41,30 @@ export class ClientComponent {
   disableNew = false;
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private formBuilder: FormBuilder,
   ) {
+
+    this.form = this.formBuilder.group({
+      name: new FormControl(''),
+      apelido: new FormControl(''),
+      razao_social: new FormControl(''),
+      rg_inscricao: new FormControl(''),
+      email: new FormControl(''),
+      celular: new FormControl(''),
+      telefone: new FormControl(''),
+      endereco: new FormControl(''),
+      cep: new FormControl(''),
+      documento: new FormControl(''),
+      cidade: new FormControl(''),
+      numero: new FormControl(''),
+      bairro: new FormControl(''),
+      complemento: new FormControl(''),
+      data_nascimento: new FormControl(''),
+      icms: new FormControl(''),
+      genero: new FormControl(''),
+    });
+
     this.apiService.findClient({
       filter: {
         deleted: 'N',
@@ -86,83 +92,73 @@ export class ClientComponent {
     })
   }
 
+  openModal() {
+    this.form.get('name')?.setValue('');
+    this.form.get('apelido')?.setValue('');
+    this.form.get('razao_social')?.setValue('');
+    this.form.get('rg_inscricao')?.setValue('');
+    this.form.get('email')?.setValue('');
+    this.form.get('celular')?.setValue('');
+    this.form.get('telefone')?.setValue('');
+    this.form.get('endereco')?.setValue('');
+    this.form.get('cep')?.setValue('');
+    this.form.get('documento')?.setValue('');
+    this.form.get('cidade')?.setValue('');
+    this.form.get('numero')?.setValue('');
+    this.form.get('bairro')?.setValue('');
+    this.form.get('complemento')?.setValue('');
+    this.form.get('data_nascimento')?.setValue('');
+    this.form.get('icms')?.setValue('');
+    this.form.get('genero')?.setValue('');
+    this.isEditMode = false;
+    $('#modalClient').modal('show');
+  }
+
   save() {
     if (this.isEditMode) {
       this.apiService.updateClient({
         id: this.clientSelected?.id,
-        apelido: this.apelido.value || '',
-        bairro: this.bairro.value || '',
-        celular: this.celular.value || '',
-        cep: this.cep.value || '',
-        cidade: this.cidade.value || '',
-        complemento: this.complemento.value || '',
-        data_nascimento: this.data_nascimento.value || '',
-        documento: this.documento.value || '',
-        email: this.email.value || '',
-        endereco: this.endereco.value || '',
-        genero: this.genero.value || '',
-        icms: this.icms.value || '',
-        name: this.nome.value || '',
-        numero: this.numero.value || '',
-        razao_social: this.razao_social.value || '',
-        rg_inscricao: this.rg_inscricao.value || '',
-        telefone: this.telefone.value || ''
+        ...this.form.value
       }).then(res => {
         console.log(res);
         this.load();
       })
     } else {
       this.apiService.createClient({
-        apelido: this.apelido.value || '',
-        bairro: this.bairro.value || '',
-        celular: this.celular.value || '',
-        cep: this.cep.value || '',
-        cidade: this.cidade.value || '',
-        complemento: this.complemento.value || '',
-        data_nascimento: this.data_nascimento.value || '',
-        documento: this.documento.value || '',
-        email: this.email.value || '',
-        endereco: this.endereco.value || '',
-        genero: this.genero.value || '',
-        icms: this.icms.value || '',
-        name: this.nome.value || '',
-        numero: this.numero.value || '',
-        razao_social: this.razao_social.value || '',
-        rg_inscricao: this.rg_inscricao.value || '',
-        telefone: this.telefone.value || '',
-        id_company: 1,
+        ...this.form.value,
+        id_company: getCompanyId(),
       }).then(res => {
         console.log(res);
         this.load();
       })
     }
 
-    $('#modalProduct').modal('hide');
+    $('#modalClient').modal('hide');
   }
 
   update(client: Clients) {
     this.clientSelected = client;
     this.isEditMode = true;
 
-    this.nome.setValue(client.name || '');
-    this.apelido.setValue(client.apelido || '');
-    this.razao_social.setValue(client.razao_social || '');
-    this.rg_inscricao.setValue(client.rg_inscricao || '');
-    this.email.setValue(client.email || '');
-    this.celular.setValue(client.celular || '');
-    this.telefone.setValue(client.telefone || '');
-    this.endereco.setValue(client.endereco || '');
-    this.cep.setValue(client.cep || '');
-    this.documento.setValue(client.documento || '');
-    this.cidade.setValue(client.cidade || '');
-    this.numero.setValue(client.numero || '');
-    this.bairro.setValue(client.bairro || '');
-    this.complemento.setValue(client.complemento || '');
-    this.data_nascimento.setValue(client.data_nascimento || '');
-    this.icms.setValue(client.icms || '');
-    this.genero.setValue(client.genero || '');
+    this.form.get('name')?.setValue(client.name || '');
+    this.form.get('apelido')?.setValue(client.apelido || '');
+    this.form.get('razao_social')?.setValue(client.razao_social || '');
+    this.form.get('rg_inscricao')?.setValue(client.rg_inscricao || '');
+    this.form.get('email')?.setValue(client.email || '');
+    this.form.get('celular')?.setValue(client.celular || '');
+    this.form.get('telefone')?.setValue(client.telefone || '');
+    this.form.get('endereco')?.setValue(client.endereco || '');
+    this.form.get('cep')?.setValue(client.cep || '');
+    this.form.get('documento')?.setValue(client.documento || '');
+    this.form.get('cidade')?.setValue(client.cidade || '');
+    this.form.get('numero')?.setValue(client.numero || '');
+    this.form.get('bairro')?.setValue(client.bairro || '');
+    this.form.get('complemento')?.setValue(client.complemento || '');
+    this.form.get('data_nascimento')?.setValue(client.data_nascimento || '');
+    this.form.get('icms')?.setValue(client.icms || '');
+    this.form.get('genero')?.setValue(client.genero || '');
 
-    $('#modalProduct').modal('show');
+    $('#modalClient').modal('show');
   }
 
   delete(client: Clients) {
