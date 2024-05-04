@@ -53,13 +53,6 @@
   }
 }
 
-// .container-main {
-//   display: grid;
-//   grid-template-columns: 10vw 90vw;
-//   grid-template-rows: 7vh 88vh 5vh;
-//   grid-template-areas: "header header" "sidenav content" "sidenav footer";
-// }
-
 .fixed-top {
   position: fixed;
   top: 0;
@@ -215,4 +208,22 @@ a {
 
 .invalid {
   border-color: #dc3545;
+}
+
+input {
+  border-radius: 50px !important;
+}
+
+select {
+  border-radius: 50px !important;
+}
+
+.select-group {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+
+  button {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
 }
