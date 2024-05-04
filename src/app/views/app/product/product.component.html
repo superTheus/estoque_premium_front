@@ -78,7 +78,12 @@
                 <div class="mb-3">
                   <label for="description" class="form-label"> Descricão </label>
                   <input type="text" class="form-control" id="description" placeholder="Descricão"
-                    formControlName="description">
+                    formControlName="description"
+                    [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
+                  <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched"
+                    class="invalid-feedback">
+                    Descricão é obrigatória
+                  </div>
                 </div>
               </div>
               <div class="col-6">
@@ -94,14 +99,30 @@
                 <div class="mb-3">
                   <label for="price_sale" class="form-label"> Preço de Venda </label>
                   <input type="text" class="form-control" id="price_sale" placeholder="R$ 0,00"
-                    formControlName="price_sale">
+                    formControlName="price_sale"
+                    [ngClass]="{'invalid': !form.get('price_sale')?.valid && form.get('price_sale')?.touched}"
+                    (keyup)="changeValueFormat(form.controls['price_sale'])"
+                    (keydown)="changeValueFormat(form.controls['price_sale'])"
+                    (keypress)="changeValueFormat(form.controls['price_sale'])">
+                  <div *ngIf="!form.get('price_sale')?.valid && form.get('price_sale')?.touched"
+                    class="invalid-feedback">
+                    Preço de venda é obrigatório
+                  </div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mb-3">
                   <label for="price_cost" class="form-label"> Preço de Custo </label>
                   <input type="text" class="form-control" id="price_cost" placeholder="R$ 0,00"
-                    formControlName="price_cost">
+                    formControlName="price_cost"
+                    [ngClass]="{'invalid': !form.get('price_cost')?.valid && form.get('price_cost')?.touched}"
+                    (keyup)="changeValueFormat(form.controls['price_cost'])"
+                    (keydown)="changeValueFormat(form.controls['price_cost'])"
+                    (keypress)="changeValueFormat(form.controls['price_cost'])">
+                  <div *ngIf="!form.get('price_cost')?.valid && form.get('price_cost')?.touched"
+                    class="invalid-feedback">
+                    Preço de custo é obrigatório
+                  </div>
                 </div>
               </div>
             </div>
@@ -147,9 +168,9 @@
 
               <div class="col-6">
                 <div class="mb-3">
-                  <label for="id_supplier" class="form-label"> Fornecedor </label>
+                  <label for="id_fornecedor" class="form-label"> Fornecedor </label>
                   <div class="d-flex">
-                    <select id="id_supplier" class="form-control" formControlName="id_supplier">
+                    <select id="id_fornecedor" class="form-control" formControlName="id_fornecedor">
                       <option value=""> Selecione </option>
                       <option *ngFor="let item of supplierSelect" [value]="item.value">{{item.label}}</option>
                     </select>
@@ -163,7 +184,7 @@
                 <div class="mb-3">
                   <label for="control_stock" class="form-label"> Controle de estoque </label>
                   <div class="d-flex">
-                    <select id="control_stock" class="form-control" formControlName="control_stock" (change)="teste()">
+                    <select id="control_stock" class="form-control" formControlName="control_stock">
                       <option value=""> Selecione </option>
                       <option *ngFor="let item of controlStock" [value]="item.value">{{item.label}}</option>
                     </select>
@@ -173,7 +194,7 @@
               <div *ngIf="!isEditMode" class="col-6">
                 <div class="mb-3">
                   <label for="stock" class="form-label"> Estoque </label>
-                  <input type="number" class="form-control" id="stock" placeholder="R$ 0,00" formControlName="stock"
+                  <input type="number" class="form-control" id="stock" placeholder="0" formControlName="stock"
                     [readOnly]="form.get('control_stock')?.value === 'S' ? false : true">
                 </div>
               </div>

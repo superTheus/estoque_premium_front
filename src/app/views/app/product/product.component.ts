@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Products } from './product.interface';
 import { ApiService } from '../../../data/api.service';
 import { Options } from '../../../components/select-default/select-default.interface';
@@ -52,15 +52,14 @@ export class ProductComponent implements OnInit {
     this.form = this.formBuilder.group({
       description: ['', [Validators.required]],
       price_sale: ['', [Validators.required]],
-      price_cost: [''],
+      price_cost: ['', [Validators.required]],
       ncm: [''],
       control_stock: ['S'],
-      stock: ['', [Validators.required]],
-      id_company: ['', [Validators.required]],
+      stock: [''],
       id_brand: [''],
       id_category: [''],
       id_subcategory: [''],
-      id_supplier: [''],
+      id_fornecedor: [''],
     })
 
     this.apiService.findProducts({
@@ -138,64 +137,69 @@ export class ProductComponent implements OnInit {
   }
 
   save() {
-    if (this.isEditMode) {
-      // this.apiService.updateProduct({
-      //   id: this.productSelected?.id,
-      //   description: this.description.value ? this.description.value : '',
-      //   id_brand: Number(this.id_brand.value) || 0,
-      //   id_category: Number(this.id_category.value) || 0,
-      //   id_subcategory: Number(this.id_subcategory.value) || 0,
-      //   price_sale: Number(this.price_sale.value) || 0,
-      //   price_cost: Number(this.price_cost.value) || 0,
-      //   ncm: this.ncm.value ? this.ncm.value : '',
-      //   id_fornecedor: Number(this.id_supplier.value) || 0,
-      //   control_stock: this.control_stock.value || 'S',
-      //   stock: Number(this.stock.value) || 0,
-      //   id_company: 1,
-      //   deleted: this.productSelected?.deleted
-      // }).then(res => {
-      //   let allProducts = [...this.data];
-      //   let index = allProducts.findIndex(product => product.id === this.productSelected?.id);
-      //   allProducts[index] = res.results;
-      //   this.data = allProducts;
-      // })
-    } else {
-      // this.apiService.createProduct({
-      //   description: this.description.value ? this.description.value : '',
-      //   id_brand: Number(this.id_brand.value) || 0,
-      //   id_category: Number(this.id_category.value) || 0,
-      //   id_subcategory: Number(this.id_subcategory.value) || 0,
-      //   price_sale: Number(this.price_sale.value) || 0,
-      //   price_cost: Number(this.price_cost.value) || 0,
-      //   ncm: this.ncm.value ? this.ncm.value : '',
-      //   id_fornecedor: Number(this.id_supplier.value) || 0,
-      //   control_stock: this.control_stock.value || 'S',
-      //   stock: Number(this.stock.value) || 0,
-      //   id_company: 1
-      // }).then(res => {
-      //   this.load();
-      //   this.balanceService.firstMoviment(res.results, Number(this.stock.value) || 0);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-      //   setTimeout(() => {
-      //     $('#modalProduct').modal('hide');
-      //   }, 500);
-      // })
+    let values = this.form.value;
+
+    if (values.price_sale) {
+      values.price_sale = values.price_sale.replace('R$', '').replace('.', '').replace(',', '.').trim() || 0;
+    }
+
+    if (values.price_cost) {
+      values.price_cost = values.price_cost.replace('R$', '').replace('.', '').replace(',', '.').trim() || 0;
+    }
+
+    values.id_brand = values.id_brand || null;
+    values.id_category = values.id_category || null;
+    values.id_subcategory = values.id_subcategory || null;
+    values.id_fornecedor = values.id_fornecedor || null;
+
+    if (this.isEditMode) {
+      this.apiService.updateProduct({
+        id: this.productSelected?.id,
+        ...values,
+        id_company: getCompanyId(),
+        deleted: this.productSelected?.deleted
+      }).then(res => {
+        this.loadProducts()
+
+        setTimeout(() => {
+          $('#modalProduct').modal('hide');
+          Swal.fire("Produto salvo", "", "success");
+        }, 500);
+      })
+    } else {
+      this.apiService.createProduct({
+        ...values,
+        id_company: getCompanyId(),
+      }).then(res => {
+        this.loadProducts()
+        this.balanceService.firstMoviment(res.results, Number(this.form.get('stock')?.value) || 0);
+
+        setTimeout(() => {
+          $('#modalProduct').modal('hide');
+          Swal.fire("Produto editado", "", "success");
+        }, 500);
+      })
     }
   }
 
   update(product: Products) {
-    // this.productSelected = product;
-    // this.description.setValue(product.description ? product.description : '');
-    // this.id_brand.setValue(product.id_brand ? String(product.id_brand) : '');
-    // this.id_category.setValue(product.id_category ? String(product.id_category) : '');
-    // this.id_subcategory.setValue(product.id_subcategory ? String(product.id_subcategory) : '');
-    // this.price_sale.setValue(product.price_sale ? String(product.price_sale) : '');
-    // this.price_cost.setValue(product.price_cost ? String(product.price_cost) : '');
-    // this.ncm.setValue(product.ncm ? product.ncm : '');
-    // this.id_supplier.setValue(product.id_fornecedor ? String(product.id_fornecedor) : '');
-    // this.control_stock.setValue(product.control_stock ? product.control_stock : 'S');
-    // this.stock.setValue(product.stock ? String(product.stock) : '');
-    // this.isEditMode = true;
+    this.productSelected = product;
+    this.form.get('description')?.setValue(product.description ? product.description : '');
+    this.form.get('id_brand')?.setValue(product.id_brand ? String(product.id_brand) : '');
+    this.form.get('id_category')?.setValue(product.id_category ? String(product.id_category) : '');
+    this.form.get('id_subcategory')?.setValue(product.id_subcategory ? String(product.id_subcategory) : '');
+    this.form.get('price_sale')?.setValue(product.price_sale ? this.formatValueCurrency(product.price_sale) : '');
+    this.form.get('price_cost')?.setValue(product.price_cost ? this.formatValueCurrency(product.price_cost) : '');
+    this.form.get('ncm')?.setValue(product.ncm ? product.ncm : '');
+    this.form.get('id_fornecedor')?.setValue(product.id_fornecedor ? String(product.id_fornecedor) : '');
+    this.form.get('control_stock')?.setValue(product.control_stock ? product.control_stock : 'S');
+    this.form.get('stock')?.setValue(product.stock ? String(product.stock) : '');
+    this.isEditMode = true;
     $('#modalProduct').modal('show');
   }
 
@@ -214,15 +218,26 @@ export class ProductComponent implements OnInit {
         this.productSelected = newProduct;
 
         this.apiService.updateProduct(newProduct).then(res => {
-          this.load();
-
+          this.loadProducts();
           Swal.fire("Produto deletado", "", "info");
         })
       }
     });
   }
 
-  teste() {
-    console.log(this.form.get('control_stock')?.value);
+  formatValueCurrency(value: string | number) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value));
+  }
+
+  changeValueFormat(control: AbstractControl) {
+    let value: any = control.value;
+
+    if (value) {
+      value = value.replace(/[^0-9]/g, '')
+      value = value.replace('.', '').replace(',', '.');
+      value = Number(value) / 100;
+      value = this.formatValueCurrency(value);
+      control.setValue(value);
+    }
   }
 }
