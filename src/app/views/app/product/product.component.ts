@@ -56,6 +56,7 @@ export class ProductComponent implements OnInit {
       ncm: [''],
       control_stock: ['S'],
       stock: [''],
+      stock_minimum: [''],
       id_brand: [''],
       id_category: [''],
       id_subcategory: [''],
@@ -69,8 +70,6 @@ export class ProductComponent implements OnInit {
       }
     }).then(res => {
       if (this.permissions?.limite_produtos) {
-        console.log(this.permissions?.limite_produtos);
-
         this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
       }
     });
@@ -133,6 +132,18 @@ export class ProductComponent implements OnInit {
   }
 
   openModal() {
+    this.form.get('description')?.setValue('');
+    this.form.get('id_brand')?.setValue('');
+    this.form.get('id_category')?.setValue('');
+    this.form.get('id_subcategory')?.setValue('');
+    this.form.get('price_sale')?.setValue('');
+    this.form.get('price_cost')?.setValue('');
+    this.form.get('ncm')?.setValue('');
+    this.form.get('id_fornecedor')?.setValue('');
+    this.form.get('control_stock')?.setValue('S');
+    this.form.get('stock')?.setValue('');
+    this.form.get('stock_minimum')?.setValue('');
+
     $('#modalProduct').modal('show');
   }
 
@@ -199,6 +210,7 @@ export class ProductComponent implements OnInit {
     this.form.get('id_fornecedor')?.setValue(product.id_fornecedor ? String(product.id_fornecedor) : '');
     this.form.get('control_stock')?.setValue(product.control_stock ? product.control_stock : 'S');
     this.form.get('stock')?.setValue(product.stock ? String(product.stock) : '');
+    this.form.get('stock_minimum')?.setValue(product.stock_minimum ? String(product.stock_minimum) : '');
     this.isEditMode = true;
     $('#modalProduct').modal('show');
   }

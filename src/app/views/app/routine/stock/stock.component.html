@@ -8,8 +8,46 @@
 
       <div class="search-bar">
         <div class="input-search">
-          <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+          <input type="text" class="" [formControl]="search" placeholder="Pesquisar" aria-label="Pesquisar..."
+            (keydown)="loadProducts()" (keypress)="loadProducts()" (keyup)="loadProducts()">
           <i class="fas fa-search"></i>
+        </div>
+      </div>
+
+      <div class="row my-2">
+        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+          <div class="card card-green h-100">
+            <div class="card-body">
+              <p> Investimento: {{totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+              <p> Retorno Previsto: {{ totalSale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+              <p> Lucro Previsto: {{ totalSale - totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+          <div class="card card-blue h-100">
+            <div class="card-body">
+              <p> Produtos no estoque: {{ totalStock }} </p>
+              <p> Produtos Cadastrados: {{ totalProducts }} </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+          <div class="card card-yellow h-100">
+            <div class="card-body">
+              <p> Produtos com estoque minimo: {{ totalProductsStockMinimum }} </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+          <div class="card card-red h-100">
+            <div class="card-body">
+              <p> Produtos com estoque zerado: {{ totalProductsStockZero }} </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -44,6 +82,7 @@
                 <th>Preço Custo</th>
                 <th>Preço Venda</th>
                 <th>Estoque atual</th>
+                <th>Estoque minimo</th>
                 <th></th>
               </tr>
             </thead>
@@ -53,6 +92,7 @@
                 <td> {{ product.price_cost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
                 <td> {{ product.price_sale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
                 <td> {{ product.stock }} </td>
+                <td> {{ product.stock_minimum }} </td>
                 <td>
                   <button class="btn btn-secondary" (click)="generatePDF(product)" data-toggle="tooltip"
                     data-placement="top" title="Relatório">
@@ -62,21 +102,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-
-        <div class="card-footer">
-          <div class="d-flex justify-content-between">
-            <p> Total de custo </p>
-            <p> {{totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
-          </div>
-          <div class="d-flex justify-content-between">
-            <p> Total de preço venda </p>
-            <p> {{ totalSale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
-          </div>
-          <div class="d-flex justify-content-between">
-            <p> Total em estoque </p>
-            <p> {{ totalStock }} </p>
-          </div>
         </div>
       </div>
     </ng-template>

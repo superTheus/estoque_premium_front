@@ -16,7 +16,7 @@ export class StockComponent implements OnInit {
   products: Products[] = [];
 
   productsList: Options[] = [{ value: 0, label: 'Todos' }];
-  productSelected = new FormControl('');
+  search = new FormControl('');
 
   dateInit = new FormControl('');
   dateEnd = new FormControl('');
@@ -24,6 +24,9 @@ export class StockComponent implements OnInit {
   totalCost = 0;
   totalSale = 0;
   totalStock = 0;
+  totalProducts = 0;
+  totalProductsStockZero = 0;
+  totalProductsStockMinimum = 0;
 
   view: 'table' | 'chart' = 'table';
 
@@ -39,22 +42,27 @@ export class StockComponent implements OnInit {
   }
 
   load() {
-    var filter: Products = {
-      id_company: getCompanyId(),
-      deleted: 'N'
-    };
-
-    if (this.productSelected.value && this.productSelected.value !== '0') {
-      filter.id = Number(this.productSelected.value) as number;
-    }
-
     this.apiService.findProducts({
-      filter: filter
+      filter: {
+        id_company: getCompanyId(),
+        deleted: 'N'
+      }
     }).then((response) => {
       this.products = response.results;
       this.totalCost = this.products.reduce((acc, product) => acc + (Number(product.price_cost) ?? 0), 0);
       this.totalSale = this.products.reduce((acc, product) => acc + (Number(product.price_sale) ?? 0), 0);
       this.totalStock = this.products.reduce((acc, product) => acc + (Number(product.stock) ?? 0), 0);
+      this.totalProducts = response.results.length;
+
+      response.results.forEach((product: Products) => {
+        if (Number(product.stock) === 0) {
+          this.totalProductsStockZero++;
+        }
+
+        if (Number(product.stock) <= Number(product.stock_minimum)) {
+          this.totalProductsStockMinimum++;
+        }
+      });
     });
   }
 
@@ -63,16 +71,10 @@ export class StockComponent implements OnInit {
       filter: {
         id_company: getCompanyId(),
         deleted: 'N'
-      }
+      },
+      search: this.search?.value ?? ''
     }).then((response) => {
-      this.productsList.push(...response.results.map((product: Products) => {
-        return {
-          label: product.description,
-          value: product.id
-        };
-      }));
-
-      this.productSelected.setValue('0');
+      this.products = response.results;
     });
   };
 

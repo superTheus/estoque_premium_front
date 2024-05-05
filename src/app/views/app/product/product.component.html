@@ -191,11 +191,20 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="!isEditMode" class="col-6">
+
+              <div *ngIf="!isEditMode" [ngClass]="{'col-md-3': !isEditMode}" class="col-12">
                 <div class="mb-3">
                   <label for="stock" class="form-label"> Estoque </label>
                   <input type="number" class="form-control" id="stock" placeholder="0" formControlName="stock"
                     [readOnly]="form.get('control_stock')?.value === 'S' ? false : true">
+                </div>
+              </div>
+
+              <div [ngClass]="{'col-md-3': !isEditMode, 'col-md-6': isEditMode}" class="col-12">
+                <div class="mb-3">
+                  <label for="stock_minimum" class="form-label"> Estoque Minimo </label>
+                  <input type="number" class="form-control" id="stock_minimum" placeholder="0"
+                    formControlName="stock_minimum">
                 </div>
               </div>
             </div>

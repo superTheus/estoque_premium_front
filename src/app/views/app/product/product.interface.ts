@@ -16,6 +16,7 @@ export interface Products {
   id_fornecedor?: number,
   control_stock?: string,
   stock?: number,
+  stock_minimum?: number,
   deleted?: 'S' | 'N';
   category?: Categorys;
   subcategory?: Subcategorys;

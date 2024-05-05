@@ -6,6 +6,7 @@ import { MenuComponent } from './menu/menu.component';
 import { SalesRoutineComponent } from './sales/salesRoutine.component';
 import { ComponentsModule } from '../../../components/components.module';
 import { StockComponent } from './stock/stock.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -14,7 +15,9 @@ import { StockComponent } from './stock/stock.component';
   imports: [
     CommonModule,
     RoutineRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class RoutineModule { }
