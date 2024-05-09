@@ -10,44 +10,44 @@
       </div>
     </div>
 
-    <div class="row align-items-center justify-content-between mt-3">
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-      <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-primary me-2" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
+    <div class="d-flex align-items-center justify-content-end mt-3">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-end px-2">
+        <button class="btn btn-primary" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
           Cliente</button>
       </div>
     </div>
 
-    <table id="stockTable" *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col-2">ID</th>
-          <th class="col-5">Nome</th>
-          <th class="col-4">Documento</th>
-          <th class="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <ng-container *ngFor="let client of data">
+    <div class="table-responsive">
+      <table id="stockTable" *ngIf="data" class="table">
+        <thead>
           <tr>
-            <td class="col-2"> {{client.id}} </td>
-            <td class="col-5"> {{client.name}} </td>
-            <td class="col-4"> {{client.documento}} </td>
-            <td class="col d-flex">
-              <button class="btn btn-primary me-2" (click)="update(client)">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-danger" (click)="delete(client)">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
+            <th class="col-2">ID</th>
+            <th class="col-5">Nome</th>
+            <th class="col-4">Documento</th>
+            <th class="col"></th>
           </tr>
-        </ng-container>
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+          <ng-container *ngFor="let client of data">
+            <tr>
+              <td class="col-2"> {{client.id}} </td>
+              <td class="col-5"> {{client.name}} </td>
+              <td class="col-4"> {{client.documento}} </td>
+              <td class="col d-flex">
+                <button class="btn btn-primary me-2" (click)="update(client)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" (click)="delete(client)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </div>
 
   </div>
 

@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between">
 
-  <div class="col px-3 d-flex justify-content-center align-items-center">
+  <div class="col-6 col-sm-2 px-3 d-flex justify-content-start align-items-center">
     <a href="javascript:;" (click)="menuClick()" class="text-white">
       <i class="fas fa-bars fa-2x"></i>
     </a>
@@ -9,22 +9,9 @@
     </a> -->
   </div>
 
-  <div class="col-3 d-flex justify-content-center align-items-center">
-
-    <!-- <div class="input-search">
-      <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-      <i class="fas fa-search"></i>
-    </div> -->
-
-  </div>
-
-  <div class="col-4 d-flex justify-content-center align-items-center">
-
-  </div>
-
-  <div class="col-4 px-3">
+  <div class="col-6 col-sm-8 px-3">
     <div class="d-flex justify-content-end align-items-center h-100">
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-between">
 
         <button class="btn">
           <img src="../../../../assets/images/icons/message.svg" alt="">
@@ -34,7 +21,7 @@
           <img src="../../../../assets/images/icons/notification.svg" alt="">
         </button>
 
-        <span class="user-name me-3"> Olá {{ authService.user.name }}#{{
+        <span class="user-name me-3" style="white-space: nowrap;"> Olá {{ authService.user.name }}#{{
           utilsService.padWithZeros(authService.user.id)
           }} </span>
 

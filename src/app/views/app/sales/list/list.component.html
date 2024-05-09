@@ -1,65 +1,61 @@
 <div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-4">
+  <div class="row px-3 mb-4 mt-5">
     <h3> Vendas </h3>
   </div>
   <div id="stock-control-container">
-    <div class="d-flex align-items-center justify-content-between mt-3">
-      <div class="col-3 px-2">
-        <!-- <select name="" id="" class="form-control" [formControl]="filter" (change)="loadData()">
-          <option value="">Todos</option>
-          <option value="AB">Em aberto</option>
-          <option value="FE">Finalizada</option>
-          <option value="CA">Cancelada</option>
-        </select> -->
-      </div>
-      <div class="col-3"></div>
-      <div class="col-3 d-flex justify-content-end">
+    <div class="d-flex align-items-center justify-content-between mt-3 mx-2">
+      <div class="col-12 col-sm-4 col-md-3 d-flex justify-content-end">
         <a [routerLink]="['/app/sales/pdv']" class="btn btn-primary me-2" data-bs-toggle="modal"
           data-bs-target="#modalProduct">Nova
           Venda</a>
       </div>
     </div>
 
-    <table id="stockTable" *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col">ID</th>
-          <th class="col-2">Cliente</th>
-          <th class="col-2">Vendedor</th>
-          <th class="col-2">Valor</th>
-          <th class="col-3">Data Hora</th>
-          <th *ngIf="filter.value !== 'CA'" class="col-2"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <ng-container *ngFor="let sale of data">
+    <div class="table-responsive">
+      <table id="stockTable" *ngIf="data">
+        <thead>
           <tr>
-            <td class="col"> {{ sale.id }} </td>
-            <td class="col-2"> {{ sale.id_client ? sale.client?.name : 'Consumidor Final' }} </td>
-            <td class="col-2"> {{ sale.id_user ? sale.user?.name : '--' }} </td>
-            <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
-            <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
-            <td *ngIf="filter.value !== 'CA'" class="col text-center" [ngClass]="{'d-flex': sale.status !== 'CA'}">
-              <a *ngIf="sale.status === 'FE'" (click)="generatePDF(sale)" class="btn btn-secondary me-2"
-                data-toggle="tooltip" data-placement="top" title="Comprovante"> <i class="fas fa-print"></i> </a>
-              <a *ngIf="sale.status === 'AB'" [routerLink]="['/app/sales/pdv/' + sale.id]" class="btn btn-primary me-2"
-                data-toggle="tooltip" data-placement="top" title="Ver compra"> <i class="fas fa-eye"></i>
-              </a>
-              <a *ngIf="sale.status === 'AB'" (click)="delete(sale)" class="btn btn-danger" data-toggle="tooltip"
-                data-placement="top" title="Cancelar venda"> <i class="fas fa-trash"></i> </a>
-            </td>
+            <th class="col">ID</th>
+            <th class="col-2">Cliente</th>
+            <th class="col-2">Vendedor</th>
+            <th class="col-2">Valor</th>
+            <th class="col-3">Data Hora</th>
+            <th *ngIf="filter.value !== 'CA'" class="col-2"></th>
           </tr>
-        </ng-container>
+        </thead>
+        <tbody>
 
-        <ng-container *ngIf="!data || data.length == 0">
-          <tr>
-            <td class="col text-center" colspan="5"> Nenhum registro encontrado </td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let sale of data">
+            <tr>
+              <td class="col"> {{ sale.id }} </td>
+              <td class="col-2"> {{ sale.id_client ? sale.client?.name : 'Consumidor Final' }} </td>
+              <td class="col-2"> {{ sale.id_user ? sale.user?.name : '--' }} </td>
+              <td class="col-2"> {{ sale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+              <td class="col-3"> {{ formatDateTime(sale.date_hour || '') }} </td>
+              <td *ngIf="filter.value !== 'CA'" class="col text-center">
+                <div [ngClass]="{'d-flex': sale.status !== 'CA'}">
+                  <a *ngIf="sale.status === 'FE'" (click)="generatePDF(sale)" class="btn btn-secondary me-2"
+                    data-toggle="tooltip" data-placement="top" title="Comprovante"> <i class="fas fa-print"></i> </a>
+                  <a *ngIf="sale.status === 'AB'" [routerLink]="['/app/sales/pdv/' + sale.id]"
+                    class="btn btn-primary me-2" data-toggle="tooltip" data-placement="top" title="Ver compra"> <i
+                      class="fas fa-eye"></i>
+                  </a>
+                  <a *ngIf="sale.status === 'AB'" (click)="delete(sale)" class="btn btn-danger" data-toggle="tooltip"
+                    data-placement="top" title="Cancelar venda"> <i class="fas fa-trash"></i> </a>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
 
-      </tbody>
-    </table>
+          <ng-container *ngIf="!data || data.length == 0">
+            <tr>
+              <td class="col text-center" colspan="5"> Nenhum registro encontrado </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>

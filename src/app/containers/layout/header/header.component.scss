@@ -28,3 +28,9 @@
     color: #3a3a3a;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .user-name {
+    display: none;
+  }
+}

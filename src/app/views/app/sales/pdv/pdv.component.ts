@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
@@ -26,6 +26,7 @@ declare var $: any;
 interface PaymentForms {
   id: number;
   label: 'DINHEIRO' | 'CARTÃO DE DÉBITO' | 'CARTÃO DE CRÉDITO' | 'PIX';
+  date: string;
   value: number;
   icon: 'far fa-credit-card' | 'far fa-money-bill-alt' | 'far fa-credit-card' | 'fas fa-qrcode';
   class: 'bg-success' | 'bg-primary' | 'bg-secondary' | 'bg-danger';
@@ -56,7 +57,7 @@ export class PdvComponent {
   id_subcategory = new FormControl('');
   id_supplier = new FormControl('');
 
-  id_client = new FormControl(0);
+  id_client = new FormControl(0, [Validators.required]);
   id_seller = new FormControl('');
 
   clientsSelect: Options[] = [];
@@ -107,7 +108,7 @@ export class PdvComponent {
   genero = new FormControl('');
 
   paymentType = new FormControl(1)
-
+  paymentDate = new FormControl('')
   generoOptions: {
     value: string;
     label: string;
@@ -205,8 +206,28 @@ export class PdvComponent {
   }
 
   openModalPayment = () => {
-    $('#modalPayment').modal('show');
-    this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
+    if (this.id_client.valid) {
+      if (this.products.length > 0 || (this.currentSale.products ?? []).length > 0) {
+        $('#modalPayment').modal('show');
+        this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Adicione produtos para continuar!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    } else {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Selecione um cliente para continuar!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
   }
 
   openModalClient = () => {
@@ -294,7 +315,7 @@ export class PdvComponent {
         this.id_client.setValue(id);
         this.updateClient();
       } else if (this.currentSale) {
-        this.id_client.setValue(this.currentSale.id_client as number);
+        this.id_client.setValue(this.currentSale.id_client ? this.currentSale.id_client : 0);
       }
     });
   }
@@ -309,7 +330,7 @@ export class PdvComponent {
       price_cost: Number(this.price_cost.value) || 0,
       ncm: this.ncm.value ? this.ncm.value : '',
       id_fornecedor: Number(this.id_supplier.value) || 0,
-      control_stock: this.control_stock.value || 'S',
+      control_stock: this.control_stock.value as 'S' | 'N' || 'S',
       stock: Number(this.stock.value) || 0,
       id_company: 1
     }).then(() => {
@@ -367,21 +388,56 @@ export class PdvComponent {
   }
 
   verifySale(product: Products) {
-    this.closeModal();
-    this.quantity.setValue(1);
-    this.desconto.setValue('R$ 0,00');
-    this.desconto_percentual.setValue(0);
-    this.total_value.setValue(this.formatValueCurrency(product.price_sale ? product.price_sale : 0));
-    this.value.setValue(this.formatValueCurrency(product.price_cost || 0));
-    this.value_sale.setValue(this.formatValueCurrency(product.price_sale || 0));
 
-    this.currentProduct = product;
-    this.openModalAddProduct();
+
+    if (product.control_stock === 'S' && product?.stock && Number(product?.stock) > 0 && Number(product?.stock) > (Number(product.stock_minimum) ?? 0)) {
+      this.closeModal();
+      this.quantity.setValue(1);
+      this.desconto.setValue('R$ 0,00');
+      this.desconto_percentual.setValue(0);
+      this.total_value.setValue(this.formatValueCurrency(product.price_sale ? product.price_sale : 0));
+      this.value.setValue(this.formatValueCurrency(product.price_cost || 0));
+      this.value_sale.setValue(this.formatValueCurrency(product.price_sale || 0));
+
+      this.currentProduct = product;
+      this.openModalAddProduct();
+    } else {
+      if (product?.stock && Number(product?.stock) === 0) {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Produto sem estoque!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Produto atingiu o estoque mínimo!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    }
   }
 
   changeQuantity(quantity: number) {
-    let valueFormated = this.formatValue(this.value_sale.value?.replace(/[^0-9]/g, '') || 0);
+    let inStock = Number(this.currentProduct.stock) - Number(this.currentProduct.stock_minimum) - quantity;
 
+    if (inStock < 0) {
+      this.quantity.setValue(quantity - 1);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Produto atingiu o Limite de Estoque!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      return;
+    }
+
+    let valueFormated = this.formatValue(this.value_sale.value?.replace(/[^0-9]/g, '') || 0);
     this.total_value.setValue(this.formatValueCurrency(Number(valueFormated) * quantity));
   }
 
@@ -478,7 +534,8 @@ export class PdvComponent {
           label: 'DINHEIRO',
           value: value,
           icon: 'far fa-money-bill-alt',
-          class: 'bg-success'
+          class: 'bg-success',
+          date: this.paymentDate.value ?? '',
         });
         break;
       case 2:
@@ -487,7 +544,8 @@ export class PdvComponent {
           label: 'CARTÃO DE DÉBITO',
           value: value,
           icon: 'far fa-credit-card',
-          class: 'bg-primary'
+          class: 'bg-primary',
+          date: this.paymentDate.value ?? '',
         });
         break;
       case 3:
@@ -496,7 +554,8 @@ export class PdvComponent {
           label: 'CARTÃO DE CRÉDITO',
           value: value,
           icon: 'far fa-credit-card',
-          class: 'bg-secondary'
+          class: 'bg-secondary',
+          date: this.paymentDate.value ?? '',
         });
         break;
       case 4:
@@ -505,7 +564,8 @@ export class PdvComponent {
           label: 'PIX',
           value: value,
           icon: 'fas fa-qrcode',
-          class: 'bg-danger'
+          class: 'bg-danger',
+          date: this.paymentDate.value ?? '',
         });
         break;
     }
@@ -531,7 +591,15 @@ export class PdvComponent {
     let newSaleValue = this.currentSale;
     newSaleValue.status = 'FE';
     newSaleValue.id_user = this.id_seller.value ? Number(this.id_seller.value) : getUserId();
-    newSaleValue.id_client = Number(this.id_client.value) ?? null;
+    newSaleValue.id_client = Number(this.id_client.value) > 0 ? Number(this.id_client.value) : null;
+    newSaleValue.payforms = this.paymentForms.map(item => {
+      return {
+        id_sale: this.currentSale.id,
+        id_form: item.id,
+        value: item.value,
+        date: item.date
+      }
+    });
 
     this.salesService.updateSale(newSaleValue).then((data) => {
       Swal.fire({

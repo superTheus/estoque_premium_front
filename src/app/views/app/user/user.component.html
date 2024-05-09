@@ -3,16 +3,19 @@
     <h3> Usuário </h3>
   </div>
   <div id="stock-control-container">
-    <div class="row align-items-center justify-content-between mt-3">
-      <div class="col-3 mx-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
+      <div class="col-12 col-sm-4 col-md-3 px-2">
         <ng-container *ngIf="isAdmin">
-          <app-input-default [control]="code" type="text" label="Código" placeHolder="0000" (change)="formatCode()"
-            [maxlenght]="4"></app-input-default>
+          <div class="mb-3">
+            <label for="codigo" class="form-label">Código</label>
+            <input type="text" class="form-control" id="codigo" placeholder="0000" [formControl]="code"
+              (keydown)="formatCode()" (keypress)="formatCode()" (keyup)="formatCode()" (change)="formatCode()"
+              [maxlength]="4">
+          </div>
         </ng-container>
       </div>
-      <div class="col-3"></div>
-      <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-primary me-2" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
+      <div class="col-12 col-sm-4 col-md-3 col-lg-2 px-2 d-flex justify-content-end">
+        <button class="btn btn-primary" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
           Usuário</button>
       </div>
     </div>
@@ -20,84 +23,88 @@
     <ng-container *ngIf="isAdmin; then isAdminUser; else notAdmin"></ng-container>
 
     <ng-template #notAdmin>
-      <table id="stockTable" *ngIf="data">
-        <thead>
-          <tr>
-            <th class="col">ID</th>
-            <th class="col-5">Descricão</th>
-            <th class="col-4">Email</th>
-            <th class="col">Perfil</th>
-            <th class="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <ng-container *ngFor="let user of data">
+      <div class="table-responsive">
+        <table id="stockTable" *ngIf="data">
+          <thead>
             <tr>
-              <td class="col-2"> {{user.id}} </td>
-              <td class="col-5"> {{user.name}} </td>
-              <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
-              <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
-              <td class="col d-flex">
-                <button class="btn btn-primary me-2" (click)="update(user)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" (click)="delete(user)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
+              <th class="col">ID</th>
+              <th class="col-5">Descricão</th>
+              <th class="col-4">Email</th>
+              <th class="col">Perfil</th>
+              <th class="col"></th>
             </tr>
-          </ng-container>
+          </thead>
+          <tbody>
 
-          <tr *ngIf="!data.length" class="text-center">
-            <td colspan="5"> Nenhum usuário encontrado </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </ng-template>
-
-    <ng-template #isAdminUser>
-      <table id="stockTable" *ngIf="data">
-        <thead>
-          <tr>
-            <th class="col">Código</th>
-            <th class="col-4">Nome</th>
-            <th class="col-3">Email</th>
-            <th class="col-3">Documento</th>
-            <th class="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <ng-container *ngFor="let user of data">
-            <tr>
-              <td class="col"> #{{ utilsService.padWithZeros(user.id) }} </td>
-              <td class="col-4"> {{user.name}} </td>
-              <td class="col-3"> {{user.email ? user.email : ' -- '}} </td>
-              <td class="col-3"> {{ utilsService.formatDocument(user.companyData?.cnpj) }} </td>
-              <td class="col">
-                <div class="d-flex">
-                  <button class="btn btn-secondary me-2" (click)="permission(user)">
-                    <i class="fas fa-lock"></i>
-                  </button>
+            <ng-container *ngFor="let user of data">
+              <tr>
+                <td class="col-2"> {{user.id}} </td>
+                <td class="col-5"> {{user.name}} </td>
+                <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
+                <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
+                <td class="col d-flex">
                   <button class="btn btn-primary me-2" (click)="update(user)">
                     <i class="fas fa-edit"></i>
                   </button>
                   <button class="btn btn-danger" (click)="delete(user)">
                     <i class="fas fa-trash"></i>
                   </button>
-                </div>
-              </td>
+                </td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!data.length" class="text-center">
+              <td colspan="5"> Nenhum usuário encontrado </td>
             </tr>
-          </ng-container>
 
-          <tr *ngIf="!data.length">
-            <td colspan="5" class="text-center"> Nenhum usuário encontrado </td>
-          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
 
-        </tbody>
-      </table>
+    <ng-template #isAdminUser>
+      <div class="table-responsive">
+        <table id="stockTable" *ngIf="data">
+          <thead>
+            <tr>
+              <th class="col">Código</th>
+              <th class="col-4">Nome</th>
+              <th class="col-3">Email</th>
+              <th class="col-3">Documento</th>
+              <th class="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <ng-container *ngFor="let user of data">
+              <tr>
+                <td class="col"> #{{ utilsService.padWithZeros(user.id) }} </td>
+                <td class="col-4"> {{user.name}} </td>
+                <td class="col-3"> {{user.email ? user.email : ' -- '}} </td>
+                <td class="col-3"> {{ utilsService.formatDocument(user.companyData?.cnpj) }} </td>
+                <td class="col">
+                  <div class="d-flex">
+                    <button class="btn btn-secondary me-2" (click)="permission(user)">
+                      <i class="fas fa-lock"></i>
+                    </button>
+                    <button class="btn btn-primary me-2" (click)="update(user)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger" (click)="delete(user)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!data.length">
+              <td colspan="5" class="text-center"> Nenhum usuário encontrado </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
     </ng-template>
 
   </div>

@@ -11,40 +11,39 @@
       </div>
     </div>
 
-    <div class="row align-items-center justify-content-between mt-3">
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-      <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Entrada</button>
+    <div class="row align-items-center justify-content-end mt-3 mx-2">
+      <div class="col-12 col-sm-4 col-md-3 d-flex justify-content-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Entrada</button>
       </div>
     </div>
 
-    <table id="stockTable" *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col">ID</th>
-          <th class="col-7">Documento</th>
-          <th class="col-3"> Quantidade de Produtos </th>
-          <th class="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <ng-container *ngFor="let insert of data">
+    <div class="table-responsive">
+      <table id="stockTable" *ngIf="data">
+        <thead>
           <tr>
-            <td class="col"> {{insert.id}} </td>
-            <td class="col-8"> {{insert.documento}} </td>
-            <td class="col-3 text-center"> {{insert.products.length}} </td>
-            <td class="col">
-              <button (click)="print(insert)" class="btn btn-secondary me-2" data-toggle="tooltip" data-placement="top"
-                title="Comprovante"> <i class="fas fa-print"></i> </button>
-            </td>
+            <th class="col">ID</th>
+            <th class="col-7">Documento</th>
+            <th class="col-3"> Quantidade de Produtos </th>
+            <th class="col"></th>
           </tr>
-        </ng-container>
+        </thead>
+        <tbody>
 
-      </tbody>
-    </table>
+          <ng-container *ngFor="let insert of data">
+            <tr>
+              <td class="col"> {{insert.id}} </td>
+              <td class="col-8"> {{insert.documento}} </td>
+              <td class="col-3 text-center"> {{insert.products.length}} </td>
+              <td class="col">
+                <button (click)="print(insert)" class="btn btn-secondary me-2" data-toggle="tooltip"
+                  data-placement="top" title="Comprovante"> <i class="fas fa-print"></i> </button>
+              </td>
+            </tr>
+          </ng-container>
 
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">

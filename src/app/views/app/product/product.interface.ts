@@ -14,7 +14,7 @@ export interface Products {
   price_cost?: number,
   ncm?: string,
   id_fornecedor?: number,
-  control_stock?: string,
+  control_stock?: 'S' | 'N',
   stock?: number,
   stock_minimum?: number,
   deleted?: 'S' | 'N';

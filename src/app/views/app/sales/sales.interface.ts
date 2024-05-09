@@ -13,7 +13,16 @@ export interface Sales {
   deleted?: string,
   products?: SaleProduct[]
   user?: Users,
-  client?: Clients
+  client?: Clients,
+  payforms?: SalePayForm[];
+}
+
+export interface SalePayForm {
+  id?: number,
+  id_sale?: number,
+  id_form: number,
+  value: number,
+  date: string,
 }
 
 export interface SalesRequest {
