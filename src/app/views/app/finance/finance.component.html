@@ -5,7 +5,7 @@
 
   <div class="card">
     <div class="card-body">
-      <div class="row px-4 mt-3">
+      <div class="d-flex flex-column px-2 px-md-4 mt-3">
         <form [formGroup]="clientForm" class="row">
           <div class="col-12 col-md-10">
             <label class="mb-2"><span> Cliente </span></label>
@@ -58,53 +58,55 @@
       </div>
     </div>
 
-    <table *ngIf="data">
-      <thead>
-        <tr>
-          <th class="col">#</th>
-          <th class="col-2">Credor</th>
-          <th class="col-2">Valor</th>
-          <th class="col-3">Data de Compra</th>
-          <th class="col-3">Data de vencimento</th>
-          <th class="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <ng-container *ngFor="let conta of finances">
+    <div class="table-responsive">
+      <table *ngIf="data">
+        <thead>
           <tr>
-            <td class="col"> {{conta.id}} </td>
-            <td class="col-2"> {{ conta.clientData?.name }} </td>
-            <td class="col-4"> {{ conta.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
-            <td class="col-2"> {{ conta.date_finance | date:'dd/MM/yyyy' }} </td>
-            <td class="col-2"> {{ conta.date_expiration | date:'dd/MM/yyyy' }} </td>
-            <td class="col">
-              <div *ngIf="conta.status === 'PE'" class="d-flex h-100">
-                <button class="btn btn-secondary me-2" (click)="payment(conta)" data-toggle="tooltip"
-                  data-placement="top" title="Pagamento">
-                  <i class="fas fa-long-arrow-alt-down"></i>
-                </button>
-                <button class="btn btn-primary me-2" (click)="update(conta)" data-toggle="tooltip" data-placement="top"
-                  title="Editar">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" (click)="delete(conta)" data-toggle="tooltip" data-placement="top"
-                  title="Deletar">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-
-              <div *ngIf="conta.status === 'PG'" class="text-success text-center">
-                <i class="fas fa-check-double"></i> Conta Paga
-              </div>
-            </td>
+            <th class="col">#</th>
+            <th class="col-2">Credor</th>
+            <th class="col-2">Valor</th>
+            <th class="col-3">Data de Compra</th>
+            <th class="col-3">Data de vencimento</th>
+            <th class="col"></th>
           </tr>
-        </ng-container>
-        <tr *ngIf="finances.length === 0">
-          <td colspan="6" class="text-center"> Nenhum registro encontrado </td>
-        </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+
+          <ng-container *ngFor="let conta of finances">
+            <tr>
+              <td class="col"> {{conta.id}} </td>
+              <td class="col-2"> {{ conta.clientData?.name }} </td>
+              <td class="col-4"> {{ conta.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+              <td class="col-2"> {{ conta.date_finance | date:'dd/MM/yyyy' }} </td>
+              <td class="col-2"> {{ conta.date_expiration | date:'dd/MM/yyyy' }} </td>
+              <td class="col">
+                <div *ngIf="conta.status === 'PE'" class="d-flex h-100">
+                  <button class="btn btn-secondary me-2" (click)="payment(conta)" data-toggle="tooltip"
+                    data-placement="top" title="Pagamento">
+                    <i class="fas fa-long-arrow-alt-down"></i>
+                  </button>
+                  <button class="btn btn-primary me-2" (click)="update(conta)" data-toggle="tooltip"
+                    data-placement="top" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="delete(conta)" data-toggle="tooltip" data-placement="top"
+                    title="Deletar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+
+                <div *ngIf="conta.status === 'PG'" class="text-success text-center">
+                  <i class="fas fa-check-double"></i> Conta Paga
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="finances.length === 0">
+            <td colspan="6" class="text-center"> Nenhum registro encontrado </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

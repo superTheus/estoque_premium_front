@@ -57,8 +57,6 @@ export class ContasComponent {
         }
         return newConta;
       })
-
-      console.log(this.data);
     })
   }
 

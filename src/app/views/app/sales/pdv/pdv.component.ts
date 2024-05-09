@@ -20,6 +20,7 @@ import { Clients } from '../../client/client.interface';
 import { BalanceService } from '../../../../data/balance.service';
 import { Users } from '../../user/users.interface';
 import { formatNumber } from '@angular/common';
+import { FinanceData } from '../../finance/finance.interface';
 
 declare var $: any;
 
@@ -28,8 +29,7 @@ interface PaymentForms {
   label: 'DINHEIRO' | 'CARTÃO DE DÉBITO' | 'CARTÃO DE CRÉDITO' | 'PIX';
   date: string;
   value: number;
-  icon: 'far fa-credit-card' | 'far fa-money-bill-alt' | 'far fa-credit-card' | 'fas fa-qrcode';
-  class: 'bg-success' | 'bg-primary' | 'bg-secondary' | 'bg-danger';
+  status: 'PA' | 'PE';
 }
 
 @Component({
@@ -108,6 +108,7 @@ export class PdvComponent {
   genero = new FormControl('');
 
   paymentType = new FormControl(1)
+  paymentStatus = new FormControl('PA')
   paymentDate = new FormControl('')
   generoOptions: {
     value: string;
@@ -144,6 +145,17 @@ export class PdvComponent {
       label: 'PIX',
       value: 4
     }
+  ]
+
+  paymentOptions: Options[] = [
+    {
+      label: 'Pago',
+      value: 'PA'
+    },
+    {
+      label: 'Pendente',
+      value: 'PE'
+    },
   ]
 
   constructor(
@@ -533,9 +545,8 @@ export class PdvComponent {
           id: 1,
           label: 'DINHEIRO',
           value: value,
-          icon: 'far fa-money-bill-alt',
-          class: 'bg-success',
           date: this.paymentDate.value ?? '',
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
         });
         break;
       case 2:
@@ -543,8 +554,7 @@ export class PdvComponent {
           id: 2,
           label: 'CARTÃO DE DÉBITO',
           value: value,
-          icon: 'far fa-credit-card',
-          class: 'bg-primary',
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
           date: this.paymentDate.value ?? '',
         });
         break;
@@ -553,9 +563,8 @@ export class PdvComponent {
           id: 3,
           label: 'CARTÃO DE CRÉDITO',
           value: value,
-          icon: 'far fa-credit-card',
-          class: 'bg-secondary',
           date: this.paymentDate.value ?? '',
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
         });
         break;
       case 4:
@@ -563,9 +572,8 @@ export class PdvComponent {
           id: 4,
           label: 'PIX',
           value: value,
-          icon: 'fas fa-qrcode',
-          class: 'bg-danger',
           date: this.paymentDate.value ?? '',
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
         });
         break;
     }
@@ -608,9 +616,12 @@ export class PdvComponent {
         icon: 'success',
         confirmButtonText: 'OK'
       }).then(() => {
-        let promises = this.currentSale.products?.map(product => {
+        let promises: Promise<void>[] | undefined = [];
+        promises = this.currentSale.products?.map((product): Promise<void> => {
           return this.balanceService.newMoviment(product.product as Products, product.quantity, 'S');
         })
+
+        promises?.push(...this.saveFinances());
 
         Promise.all(promises as any[]).then(() => {
           window.location.href = location.origin + '/app/sales/list';
@@ -662,6 +673,31 @@ export class PdvComponent {
     })
 
     this.closeModal();
+  }
+
+  saveFinances() {
+    let promises: Promise<any>[] = [];
+
+    this.paymentForms.forEach((payment, index) => {
+      let finance: FinanceData = {
+        client: Number(this.currentSale.id_client),
+        company: getCompanyId(),
+        date_expiration: payment.date,
+        date_finance: payment.date,
+        number_order: '',
+        observation: 'Conta gera pela venda de mercadoria - Venda ' + this.currentSale.id,
+        payform: payment.id,
+        portion_value: 1,
+        status: payment.status,
+        type: 'R',
+        value: payment.value,
+        wild: 'V'
+      }
+
+      promises.push(this.apiService.createFinance(finance));
+    });
+
+    return promises;
   }
 
   changeValueFormat() {

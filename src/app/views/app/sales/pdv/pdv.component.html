@@ -4,50 +4,52 @@
     <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
     <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
   </div> -->
-
-  <div class="row px-3 py-2">
-    <div class="col-12 col-md-6">
-      <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
-    </div>
-    <div class="col-12 col-md-6">
-      <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente" [items]="clientsSelect"
-        [showButton]="true" (buttonAction)="openModalClient()"></app-select-default>
-    </div>
-  </div>
-
-  <div class="row px-3 py-2">
-    <div class="col-md-12 offset-md-0">
-      <div class="custom-input-group  mt-0 ">
-        <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal"
-          data-bs-target="#modalProduct">Adicionar
-          Produtos</button>
-        <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
-          placeholder="Pesquisar">
+  <div>
+    <div class="row px-3 py-2">
+      <div class="col-12 col-md-6">
+        <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
+      </div>
+      <div class="col-12 col-md-6">
+        <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente" [items]="clientsSelect"
+          [showButton]="true" (buttonAction)="openModalClient()"></app-select-default>
       </div>
     </div>
 
-    <div class="col-md-12">
-      <div class="container-products">
-        <ng-container *ngIf="currentSale">
+    <div class="row px-3 py-2">
+      <div class="col-md-12 offset-md-0">
+        <div class="custom-input-group  mt-0 ">
+          <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal"
+            data-bs-target="#modalProduct">Adicionar
+            Produtos</button>
+          <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
+            placeholder="Pesquisar">
+        </div>
+      </div>
 
-          <h4 *ngIf="currentSale.products?.length" class="my-3"> Produtos </h4>
+      <div class="col-md-12">
+        <div class="container-products">
+          <ng-container *ngIf="currentSale">
 
-          <div *ngFor="let productSale of currentSale.products" class="card bg-light p-2 d-flex flex-row my-2">
-            <div class="col-6 d-flex align-items-center">
-              {{ productSale.product?.description }}
+            <h4 *ngIf="currentSale.products?.length" class="my-3"> Produtos </h4>
+
+            <div *ngFor="let productSale of currentSale.products" class="card bg-light p-2 d-flex flex-row my-2">
+              <div class="col-6 d-flex align-items-center">
+                {{ productSale.product?.description }}
+              </div>
+              <div class="col-2 d-flex align-items-center">
+                {{ productSale.quantity }}
+              </div>
+              <div class="col-2 d-flex align-items-center">
+                {{ productSale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+              </div>
+              <div class="col d-flex justify-content-center">
+                <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
+                <button class="btn btn-danger" (click)="deleteProduct(productSale)"> <i class="fa fa-trash"></i>
+                </button>
+              </div>
             </div>
-            <div class="col-2 d-flex align-items-center">
-              {{ productSale.quantity }}
-            </div>
-            <div class="col-2 d-flex align-items-center">
-              {{ productSale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
-            </div>
-            <div class="col d-flex justify-content-center">
-              <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
-              <button class="btn btn-danger" (click)="deleteProduct(productSale)"> <i class="fa fa-trash"></i> </button>
-            </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
@@ -56,13 +58,15 @@
     <div class="col-md-12">
       <div class="custom-footer">
         <div class="row justify-content-center">
-          <div class="col-md-4 py-2 text-center">
+          <div class="col-md-4 p-2 text-center">
             <hr style="background-color: #ffffff;">
             <h6>Total</h6>
             <span id="totalAmount">
               <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
             </span>
-            <button class="btn btn-success col-md-6" (click)="openModalPayment()">Continuar</button>
+            <div class="col-8 col-md-6 m-auto">
+              <button class="btn btn-success" (click)="openModalPayment()">Continuar</button>
+            </div>
           </div>
         </div>
       </div>
@@ -150,30 +154,30 @@
 
           <form>
             <div class="row">
-              <div class="col-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <app-input-quantity [control]="quantity" label="Quantidade" placeHolder=""
                   (change)="changeQuantity($event)"></app-input-quantity>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <app-input-default [control]="value" type="text" classname="text-center disabled" label="Valor custo"
                   placeHolder="" [disabled]="true"></app-input-default>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <app-input-default [control]="value_sale" classname="text-center" type="text" label="Valor Venda"
                   placeHolder="" [disabled]="true"></app-input-default>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <app-input-default [control]="total_value" classname="text-center" type="text" label="Total"
                   placeHolder="" [disabled]="true"></app-input-default>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-3">
+              <div class="col-12 col-md-4 col-lg-3">
                 <app-input-default [control]="desconto_percentual" classname="text-center" type="number"
                   label="Desconto em %" placeHolder="" (change)="changeDiscount()"></app-input-default>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-4 col-lg-3">
                 <app-input-default [control]="desconto" classname="text-center" type="text" label="Desconto em R$"
                   placeHolder="" (change)="changeDiscountValue()"></app-input-default>
               </div>
@@ -182,8 +186,15 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="addProductToSale()">Salvar</button>
+          <div class="d-flex col-12 justify-content-end">
+            <div class="col-12 col-md-3 col-lg-2 me-2">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+            <div class="col-12 col-md-3 col-lg-2 ms-2">
+              <button type="button" class="btn btn-primary" (click)="addProductToSale()">Salvar</button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -235,7 +246,7 @@
             <div class="card-body p-3">
 
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="card card-blue">
                     <div class="card-body">
                       <p> Total </p>
@@ -244,7 +255,7 @@
                   </div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-12 col-md-6 mt-2 mt-md-0">
                   <div class="card card-green">
                     <div class="card-body">
                       <p> Total Pago </p>
@@ -255,9 +266,13 @@
               </div>
 
               <div class="row mt-3">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
                   <app-select-default [control]="paymentType" label=""
                     [items]="paymentTypeOptions"></app-select-default>
+                </div>
+
+                <div class="col-12 col-md-2">
+                  <app-select-default [control]="paymentStatus" label="" [items]="paymentOptions"></app-select-default>
                 </div>
 
                 <div class="col-12 col-md-2">
@@ -269,7 +284,7 @@
                   <app-input-default [control]="paymentDate" type="date" label=""></app-input-default>
                 </div>
 
-                <div class="col-12 col-md mt-4">
+                <div class="col-12 col-md mt-0 mt-md-4">
                   <button (click)="applyPayment()" class="btn btn-success"
                     [ngClass]="{'disabled': totalPayment >= total}"> <i class="fas fa-plus"></i> </button>
                 </div>
