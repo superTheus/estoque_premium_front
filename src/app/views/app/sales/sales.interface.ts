@@ -23,6 +23,8 @@ export interface SalePayForm {
   id_form: number,
   value: number,
   date: string,
+  portion_number: number,
+  portion_total: number,
 }
 
 export interface SalesRequest {

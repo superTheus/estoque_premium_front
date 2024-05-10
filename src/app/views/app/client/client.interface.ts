@@ -18,7 +18,8 @@ export interface Clients {
   icms?: string,
   genero?: string
   deleted?: string,
-  telefone?: string
+  telefone?: string,
+  show_client?: 'S' | 'N',
 }
 
 

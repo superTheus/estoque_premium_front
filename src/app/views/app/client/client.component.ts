@@ -68,6 +68,7 @@ export class ClientComponent {
     this.apiService.findClient({
       filter: {
         deleted: 'N',
+        show_client: 'S',
         id_company: getCompanyId()
       }
     }).then(res => {
@@ -85,7 +86,8 @@ export class ClientComponent {
     this.apiService.findClient({
       filter: {
         id_company: getCompanyId(),
-        deleted: 'N'
+        deleted: 'N',
+        show_client: 'S'
       }
     }).then(res => {
       this.data = res.results;

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
 import { Options } from '../../../../components/select-default/select-default.interface';
 import { ApiService } from '../../../../data/api.service';
@@ -19,7 +18,6 @@ import { Suppliers } from '../../supplier/supplier.interface';
 import { Clients } from '../../client/client.interface';
 import { BalanceService } from '../../../../data/balance.service';
 import { Users } from '../../user/users.interface';
-import { formatNumber } from '@angular/common';
 import { FinanceData } from '../../finance/finance.interface';
 
 declare var $: any;
@@ -30,6 +28,8 @@ interface PaymentForms {
   date: string;
   value: number;
   status: 'PA' | 'PE';
+  portion_number: number;
+  portion_total: number;
 }
 
 @Component({
@@ -318,11 +318,11 @@ export class PdvComponent {
   loadClients(id?: number) {
     this.apiService.findClient({
       filter: {
-        id_company: getCompanyId()
+        id_company: getCompanyId(),
+        deleted: 'N'
       }
     }).then(response => {
       this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
-      this.clientsSelect.unshift({ label: 'Consumidor Final', value: 0 });
       if (id) {
         this.id_client.setValue(id);
         this.updateClient();
@@ -546,7 +546,9 @@ export class PdvComponent {
           label: 'DINHEIRO',
           value: value,
           date: this.paymentDate.value ?? '',
-          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
+          portion_number: 1,
+          portion_total: 1
         });
         break;
       case 2:
@@ -556,6 +558,8 @@ export class PdvComponent {
           value: value,
           status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
           date: this.paymentDate.value ?? '',
+          portion_number: 1,
+          portion_total: 1
         });
         break;
       case 3:
@@ -564,7 +568,9 @@ export class PdvComponent {
           label: 'CARTÃO DE CRÉDITO',
           value: value,
           date: this.paymentDate.value ?? '',
-          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
+          portion_number: 1,
+          portion_total: 1
         });
         break;
       case 4:
@@ -573,7 +579,9 @@ export class PdvComponent {
           label: 'PIX',
           value: value,
           date: this.paymentDate.value ?? '',
-          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA'
+          status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
+          portion_number: 1,
+          portion_total: 1
         });
         break;
     }
@@ -605,7 +613,9 @@ export class PdvComponent {
         id_sale: this.currentSale.id,
         id_form: item.id,
         value: item.value,
-        date: item.date
+        date: item.date,
+        portion_number: item.portion_number,
+        portion_total: item.portion_total
       }
     });
 
