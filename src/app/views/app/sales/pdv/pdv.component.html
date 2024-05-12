@@ -290,6 +290,17 @@
                 </div>
               </div>
 
+              <div *ngIf="paymentType.value === '3'" class="row my-2">
+                <div class="col-12">
+                  <p> Parcelas </p>
+                </div>
+                <div *ngFor="let portion of portions" class="col btn-portion">
+                  <button class="btn btn-primary" [ngClass]="{'active': portion === portionNumber}"
+                    (click)="selectPortion(portion)"> {{portion}}x
+                  </button>
+                </div>
+              </div>
+
               <div *ngIf="paymentForms.length" class="row">
                 <div class="col-12">
                   <table class="table">

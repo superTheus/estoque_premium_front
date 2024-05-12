@@ -7,7 +7,7 @@ import { Clients } from '../client/client.interface';
 import { Finance } from '../payment/payment.interface';
 import { Options } from '../../../components/select-default/select-default.interface';
 import { getCompanyId } from '../../../utils/util';
-import { FinanceData, FinanceDataRequest } from './finance.interface';
+import { FinanceData } from './finance.interface';
 import Swal from 'sweetalert2';
 
 declare const $: any;
@@ -227,6 +227,8 @@ export class FinanceComponent implements OnInit {
       limit: 30
     }).then((data) => {
       this.finances = data.results;
+
+      console.log(this.finances);
     }).catch((error) => {
       this.finances = [];
     });

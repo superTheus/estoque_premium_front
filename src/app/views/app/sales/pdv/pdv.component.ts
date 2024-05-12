@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
+import moment from 'moment';
 
 import { Options } from '../../../../components/select-default/select-default.interface';
 import { ApiService } from '../../../../data/api.service';
@@ -88,6 +89,7 @@ export class PdvComponent {
   paymentSelected!: | 1 | 2 | 3 | 4;
   paymentForms: PaymentForms[] = [];
 
+  portions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
   nome = new FormControl('');
   apelido = new FormControl('');
@@ -107,9 +109,12 @@ export class PdvComponent {
   icms = new FormControl('');
   genero = new FormControl('');
 
-  paymentType = new FormControl(1)
+  paymentType = new FormControl('1')
   paymentStatus = new FormControl('PA')
-  paymentDate = new FormControl('')
+  paymentDate = new FormControl(moment().format('YYYY-MM-DD'))
+
+  portionNumber = 1;
+
   generoOptions: {
     value: string;
     label: string;
@@ -570,7 +575,7 @@ export class PdvComponent {
           date: this.paymentDate.value ?? '',
           status: this.paymentStatus.value as 'PA' | 'PE' ?? 'PA',
           portion_number: 1,
-          portion_total: 1
+          portion_total: this.portionNumber
         });
         break;
       case 4:
@@ -588,6 +593,7 @@ export class PdvComponent {
 
     this.totalPayment += value;
     this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
+    this.paymentType.setValue('1');
   }
 
   deletPaymentForm(payment: PaymentForms) {
@@ -689,22 +695,43 @@ export class PdvComponent {
     let promises: Promise<any>[] = [];
 
     this.paymentForms.forEach((payment, index) => {
-      let finance: FinanceData = {
-        client: Number(this.currentSale.id_client),
-        company: getCompanyId(),
-        date_expiration: payment.date,
-        date_finance: payment.date,
-        number_order: '',
-        observation: 'Conta gera pela venda de mercadoria - Venda ' + this.currentSale.id,
-        payform: payment.id,
-        portion_value: 1,
-        status: payment.status,
-        type: 'R',
-        value: payment.value,
-        wild: 'V'
+      if (payment.id === 3) {
+        for (let i = 0; i < payment.portion_total; i++) {
+          let finance: FinanceData = {
+            client: Number(this.currentSale.id_client),
+            company: getCompanyId(),
+            date_expiration: moment(payment.date).add(i + 1, 'month').format('YYYY-MM-DD'),
+            date_finance: payment.date,
+            number_order: '',
+            observation: 'Conta gera pela venda de mercadoria - Venda ' + this.currentSale.id + ' Parcela ' + (i + 1) + '/' + payment.portion_total,
+            payform: payment.id,
+            portion_value: i + 1,
+            status: payment.status,
+            type: 'R',
+            value: payment.value / payment.portion_total,
+            wild: 'V'
+          }
+
+          promises.push(this.apiService.createFinance(finance));
+        }
+      } else {
+        let finance: FinanceData = {
+          client: Number(this.currentSale.id_client),
+          company: getCompanyId(),
+          date_expiration: payment.date,
+          date_finance: payment.date,
+          number_order: '',
+          observation: 'Conta gera pela venda de mercadoria - Venda ' + this.currentSale.id,
+          payform: payment.id,
+          portion_value: 1,
+          status: payment.status,
+          type: 'R',
+          value: payment.value,
+          wild: 'V'
+        }
+        promises.push(this.apiService.createFinance(finance));
       }
 
-      promises.push(this.apiService.createFinance(finance));
     });
 
     return promises;
@@ -720,5 +747,9 @@ export class PdvComponent {
       value = this.formatValueCurrency(value);
       this.paymentValue.setValue(value);
     }
+  }
+
+  selectPortion(portion: number) {
+    this.portionNumber = portion;
   }
 }
