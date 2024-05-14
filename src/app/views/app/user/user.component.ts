@@ -197,7 +197,7 @@ export class UserComponent {
         name: this.name.value + ' ' + this.lastName.value,
         email: this.email.value ?? '',
         password: this.password.value ?? '',
-        company: 1,
+        company: getCompanyId(),
         profile: this.profile.value as 'ADMIN' | 'STORE' ?? 'ADMIN',
         use_system: this.use_system ? 'Y' : 'N'
       }).then((res) => {
