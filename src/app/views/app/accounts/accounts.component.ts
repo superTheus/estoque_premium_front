@@ -57,25 +57,11 @@ export class AccountComponent {
   isEditModePermission = false;
 
   permissions = getPermision();
-  disableNew = false;
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService,
     public utilsService: UtilsService
-  ) {
-
-    this.apiService.getUser({
-      filter: {
-        ativo: 'S',
-        company: getCompanyId()
-      }
-    }).subscribe(res => {
-      if (this.permissions?.limite_usuarios) {
-        this.disableNew = this.permissions?.limite_usuarios <= res.results.length ? true : false;
-      }
-    });
-  }
+  ) { }
 
   ngOnInit(): void {
     this.load();
@@ -143,7 +129,7 @@ export class AccountComponent {
         this.apiService.createLastPass({
           id_user: res.results.id,
           last_pass: pass
-        }).then((res) => {
+        }).then(() => {
           this.load();
         });
       });
@@ -255,7 +241,7 @@ export class AccountComponent {
 
     this.apiService.findPermission({
       filter: {
-        id_user: company.id
+        id_company: company.id
       }
     }).then((res) => {
       let permission = res.results[0] as Permission;
@@ -288,8 +274,7 @@ export class AccountComponent {
 
   savePermission() {
     let permission: Permission = {
-      id_company: getCompanyId(),
-      id_user: this.companySelected?.id,
+      id_company: this.companySelected?.id ?? 0,
       email: this.emailPermission.value ?? '',
       limite_clientes: Number(this.limite_clientes.value) ?? 0,
       limite_empresas: Number(this.limite_empresas.value) ?? 0,

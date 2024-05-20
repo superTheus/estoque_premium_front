@@ -76,16 +76,7 @@ export class UserComponent {
       issueNfe: [true],
     });
 
-    this.apiService.getUser({
-      filter: {
-        ativo: 'S',
-        company: getCompanyId()
-      }
-    }).subscribe(res => {
-      if (this.permissions?.limite_usuarios) {
-        this.disableNew = this.permissions?.limite_usuarios <= res.results.length ? true : false;
-      }
-    });
+    this.loadUsers();
   }
 
   ngOnInit(): void {
@@ -106,6 +97,19 @@ export class UserComponent {
         this.data = [];
       }
     )
+  }
+
+  loadUsers() {
+    this.apiService.getUser({
+      filter: {
+        ativo: 'S',
+        company: getCompanyId()
+      }
+    }).subscribe(res => {
+      if (this.permissions?.limite_usuarios) {
+        this.disableNew = this.permissions?.limite_usuarios <= res.results.length ? true : false;
+      }
+    });
   }
 
   save() {
@@ -157,6 +161,7 @@ export class UserComponent {
       type: 'simple'
     }).then((res) => {
       this.load();
+      this.loadUsers();
     });
   }
 
@@ -171,6 +176,7 @@ export class UserComponent {
       use_system: this.use_system ? 'Y' : 'N'
     }).then((res) => {
       this.load();
+      this.loadUsers();
     });
   }
 
@@ -204,6 +210,7 @@ export class UserComponent {
           company: 1 // Add the missing 'company' property
         }).then((res) => {
           this.load();
+          this.loadUsers();
           Swal.fire("Usuário deletado", "", "info");
         });
       }

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/auth.service';
-import { getCompanyId } from '../../../utils/util';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +33,7 @@ export class LoginComponent {
       this.router.navigate(['/app'])
     }).catch((error) => {
       console.error('login -> error', error);
+      Swal.fire("Email ou senha inválida", "", "error");
     })
   }
 }

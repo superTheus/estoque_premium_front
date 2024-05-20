@@ -63,16 +63,7 @@ export class ProductComponent implements OnInit {
       id_fornecedor: [''],
     })
 
-    this.apiService.findProducts({
-      filter: {
-        deleted: 'N',
-        id_company: getCompanyId()
-      }
-    }).then(res => {
-      if (this.permissions?.limite_produtos) {
-        this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
-      }
-    });
+    this.loadProductsPermissions();
   }
 
   ngOnInit() {
@@ -131,6 +122,19 @@ export class ProductComponent implements OnInit {
     }
   }
 
+  loadProductsPermissions() {
+    this.apiService.findProducts({
+      filter: {
+        deleted: 'N',
+        id_company: getCompanyId()
+      }
+    }).then(res => {
+      if (this.permissions?.limite_produtos) {
+        this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
+      }
+    });
+  }
+
   openModal() {
     this.form.get('description')?.setValue('');
     this.form.get('id_brand')?.setValue('');
@@ -175,11 +179,12 @@ export class ProductComponent implements OnInit {
         id_company: getCompanyId(),
         deleted: this.productSelected?.deleted
       }).then(res => {
-        this.loadProducts()
+        this.loadProducts();
+        this.loadProductsPermissions();
 
         setTimeout(() => {
           $('#modalProduct').modal('hide');
-          Swal.fire("Produto salvo", "", "success");
+          Swal.fire("Produto editado", "", "success");
         }, 500);
       })
     } else {
@@ -187,12 +192,13 @@ export class ProductComponent implements OnInit {
         ...values,
         id_company: getCompanyId(),
       }).then(res => {
-        this.loadProducts()
+        this.loadProductsPermissions();
+        this.loadProducts();
         this.balanceService.firstMoviment(res.results, Number(this.form.get('stock')?.value) || 0);
 
         setTimeout(() => {
           $('#modalProduct').modal('hide');
-          Swal.fire("Produto editado", "", "success");
+          Swal.fire("Produto salvo", "", "success");
         }, 500);
       })
     }
@@ -231,6 +237,7 @@ export class ProductComponent implements OnInit {
 
         this.apiService.updateProduct(newProduct).then(res => {
           this.loadProducts();
+          this.loadProductsPermissions();
           Swal.fire("Produto deletado", "", "info");
         })
       }

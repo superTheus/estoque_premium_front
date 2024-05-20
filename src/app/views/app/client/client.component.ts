@@ -65,17 +65,7 @@ export class ClientComponent {
       genero: new FormControl(''),
     });
 
-    this.apiService.findClient({
-      filter: {
-        deleted: 'N',
-        show_client: 'S',
-        id_company: getCompanyId()
-      }
-    }).then(res => {
-      if (this.permissions?.limite_clientes) {
-        this.disableNew = this.permissions?.limite_clientes <= res.results.length ? true : false;
-      }
-    });
+    this.loadClients();
   }
 
   ngOnInit(): void {
@@ -92,6 +82,20 @@ export class ClientComponent {
     }).then(res => {
       this.data = res.results;
     })
+  }
+
+  loadClients() {
+    this.apiService.findClient({
+      filter: {
+        deleted: 'N',
+        show_client: 'S',
+        id_company: getCompanyId()
+      }
+    }).then(res => {
+      if (this.permissions?.limite_clientes) {
+        this.disableNew = this.permissions?.limite_clientes <= res.results.length ? true : false;
+      }
+    });
   }
 
   openModal() {
@@ -122,16 +126,16 @@ export class ClientComponent {
         id: this.clientSelected?.id,
         ...this.form.value
       }).then(res => {
-        console.log(res);
         this.load();
+        this.loadClients()
       })
     } else {
       this.apiService.createClient({
         ...this.form.value,
         id_company: getCompanyId(),
       }).then(res => {
-        console.log(res);
         this.load();
+        this.loadClients()
       })
     }
 
@@ -179,6 +183,7 @@ export class ClientComponent {
 
         this.apiService.updateClient(newClient).then(res => {
           this.load();
+          this.loadClients()
           Swal.fire("Cliente deletado", "", "info");
         })
 

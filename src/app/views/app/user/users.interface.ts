@@ -49,7 +49,6 @@ export interface PermissionData {
 
 export interface Permission {
   id?: number;
-  id_user?: number;
   id_company?: number;
   nome_empresa?: string;
   responsavel?: string;
