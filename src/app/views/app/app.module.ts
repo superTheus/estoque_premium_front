@@ -29,6 +29,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { StockComponent } from './stock/stock.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { FinanceComponent } from './finance/finance.component';
+import { AccountComponent } from './accounts/accounts.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { FinanceComponent } from './finance/finance.component';
     BoxComponent,
     CompanyComponent,
     StockComponent,
-    FinanceComponent
+    FinanceComponent,
+    AccountComponent
   ],
   imports: [
     CommonModule,

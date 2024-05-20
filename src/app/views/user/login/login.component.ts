@@ -26,7 +26,8 @@ export class LoginComponent {
   login() {
     this.authService.signIn({
       ...this.form.value,
-      use_system: 'Y'
+      use_system: 'Y',
+      ativo: 'S'
     }).then((data) => {
       this.router.navigate(['/app'])
     }).catch((error) => {

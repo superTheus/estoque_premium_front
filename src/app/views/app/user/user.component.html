@@ -2,111 +2,55 @@
   <div class="row px-3 mb-4 mt-3">
     <h3> Usuário </h3>
   </div>
+
   <div id="stock-control-container">
-    <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-      <div class="col-12 col-sm-4 col-md-3 px-2">
-        <ng-container *ngIf="isAdmin">
-          <div class="mb-3">
-            <label for="codigo" class="form-label">Código</label>
-            <input type="text" class="form-control" id="codigo" placeholder="0000" [formControl]="code"
-              (keydown)="formatCode()" (keypress)="formatCode()" (keyup)="formatCode()" (change)="formatCode()"
-              [maxlength]="4">
-          </div>
-        </ng-container>
-      </div>
+    <div class="d-flex flex-wrap align-items-center justify-content-end mt-3">
       <div class="col-12 col-sm-4 col-md-3 col-lg-2 px-2 d-flex justify-content-end">
         <button class="btn btn-primary" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
           Usuário</button>
       </div>
     </div>
 
-    <ng-container *ngIf="isAdmin; then isAdminUser; else notAdmin"></ng-container>
+    <div class="table-responsive">
+      <table id="stockTable" *ngIf="data">
+        <thead>
+          <tr>
+            <th class="col">ID</th>
+            <th class="col-5">Descricão</th>
+            <th class="col-4">Email</th>
+            <th class="col">Perfil</th>
+            <th class="col"></th>
+          </tr>
+        </thead>
+        <tbody>
 
-    <ng-template #notAdmin>
-      <div class="table-responsive">
-        <table id="stockTable" *ngIf="data">
-          <thead>
+          <ng-container *ngFor="let user of data">
             <tr>
-              <th class="col">ID</th>
-              <th class="col-5">Descricão</th>
-              <th class="col-4">Email</th>
-              <th class="col">Perfil</th>
-              <th class="col"></th>
+              <td class="col-2"> {{user.id}} </td>
+              <td class="col-5"> {{user.name}} </td>
+              <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
+              <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
+              <td class="col d-flex">
+                <button class="btn btn-secondary me-2" (click)="permission(user)">
+                  <i class="fas fa-lock"></i>
+                </button>
+                <button class="btn btn-primary me-2" (click)="update(user)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" (click)="delete(user)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
+          </ng-container>
 
-            <ng-container *ngFor="let user of data">
-              <tr>
-                <td class="col-2"> {{user.id}} </td>
-                <td class="col-5"> {{user.name}} </td>
-                <td class="col-4"> {{user.email ? user.email : ' -- '}} </td>
-                <td class="col-4"> {{user.profile === 'ADMIN' ? 'Administrador' : 'Vendedor'}} </td>
-                <td class="col d-flex">
-                  <button class="btn btn-primary me-2" (click)="update(user)">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-danger" (click)="delete(user)">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </ng-container>
+          <tr *ngIf="!data.length" class="text-center">
+            <td colspan="5"> Nenhum usuário encontrado </td>
+          </tr>
 
-            <tr *ngIf="!data.length" class="text-center">
-              <td colspan="5"> Nenhum usuário encontrado </td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-    </ng-template>
-
-    <ng-template #isAdminUser>
-      <div class="table-responsive">
-        <table id="stockTable" *ngIf="data">
-          <thead>
-            <tr>
-              <th class="col">Código</th>
-              <th class="col-4">Nome</th>
-              <th class="col-3">Email</th>
-              <th class="col-3">Documento</th>
-              <th class="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <ng-container *ngFor="let user of data">
-              <tr>
-                <td class="col"> #{{ utilsService.padWithZeros(user.id) }} </td>
-                <td class="col-4"> {{user.name}} </td>
-                <td class="col-3"> {{user.email ? user.email : ' -- '}} </td>
-                <td class="col-3"> {{ utilsService.formatDocument(user.companyData?.cnpj) }} </td>
-                <td class="col">
-                  <div class="d-flex">
-                    <button class="btn btn-secondary me-2" (click)="permission(user)">
-                      <i class="fas fa-lock"></i>
-                    </button>
-                    <button class="btn btn-primary me-2" (click)="update(user)">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-danger" (click)="delete(user)">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </ng-container>
-
-            <tr *ngIf="!data.length">
-              <td colspan="5" class="text-center"> Nenhum usuário encontrado </td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-    </ng-template>
-
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="modal fade" id="modalUser" tabindex="-1" aria-labelledby="modalUserLabel" aria-hidden="true">
@@ -118,102 +62,47 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <ng-container *ngIf="isAdmin; then isAdminUserForm; else notAdminForm"></ng-container>
+          <div class="row mt-2">
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+            </div>
+            <div class="col-12 col-md-6">
+              <app-input-default [control]="lastName" type="text" label="Sobrenome"
+                placeHolder="Sobrenome"></app-input-default>
+            </div>
+          </div>
 
-          <ng-template #notAdminForm>
-            <div class="row mt-2">
-              <div class="col-12 col-md-6">
-                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
+          <div class="row mt-2">
+            <div class="col-12">
+              <app-select-default [control]="profile" label="Perfil" [items]="profileOptions"></app-select-default>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-start">
+              <label for=""> Acesso ao sistema ? </label>
+              <div class="mx-3">
+                <p-toggleButton [(ngModel)]="use_system" onLabel="Sim" offLabel="Não">
+                  offLabel="Não"></p-toggleButton>
               </div>
-              <div class="col-12 col-md-6">
-                <app-input-default [control]="lastName" type="text" label="Sobrenome"
-                  placeHolder="Sobrenome"></app-input-default>
+            </div>
+          </div>
+
+          <ng-container *ngIf="use_system">
+            <div class="row mt-2">
+              <div class="col-12">
+                <app-input-default [control]="email" type="email" label="E-mail"
+                  placeHolder="E-mail"></app-input-default>
               </div>
             </div>
 
             <div class="row mt-2">
               <div class="col-12">
-                <app-select-default [control]="profile" label="Perfil" [items]="profileOptions"></app-select-default>
+                <app-input-default [control]="password" type="password" label="Senha"
+                  placeHolder="Senha"></app-input-default>
               </div>
             </div>
-
-            <div class="row mt-2">
-              <div class="col-12 d-flex justify-content-start">
-                <label for=""> Acesso ao sistema ? </label>
-                <div class="mx-3">
-                  <p-toggleButton [(ngModel)]="use_system" onLabel="Sim" offLabel="Não">
-                    offLabel="Não"></p-toggleButton>
-                </div>
-              </div>
-            </div>
-
-            <ng-container *ngIf="use_system">
-              <div class="row mt-2">
-                <div class="col-12">
-                  <app-input-default [control]="email" type="email" label="E-mail"
-                    placeHolder="E-mail"></app-input-default>
-                </div>
-              </div>
-
-              <div class="row mt-2">
-                <div class="col-12">
-                  <app-input-default [control]="password" type="password" label="Senha"
-                    placeHolder="Senha"></app-input-default>
-                </div>
-              </div>
-            </ng-container>
-          </ng-template>
-
-          <ng-template #isAdminUserForm>
-            <div class="row mt-2">
-              <div class="col-12 col-md-6">
-                <app-input-default [control]="name" type="text" label="Nome" placeHolder="Nome"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6">
-                <app-input-default [control]="lastName" type="text" label="Sobrenome"
-                  placeHolder="Sobrenome"></app-input-default>
-              </div>
-            </div>
-
-            <div class="row mt-2">
-              <div class="col-12">
-                <app-input-default [control]="document" type="text" label="Documento" placeHolder="CNPJ/CPF"
-                  (change)="formatDocument()" [maxlenght]="18"></app-input-default>
-              </div>
-            </div>
-
-            <div class="row mt-2">
-              <div class="col-12">
-                <app-input-default [control]="telephone" type="text" label="Telefone" placeHolder="(92) 99999-9999"
-                  (change)="formatTelefone()" [maxlenght]="15"></app-input-default>
-              </div>
-            </div>
-
-            <div class="row mt-2">
-              <div class="col-12">
-                <app-input-default [control]="email" type="text" label="E-mail"
-                  placeHolder="exemplo@mail.com"></app-input-default>
-              </div>
-            </div>
-
-
-            <ng-container *ngIf="isEditMode">
-              <hr>
-              <h5> Senha </h5>
-
-              <div class="row mt-2">
-                <div class="col-12 col-md-8">
-                  <app-input-default [control]="password" type="text" label="Ultima senha gerada" placeHolder=""
-                    classcontainer="mb-md-0" [disabled]="true"></app-input-default>
-                </div>
-                <div class="col-12 col-md-4 d-flex justify-content-end align-items-end">
-                  <button class="btn btn-primary" (click)="generatePassword()"> Gerar Nova </button>
-                </div>
-              </div>
-
-            </ng-container>
-          </ng-template>
-
+          </ng-container>
         </div>
         <div class="modal-footer">
           <div class="row w-100 justify-content-md-end">
@@ -231,85 +120,293 @@
 
   <div class="modal fade" id="modalPermission" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel"> Configuração de Permissões </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <form [formGroup]="formPermission" (ngSubmit)="savePermission()">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel"> Configuração de Permissões </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="accordion accordion-flush" id="accordionRegisters">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Cadastros
+                  </button>
+                </h2>
+
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionRegisters">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuRegister" class="form-check-input" type="checkbox"
+                            id="showMenu">
+                          <label class="form-check-label" for="showMenu">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerUsers" class="form-check-input" type="checkbox"
+                            id="managerUsers">
+                          <label class="form-check-label" for="managerUsers">Gerenciar Usuários</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerSuppliers" class="form-check-input" type="checkbox"
+                            id="managerSuppliers">
+                          <label class="form-check-label" for="managerSuppliers">Gerenciar Fornecedores</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerClientes" class="form-check-input" type="checkbox"
+                            id="managerClientes">
+                          <label class="form-check-label" for="managerClientes">Gerenciar Clientes</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerProdutos" class="form-check-input" type="checkbox"
+                            id="managerProdutos">
+                          <label class="form-check-label" for="managerProdutos">Gerenciar Produtos</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerBrands" class="form-check-input" type="checkbox"
+                            id="managerBrands">
+                          <label class="form-check-label" for="managerBrands">Gerenciar Marcas</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerCategories" class="form-check-input" type="checkbox"
+                            id="managerCategories">
+                          <label class="form-check-label" for="managerCategories">Gerenciar Categorias</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerSubcategories" class="form-check-input" type="checkbox"
+                            id="managerSubcategories">
+                          <label class="form-check-label" for="managerSubcategories">Gerenciar Subcategorias</label>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion accordion-flush" id="accordionBox">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse-box" aria-expanded="false" aria-controls="flush-collapse-box">
+                    Caixas
+                  </button>
+                </h2>
+
+                <div id="flush-collapse-box" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionBox">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuBox" class="form-check-input" type="checkbox"
+                            id="showMenuBox">
+                          <label class="form-check-label" for="showMenuBox">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerBox" class="form-check-input" type="checkbox" id="managerBox">
+                          <label class="form-check-label" for="managerBox">Gerenciar Caixas</label>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion accordion-flush" id="accordionSales">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse-sales" aria-expanded="false" aria-controls="flush-collapse-sales">
+                    Portal de Vendas
+                  </button>
+                </h2>
+
+                <div id="flush-collapse-sales" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionSales">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuSales" class="form-check-input" type="checkbox"
+                            id="showMenuSales">
+                          <label class="form-check-label" for="showMenuSales">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerSales" class="form-check-input" type="checkbox"
+                            id="managerSales">
+                          <label class="form-check-label" for="managerSales">Realizar Vendas</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="issueNfe" class="form-check-input" type="checkbox" id="issueNfe">
+                          <label class="form-check-label" for="issueNfe"> Emitir NFe </label>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion accordion-flush" id="accordionReports">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse-reports" aria-expanded="false"
+                    aria-controls="flush-collapse-reports">
+                    Relatórios e Rotinas
+                  </button>
+                </h2>
+
+                <div id="flush-collapse-reports" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionReports">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuReports" class="form-check-input" type="checkbox"
+                            id="showMenuReports">
+                          <label class="form-check-label" for="showMenuReports">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="showReportsSales" class="form-check-input" type="checkbox"
+                            id="showReportsSales">
+                          <label class="form-check-label" for="showReportsSales">Mostrar relatório de Vendas</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="showReportsStock" class="form-check-input" type="checkbox"
+                            id="showReportsStock">
+                          <label class="form-check-label" for="showReportsStock">Mostrar relatório de estoque</label>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion accordion-flush" id="accordionStock">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse-stocks" aria-expanded="false" aria-controls="flush-collapse-stocks">
+                    Controle de Estoque
+                  </button>
+                </h2>
+
+                <div id="flush-collapse-stocks" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionStock">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuStock" class="form-check-input" type="checkbox"
+                            id="showMenuStock">
+                          <label class="form-check-label" for="showMenuReports">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerEntries" class="form-check-input" type="checkbox"
+                            id="managerEntries">
+                          <label class="form-check-label" for="managerEntries">Realizar Entradas</label>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion accordion-flush" id="accordionFinance">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse-finance" aria-expanded="false"
+                    aria-controls="flush-collapse-finance">
+                    Financias
+                  </button>
+                </h2>
+
+                <div id="flush-collapse-finance" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionFinance">
+                  <div class="accordion-body">
+
+                    <div class="row mt-2">
+                      <div class="col-12">
+                        <div class="form-check form-switch">
+                          <input formControlName="showMenuFinance" class="form-check-input" type="checkbox"
+                            id="showMenuFinance">
+                          <label class="form-check-label" for="showMenuFinance">Mostrar Menu</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerFinance" class="form-check-input" type="checkbox"
+                            id="managerFinance">
+                          <label class="form-check-label" for="managerFinance">Gerenciar Contas</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                          <input formControlName="managerAccount" class="form-check-input" type="checkbox"
+                            id="managerAccount">
+                          <label class="form-check-label" for="managerAccount">Gerenciar Contas Bancárias</label>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row w-100 justify-content-md-end">
+              <div class="col-12 col-md-6 col-lg-3">
+                <button type="button" class="btn btn-success" (click)="checkAll()">Marcar Todos</button>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <button type="button" class="btn btn-danger" (click)="uncheckAll()">Tirar Todos</button>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <button type="button" class="btn btn-secondary" (click)="resetAll()">Resetar</button>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-
-          <div class="row mt-2">
-            <div class="col-12 col-md-6 col-lg-4">
-              <app-input-default [control]="responsavel" type="text" label="Responsável"
-                placeHolder="Responsável"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-              <app-input-default [control]="telefone" type="text" label="Telefone" placeHolder="Telefone"
-                (change)="formatTelefone()"></app-input-default>
-            </div>
-            <div class="col-12 col-lg-4">
-              <app-input-default [control]="nome_empresa" type="text" label="Nome empresa"
-                placeHolder="Nome empresa"></app-input-default>
-            </div>
-          </div>
-
-          <div class="row mt-2">
-            <div class="col-12 col-md-6 col-lg-8">
-              <app-input-default [control]="emailPermission" type="text" label="E-mail"
-                placeHolder="email"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-              <app-input-default [control]="valor_mensal" type="text" label="Valor Mensal" placeHolder="Valor Mensal"
-                (change)="changeValueFormat()"></app-input-default>
-            </div>
-          </div>
-
-          <div class="row mt-2">
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_nfe" type="number" label="Limite NFe (Mensal)"
-                placeHolder="Limite NFe"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_nfce" type="number" label="Limite NFCe (Mensal)"
-                placeHolder="Limite NFCe"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_empresas" type="number" label="Limite Empresas"
-                placeHolder="Limite Empresas"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_usuarios" type="number" label="Limite usuários"
-                placeHolder="Limite NFCe"></app-input-default>
-            </div>
-          </div>
-
-          <div class="row mt-2">
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_produtos" type="number" label="Limite Produtos"
-                placeHolder="Limite NFe"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <app-input-default [control]="limite_clientes" type="number" label="Limite Clientes"
-                placeHolder="Limite NFCe"></app-input-default>
-            </div>
-            <div class="col-12 col-md-6">
-              <app-input-default [control]="date_expiration" type="date" label="Vencimento"
-                placeHolder="Vencimento"></app-input-default>
-            </div>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <div class="row w-100 justify-content-md-end">
-            <div class="col-12 col-md-6 col-lg-3">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <button type="button" class="btn btn-primary" (click)="savePermission()">Salvar</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

@@ -10,6 +10,7 @@ export interface ISignInCredentials {
   email: string;
   password: string;
   use_system?: 'Y' | 'N';
+  ativo: 'S' | 'N';
 }
 
 export interface ICreateCredentials {

@@ -17,6 +17,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
 import { CompanyComponent } from './company/company.component';
+import { AccountComponent } from './accounts/accounts.component';
 
 let routes: Routes = [
   {
@@ -34,7 +35,6 @@ let routes: Routes = [
       { path: 'shopp', component: ShoppComponent },
       { path: 'routine', loadChildren: () => import('./routine/routine.module').then(m => m.RoutineModule) },
       { path: 'stock', component: StockComponent },
-      { path: 'finance', component: FinanceComponent },
       { path: 'user', component: UserComponent },
       { path: 'product', component: ProductComponent },
       { path: 'client', component: ClientComponent },
@@ -43,6 +43,7 @@ let routes: Routes = [
       { path: 'receive', component: ReceiveComponent },
       { path: 'company', component: CompanyComponent },
       { path: 'finance', component: FinanceComponent },
+      { path: 'accounts', component: AccountComponent },
     ]
   }
 ];

@@ -16,7 +16,7 @@ import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
 import { Box, BoxRequest } from '../views/app/box/box.interface';
 import { Company, CompanyRequest } from '../views/app/company/company.interface';
-import { Permission, PermissionRequest, Users, UsersRequest } from '../views/app/user/users.interface';
+import { Permission, PermissionData, PermissionRequest, Users, UsersRequest } from '../views/app/user/users.interface';
 import { FinanceData, FinanceDataRequest } from '../views/app/finance/finance.interface';
 
 interface resultInterface {
@@ -164,6 +164,33 @@ export class ApiService {
 
     return new Promise((resolve, reject) => {
       this.http.put(url, user, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  updateUserPermission(permission: PermissionData): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/user/permission/` + permission.id;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.put(url, permission, { headers })
         .pipe(
           map((res) => {
             return res;

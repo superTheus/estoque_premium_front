@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../../data/api.service';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -9,8 +10,17 @@ declare const $: any;
   styleUrl: './aside.component.scss'
 })
 export class AsideComponent {
+  public isAdmin: boolean = true;
+
   menuIsOpen = false;
-  constructor(public apiService: ApiService) { }
+  constructor(
+    public apiService: ApiService,
+    public authService: AuthService
+  ) {
+    this.isAdmin = this.authService.user.companyData.type === 1 && this.authService.user.profile === 'ADMIN';
+    console.log(this.isAdmin);
+  }
+
 
   changeMenuState(isCompoustMenu: boolean) {
     if (this.menuIsOpen) {

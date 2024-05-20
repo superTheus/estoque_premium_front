@@ -17,33 +17,6 @@ export interface Users {
   },
   permissions?: Permission;
   type?: 'owner' | 'simple';
-  permissao?: PermissionData;
-}
-
-export interface PermissionData {
-  id?: number;
-  user?: number;
-  showMenuRegister: 0 | 1,
-  managerUsers: 0 | 1,
-  managerSuppliers: 0 | 1,
-  managerClientes: 0 | 1,
-  managerProdutos: 0 | 1,
-  managerBrands: 0 | 1,
-  managerCategories: 0 | 1,
-  managerSubcategories: 0 | 1,
-  showMenuBox: 0 | 1,
-  managerBox: 0 | 1,
-  showMenuSales: 0 | 1,
-  managerSales: 0 | 1,
-  showMenuReports: 0 | 1,
-  showReportsSales: 0 | 1,
-  showReportsStock: 0 | 1,
-  showMenuStock: 0 | 1,
-  managerEntries: 0 | 1,
-  showMenuFinance: 0 | 1,
-  managerFinance: 0 | 1,
-  managerAccount: 0 | 1,
-  issueNfe: 0 | 1,
 }
 
 export interface Permission {
