@@ -18,6 +18,7 @@ export interface Users {
   permissions?: Permission;
   type?: 'owner' | 'simple';
   permissao?: PermissionData;
+  dateLogin?: string,
 }
 
 export interface PermissionData {

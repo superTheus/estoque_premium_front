@@ -17,8 +17,7 @@ export class AsideComponent {
     public apiService: ApiService,
     public authService: AuthService
   ) {
-    this.isAdmin = this.authService.user.companyData.type === 1 && this.authService.user.profile === 'ADMIN';
-    console.log(this.isAdmin);
+    this.isAdmin = this.authService.user.companyData?.type === 1 && this.authService.user.profile === 'ADMIN';
   }
 
 

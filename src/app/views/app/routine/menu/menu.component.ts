@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../../../shared/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-
+  constructor(
+    public authService: AuthService,
+  ) { }
 }

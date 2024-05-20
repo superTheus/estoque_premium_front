@@ -11,7 +11,8 @@
       </div>
     </div>
 
-    <div class="row align-items-center justify-content-end mt-3 mx-2">
+    <div *ngIf="authService.user.permissao?.managerEntries"
+      class="row align-items-center justify-content-end mt-3 mx-2">
       <div class="col-12 col-sm-4 col-md-3 d-flex justify-content-end">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Entrada</button>
       </div>

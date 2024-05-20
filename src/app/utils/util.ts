@@ -1,26 +1,4 @@
-import { environment } from "../environments/environment";
-import { User } from "../shared/auth.interface";
-import { Permission } from "../views/app/user/users.interface";
-
-
-// export const getUserRole = () => {
-//   let role = environment.defaultRole;
-//   try {
-//     role = localStorage.getItem('theme_user_role') || environment.defaultRole;
-//   } catch (error) {
-//     console.log(">>>> src/app/utils/util.js : getUserRole -> error", error)
-//     role = environment.defaultRole
-//   }
-//   return role;
-// }
-
-// export const setUserRole = (role) => {
-//   try {
-//     localStorage.setItem('theme_user_role', role);
-//   } catch (error) {
-//     console.log(">>>> src/app/utils/util.js : setUserRole -> error", role)
-//   }
-// }
+import { Permission, Users } from "../views/app/user/users.interface";
 
 export const getCompanyId = () => {
   let id = 0
@@ -79,7 +57,7 @@ export const setUserEmail = (email: string) => {
   }
 }
 
-export const setUser = (user: User) => {
+export const setUser = (user: Users) => {
   try {
     localStorage.setItem('user_data', JSON.stringify(user));
   } catch (error) {

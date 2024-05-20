@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Permission, Users } from './users.interface';
 import { ApiService } from '../../../data/api.service';
 import { getCompanyId, getPermision, setPermision } from '../../../utils/util';
 
@@ -9,6 +8,7 @@ import { Options } from '../../../components/select-default/select-default.inter
 import { AuthService } from '../../../shared/auth.service';
 import { UtilsService } from '../../../shared/utils.service';
 import { Company } from '../company/company.interface';
+import { Permission, Users } from '../user/users.interface';
 
 declare const $: any;
 

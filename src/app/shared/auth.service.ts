@@ -3,8 +3,8 @@ import { catchError, from, throwError } from 'rxjs';
 
 import { ApiService } from '../data/api.service';
 import { clearSession, getUser, setCompanyId, setPermision, setUser, setUserEmail, setUserId } from '../utils/util';
-import { User } from './auth.interface';
 import { Router } from '@angular/router';
+import { Users } from '../views/app/user/users.interface';
 
 export interface ISignInCredentials {
   email: string;
@@ -26,7 +26,7 @@ export interface IPasswordReset {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user!: User;
+  user!: Users;
 
   constructor(
     private apiService: ApiService,

@@ -6,6 +6,7 @@ import { ApiService } from '../../../data/api.service';
 import { Products } from '../product/product.interface';
 import { Options } from '../../../components/select-default/select-default.interface';
 import { ReportsService } from '../../../shared/reports.service';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -35,6 +36,7 @@ export class StockComponent implements OnInit {
     private balanceService: BalanceService,
     private apiService: ApiService,
     private reportService: ReportsService,
+    public authService: AuthService,
   ) { }
 
   ngOnInit(): void {

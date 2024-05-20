@@ -8,6 +8,7 @@ import { SalesService } from '../../../data/sales.service';
 import { Sales } from '../sales/sales.interface';
 import { getCompanyId } from '../../../utils/util';
 import { Company } from '../company/company.interface';
+import { AuthService } from '../../../shared/auth.service';
 
 
 @Component({
@@ -44,11 +45,14 @@ export class DashboardsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private saleService: SalesService
+    private saleService: SalesService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.load();
+
+    console.log(this.authService.user);
   }
 
   load() {

@@ -227,6 +227,8 @@ export class UserComponent {
   permission(user: Users) {
     this.userSelected = { ...user };
 
+    console.log(this.userSelected)
+
     if (user.permissao) {
       let permission: { [key: string]: any; } = { ...user.permissao }
       delete permission['id'];
@@ -242,7 +244,6 @@ export class UserComponent {
     if (permissions) {
       Object.keys(permissions).forEach((key: any) => {
         if (this.formPermission.controls[key]) {
-          console.log("control " + key, this.formPermission.controls[key].value);
           permissions[key] = this.formPermission.controls[key].value ? 1 : 0;
         }
       });

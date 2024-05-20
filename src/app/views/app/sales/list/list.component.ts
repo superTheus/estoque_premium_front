@@ -6,6 +6,7 @@ import { getCompanyId } from '../../../../utils/util';
 
 import { jsPDF } from 'jspdf';
 import { ReportsService } from '../../../../shared/reports.service';
+import { AuthService } from '../../../../shared/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -19,7 +20,8 @@ export class ListComponent implements OnInit {
 
   constructor(
     private salesService: SalesService,
-    private reportsService: ReportsService
+    private reportsService: ReportsService,
+    public authService: AuthService,
   ) {
 
   }
