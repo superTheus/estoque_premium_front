@@ -1,76 +1,85 @@
-<div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-4">
-    <h3> Marcas </h3>
-  </div>
+<ng-container *ngIf="authService.user.permissao?.managerBrands; then permission; else notPermission"></ng-container>
 
-  <div id="stock-control-container">
-    <div class="search-bar">
-      <div class="input-search">
-        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-        <i class="fas fa-search"></i>
-      </div>
+<ng-template #permission>
+  <div class="container-main d-flex flex-column">
+    <div class="row px-3 mb-4">
+      <h3> Marcas </h3>
     </div>
 
-    <div class="row align-items-center justify-content-end mt-3 px-3">
-      <div class="col-12 col-sm-4 col-md-3 justify-content-end">
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Marca</button>
+    <div id="stock-control-container">
+      <div class="search-bar">
+        <div class="input-search">
+          <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+          <i class="fas fa-search"></i>
+        </div>
       </div>
-    </div>
 
-    <div class="table-responsive">
-      <table id="stockTable" *ngIf="data">
-        <thead>
-          <tr>
-            <th class="col-2">ID</th>
-            <th class="col-9">Descricão</th>
-            <th class="col"></th>
-          </tr>
-        </thead>
-        <tbody>
+      <div class="row align-items-center justify-content-end mt-3 px-3">
+        <div class="col-12 col-sm-4 col-md-3 justify-content-end">
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalProduct">Nova Marca</button>
+        </div>
+      </div>
 
-          <ng-container *ngFor="let brand of data">
+      <div class="table-responsive">
+        <table id="stockTable" *ngIf="data">
+          <thead>
             <tr>
-              <td class="col-2"> {{brand.id}} </td>
-              <td class="col-9"> {{brand.description}} </td>
-              <td class="col d-flex">
-                <button class="btn btn-primary me-2" (click)="update(brand)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" (click)="delete(brand)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
+              <th class="col-2">ID</th>
+              <th class="col-9">Descricão</th>
+              <th class="col"></th>
             </tr>
-          </ng-container>
+          </thead>
+          <tbody>
 
-        </tbody>
-      </table>
+            <ng-container *ngFor="let brand of data">
+              <tr>
+                <td class="col-2"> {{brand.id}} </td>
+                <td class="col-9"> {{brand.description}} </td>
+                <td class="col d-flex">
+                  <button class="btn btn-primary me-2" (click)="update(brand)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="delete(brand)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+          </tbody>
+        </table>
+      </div>
+
     </div>
 
-  </div>
+    <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Marca' : 'Adicionar nova marca' }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
 
-  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Marca' : 'Adicionar nova marca' }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+            <form>
+              <div class="row mt-3">
+                <app-input-default [control]="description" type="text" label="Descricão"
+                  placeHolder="Ex: Coca Cola"></app-input-default>
+              </div>
+            </form>
 
-          <form>
-            <div class="row mt-3">
-              <app-input-default [control]="description" type="text" label="Descricão"
-                placeHolder="Ex: Coca Cola"></app-input-default>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

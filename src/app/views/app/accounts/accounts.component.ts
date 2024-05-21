@@ -55,13 +55,17 @@ export class AccountComponent {
   date_expiration = new FormControl('');
 
   isEditModePermission = false;
+  isAdmin = false;
 
   permissions = getPermision();
 
   constructor(
     private apiService: ApiService,
-    public utilsService: UtilsService
-  ) { }
+    public utilsService: UtilsService,
+    public authService: AuthService
+  ) {
+    this.isAdmin = this.authService.user.companyData?.type === 1 && this.authService.user.profile === 'ADMIN';
+  }
 
   ngOnInit(): void {
     this.load();

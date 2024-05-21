@@ -1,462 +1,472 @@
-<div class="container-main d-flex flex-column justify-content-between">
-  <!-- <div class="input-group mb-3">
-    <input type="text" class="form-control   " placeholder="Selecionar vendedor">
-    <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
-    <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
-  </div> -->
-  <div>
-    <div class="row px-3 py-2">
-      <div class="col-12 col-md-6">
-        <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
-      </div>
-      <div class="col-12 col-md-6">
-        <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente" [items]="clientsSelect"
-          [showButton]="true" (buttonAction)="openModalClient()"></app-select-default>
-      </div>
-    </div>
+<ng-container *ngIf="authService.user.permissao?.managerSales; then permission; else notPermission"></ng-container>
 
-    <div class="row px-3 py-2">
-      <div class="col-md-12 offset-md-0">
-        <div class="custom-input-group  mt-0 ">
-          <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal"
-            data-bs-target="#modalProduct">Adicionar
-            Produtos</button>
-          <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
-            placeholder="Pesquisar">
+<ng-template #permission>
+  <div class="container-main d-flex flex-column justify-content-between">
+    <!-- <div class="input-group mb-3">
+      <input type="text" class="form-control   " placeholder="Selecionar vendedor">
+      <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
+      <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
+    </div> -->
+    <div>
+      <div class="row px-3 py-2">
+        <div class="col-12 col-md-6">
+          <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
+        </div>
+        <div class="col-12 col-md-6">
+          <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente" [items]="clientsSelect"
+            [showButton]="true" (buttonAction)="openModalClient()"></app-select-default>
         </div>
       </div>
 
-      <div class="col-md-12">
-        <div class="container-products">
-          <ng-container *ngIf="currentSale">
-
-            <h4 *ngIf="currentSale.products?.length" class="my-3"> Produtos </h4>
-
-            <div *ngFor="let productSale of currentSale.products" class="card bg-light p-2 d-flex flex-row my-2">
-              <div class="col-6 d-flex align-items-center">
-                {{ productSale.product?.description }}
-              </div>
-              <div class="col-2 d-flex align-items-center">
-                {{ productSale.quantity }}
-              </div>
-              <div class="col-2 d-flex align-items-center">
-                {{ productSale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
-              </div>
-              <div class="col d-flex justify-content-center">
-                <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
-                <button class="btn btn-danger" (click)="deleteProduct(productSale)"> <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row px-3 container-footer">
-    <div class="col-md-12">
-      <div class="custom-footer">
-        <div class="row justify-content-center">
-          <div class="col-md-4 p-2 text-center">
-            <hr style="background-color: #ffffff;">
-            <h6>Total</h6>
-            <span id="totalAmount">
-              <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
-            </span>
-            <div class="col-8 col-md-6 m-auto">
-              <button class="btn btn-success" (click)="openModalPayment()">Continuar</button>
-            </div>
+      <div class="row px-3 py-2">
+        <div class="col-md-12 offset-md-0">
+          <div class="custom-input-group  mt-0 ">
+            <button id="btTeste" class="col-md-12  rounded-0" data-bs-toggle="modal"
+              data-bs-target="#modalProduct">Adicionar
+              Produtos</button>
+            <input type="text" [formControl]="search" class="form-control p-3 btn btn" (keypress)="loadProducts($event)"
+              placeholder="Pesquisar">
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">Adicionar novo produto
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+        <div class="col-md-12">
+          <div class="container-products">
+            <ng-container *ngIf="currentSale">
 
-          <form>
-            <div class="row">
-              <div class="col-6">
-                <app-input-default [control]="description" type="text" label="Descricão"
-                  placeHolder="Ex: Coca Cola em lata"></app-input-default>
-              </div>
-              <div class="col-6">
-                <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <app-input-default [control]="price_sale" type="text" label="Preço de venda"
-                  placeHolder="Preço de venda"></app-input-default>
-              </div>
-              <div class="col-6">
-                <app-input-default [control]="price_cost" type="text" label="Preço de custo"
-                  placeHolder="Preço de custo"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <app-select-default [control]="id_category" label="Categoria"
-                  [items]="categorySelect"></app-select-default>
-              </div>
-              <div class="col-6">
-                <app-select-default [control]="id_subcategory" label="Subcategoria"
-                  [items]="subcategorySelect"></app-select-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
-              </div>
-              <div class="col-6">
-                <app-select-default [control]="id_supplier" label="Fornecedor"
-                  [items]="supplierSelect"></app-select-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <app-select-default [control]="control_stock" label="Controla Estoque"
-                  [items]="controlStock"></app-select-default>
-              </div>
-              <div class="col-6">
-                <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
-                  [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
-              </div>
-            </div>
-          </form>
+              <h4 *ngIf="currentSale.products?.length" class="my-3"> Produtos </h4>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">Adicionar produto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <form>
-            <div class="row">
-              <div class="col-12 col-md-6 col-lg-3">
-                <app-input-quantity [control]="quantity" label="Quantidade" placeHolder=""
-                  (change)="changeQuantity($event)"></app-input-quantity>
-              </div>
-              <div class="col-12 col-md-6 col-lg-3">
-                <app-input-default [control]="value" type="text" classname="text-center disabled" label="Valor custo"
-                  placeHolder="" [disabled]="true"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6 col-lg-3">
-                <app-input-default [control]="value_sale" classname="text-center" type="text" label="Valor Venda"
-                  placeHolder="" [disabled]="true"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6 col-lg-3">
-                <app-input-default [control]="total_value" classname="text-center" type="text" label="Total"
-                  placeHolder="" [disabled]="true"></app-input-default>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-12 col-md-4 col-lg-3">
-                <app-input-default [control]="desconto_percentual" classname="text-center" type="number"
-                  label="Desconto em %" placeHolder="" (change)="changeDiscount()"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4 col-lg-3">
-                <app-input-default [control]="desconto" classname="text-center" type="text" label="Desconto em R$"
-                  placeHolder="" (change)="changeDiscountValue()"></app-input-default>
-              </div>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <div class="d-flex col-12 justify-content-end">
-            <div class="col-12 col-md-3 col-lg-2 me-2">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-            <div class="col-12 col-md-3 col-lg-2 ms-2">
-              <button type="button" class="btn btn-primary" (click)="addProductToSale()">Salvar</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalListProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-
-          <table id="stockTable" *ngIf="products">
-            <thead>
-              <tr>
-                <th class="col-11">Produto</th>
-                <th class="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-
-              <ng-container *ngFor="let product of products">
-                <tr>
-                  <td class="col-11"> {{ product.description }} </td>
-                  <td class="col d-flex">
-                    <button class="btn text-white bg-success" (click)="verifySale(product)">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </td>
-                </tr>
-              </ng-container>
-
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalPayment" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">Finalizar Venda</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <div class="bcard card h-100">
-            <div class="card-body p-3">
-
-              <div class="row">
-                <div class="col-12 col-md-6">
-                  <div class="card card-blue">
-                    <div class="card-body">
-                      <p> Total </p>
-                      <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
-                    </div>
-                  </div>
+              <div *ngFor="let productSale of currentSale.products" class="card bg-light p-2 d-flex flex-row my-2">
+                <div class="col-6 d-flex align-items-center">
+                  {{ productSale.product?.description }}
                 </div>
-
-                <div class="col-12 col-md-6 mt-2 mt-md-0">
-                  <div class="card card-green">
-                    <div class="card-body">
-                      <p> Total Pago </p>
-                      <h4> {{ totalPayment | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
-                    </div>
-                  </div>
+                <div class="col-2 d-flex align-items-center">
+                  {{ productSale.quantity }}
                 </div>
-              </div>
-
-              <div class="row mt-3">
-                <div class="col-12 col-md-4">
-                  <app-select-default [control]="paymentType" label=""
-                    [items]="paymentTypeOptions"></app-select-default>
+                <div class="col-2 d-flex align-items-center">
+                  {{ productSale.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                 </div>
-
-                <div class="col-12 col-md-2">
-                  <app-select-default [control]="paymentStatus" label="" [items]="paymentOptions"></app-select-default>
-                </div>
-
-                <div class="col-12 col-md-2">
-                  <app-input-default [control]="paymentValue" (change)="changeValueFormat()" type="text" label=""
-                    placeHolder="0.00"></app-input-default>
-                </div>
-
-                <div class="col-12 col-md-3">
-                  <app-input-default [control]="paymentDate" type="date" label=""></app-input-default>
-                </div>
-
-                <div class="col-12 col-md mt-0 mt-md-4">
-                  <button (click)="applyPayment()" class="btn btn-success"
-                    [ngClass]="{'disabled': totalPayment >= total}"> <i class="fas fa-plus"></i> </button>
-                </div>
-              </div>
-
-              <div *ngIf="paymentType.value === '3'" class="row my-2">
-                <div class="col-12">
-                  <p> Parcelas </p>
-                </div>
-                <div *ngFor="let portion of portions" class="col btn-portion">
-                  <button class="btn btn-primary" [ngClass]="{'active': portion === portionNumber}"
-                    (click)="selectPortion(portion)"> {{portion}}x
+                <div class="col d-flex justify-content-center">
+                  <button class="btn btn-success mx-2"> <i class="fa fa-edit"></i> </button>
+                  <button class="btn btn-danger" (click)="deleteProduct(productSale)"> <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
 
-              <div *ngIf="paymentForms.length" class="row">
-                <div class="col-12">
-                  <table class="table">
-                    <tbody>
-                      <tr *ngFor="let payment of paymentForms">
-                        <td> {{ payment.label }} </td>
-                        <td> {{ payment.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
-                        <td> {{ payment.date | date:'dd/MM/yyyy' }} </td>
-                        <td> <button class="btn btn-danger" (click)="deletPaymentForm(payment)"> <i
-                              class="fa fa-trash"></i>
-                          </button> </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-            <div class="card-footer">
-              <div class="row">
-                <div class="col-12 d-flex justify-content-end">
-                  <button (click)="finishedSale()" class="btn btn-success"
-                    [ngClass]="{'disabled': totalPayment < total}">Finalizar</button>
-                </div>
+    <div class="row px-3 container-footer">
+      <div class="col-md-12">
+        <div class="custom-footer">
+          <div class="row justify-content-center">
+            <div class="col-md-4 p-2 text-center">
+              <hr style="background-color: #ffffff;">
+              <h6>Total</h6>
+              <span id="totalAmount">
+                <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
+              </span>
+              <div class="col-8 col-md-6 m-auto">
+                <button class="btn btn-success" (click)="openModalPayment()">Continuar</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="modal fade" id="modalProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">Adicionar novo produto
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form>
+              <div class="row">
+                <div class="col-6">
+                  <app-input-default [control]="description" type="text" label="Descricão"
+                    placeHolder="Ex: Coca Cola em lata"></app-input-default>
+                </div>
+                <div class="col-6">
+                  <app-input-default [control]="ncm" type="text" label="NCM" placeHolder="NCM"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-input-default [control]="price_sale" type="text" label="Preço de venda"
+                    placeHolder="Preço de venda"></app-input-default>
+                </div>
+                <div class="col-6">
+                  <app-input-default [control]="price_cost" type="text" label="Preço de custo"
+                    placeHolder="Preço de custo"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-select-default [control]="id_category" label="Categoria"
+                    [items]="categorySelect"></app-select-default>
+                </div>
+                <div class="col-6">
+                  <app-select-default [control]="id_subcategory" label="Subcategoria"
+                    [items]="subcategorySelect"></app-select-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-select-default [control]="id_brand" label="Marca" [items]="brandsSelect"></app-select-default>
+                </div>
+                <div class="col-6">
+                  <app-select-default [control]="id_supplier" label="Fornecedor"
+                    [items]="supplierSelect"></app-select-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-select-default [control]="control_stock" label="Controla Estoque"
+                    [items]="controlStock"></app-select-default>
+                </div>
+                <div class="col-6">
+                  <app-input-default [control]="stock" type="text" label="Estoque" placeHolder="Estoque"
+                    [disabled]="control_stock.value === 'S' ? false : true"></app-input-default>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">Adicionar produto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-3">
+                  <app-input-quantity [control]="quantity" label="Quantidade" placeHolder=""
+                    (change)="changeQuantity($event)"></app-input-quantity>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                  <app-input-default [control]="value" type="text" classname="text-center disabled" label="Valor custo"
+                    placeHolder="" [disabled]="true"></app-input-default>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                  <app-input-default [control]="value_sale" classname="text-center" type="text" label="Valor Venda"
+                    placeHolder="" [disabled]="true"></app-input-default>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                  <app-input-default [control]="total_value" classname="text-center" type="text" label="Total"
+                    placeHolder="" [disabled]="true"></app-input-default>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-md-4 col-lg-3">
+                  <app-input-default [control]="desconto_percentual" classname="text-center" type="number"
+                    label="Desconto em %" placeHolder="" (change)="changeDiscount()"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3">
+                  <app-input-default [control]="desconto" classname="text-center" type="text" label="Desconto em R$"
+                    placeHolder="" (change)="changeDiscountValue()"></app-input-default>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <div class="d-flex col-12 justify-content-end">
+              <div class="col-12 col-md-3 col-lg-2 me-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              </div>
+              <div class="col-12 col-md-3 col-lg-2 ms-2">
+                <button type="button" class="btn btn-primary" (click)="addProductToSale()">Salvar</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalListProduct" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+
+            <table id="stockTable" *ngIf="products">
+              <thead>
+                <tr>
+                  <th class="col-11">Produto</th>
+                  <th class="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <ng-container *ngFor="let product of products">
+                  <tr>
+                    <td class="col-11"> {{ product.description }} </td>
+                    <td class="col d-flex">
+                      <button class="btn text-white bg-success" (click)="verifySale(product)">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalPayment" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">Finalizar Venda</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <div class="bcard card h-100">
+              <div class="card-body p-3">
+
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="card card-blue">
+                      <div class="card-body">
+                        <p> Total </p>
+                        <h4> {{ total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 mt-2 mt-md-0">
+                    <div class="card card-green">
+                      <div class="card-body">
+                        <p> Total Pago </p>
+                        <h4> {{ totalPayment | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-3">
+                  <div class="col-12 col-md-4">
+                    <app-select-default [control]="paymentType" label=""
+                      [items]="paymentTypeOptions"></app-select-default>
+                  </div>
+
+                  <div class="col-12 col-md-2">
+                    <app-select-default [control]="paymentStatus" label=""
+                      [items]="paymentOptions"></app-select-default>
+                  </div>
+
+                  <div class="col-12 col-md-2">
+                    <app-input-default [control]="paymentValue" (change)="changeValueFormat()" type="text" label=""
+                      placeHolder="0.00"></app-input-default>
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <app-input-default [control]="paymentDate" type="date" label=""></app-input-default>
+                  </div>
+
+                  <div class="col-12 col-md mt-0 mt-md-4">
+                    <button (click)="applyPayment()" class="btn btn-success"
+                      [ngClass]="{'disabled': totalPayment >= total}"> <i class="fas fa-plus"></i> </button>
+                  </div>
+                </div>
+
+                <div *ngIf="paymentType.value === '3'" class="row my-2">
+                  <div class="col-12">
+                    <p> Parcelas </p>
+                  </div>
+                  <div *ngFor="let portion of portions" class="col btn-portion">
+                    <button class="btn btn-primary" [ngClass]="{'active': portion === portionNumber}"
+                      (click)="selectPortion(portion)"> {{portion}}x
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="paymentForms.length" class="row">
+                  <div class="col-12">
+                    <table class="table">
+                      <tbody>
+                        <tr *ngFor="let payment of paymentForms">
+                          <td> {{ payment.label }} </td>
+                          <td> {{ payment.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+                          <td> {{ payment.date | date:'dd/MM/yyyy' }} </td>
+                          <td> <button class="btn btn-danger" (click)="deletPaymentForm(payment)"> <i
+                                class="fa fa-trash"></i>
+                            </button> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-12 d-flex justify-content-end">
+                    <button (click)="finishedSale()" class="btn btn-success"
+                      [ngClass]="{'disabled': totalPayment < total}">Finalizar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalOpenBox" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">Abrir Caixa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form>
+              <div class="row mt-3">
+                <app-input-default [control]="valueBox" type="text" label="Valor de abertura"
+                  placeHolder="0.00"></app-input-default>
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="saveBox()">Abrir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalClient" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductLabel">Adicionar novo cliente
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-8">
+                  <app-input-default [control]="nome" type="text" label="Nome" placeHolder="nome"></app-input-default>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                  <app-input-default [control]="apelido" type="text" label="Apelido"
+                    placeHolder="apelido"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="razao_social" type="text" label="Razão Social"
+                    placeHolder="Razão Social"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="rg_inscricao" type="text" label="RG/N° Inscrição"
+                    placeHolder="RG/N° Inscrição"></app-input-default>
+                </div>
+
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="documento" type="text" label="Documento"
+                    placeHolder="Documento"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="email" type="text" label="Email"
+                    placeHolder="Email"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="celular" type="text" label="Celular"
+                    placeHolder="Celular"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="telefone" type="text" label="Telefone"
+                    placeHolder="Telefone"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-4 col-lg-2">
+                  <app-input-default [control]="cep" type="text" label="CEP" placeHolder="CEP"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6">
+                  <app-input-default [control]="endereco" type="text" label="Endereço"
+                    placeHolder="Endereço"></app-input-default>
+                </div>
+                <div class="col-6 col-md-4 col-lg-4">
+                  <app-input-default [control]="cidade" type="text" label="Cidade"
+                    placeHolder="cidade"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-2">
+                  <app-input-default [control]="numero" type="text" label="Número"
+                    placeHolder="Número"></app-input-default>
+                </div>
+                <div class="col-12 col-md-6 col-lg-5">
+                  <app-input-default [control]="bairro" type="text" label="Bairro"
+                    placeHolder="Bairro"></app-input-default>
+                </div>
+                <div class="col-12 col-md-6 col-lg-5">
+                  <app-input-default [control]="complemento" type="text" label="Complemento"
+                    placeHolder="Complemento"></app-input-default>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="data_nascimento" type="date" label="Data Nascimento"
+                    placeHolder="Data Nascimento"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4">
+                  <app-input-default [control]="icms" type="text" label="Icms" placeHolder="Icms"></app-input-default>
+                </div>
+                <div class="col-12 col-md-4">
+                  <app-select-default [control]="genero" label="Gênero" placeHolder="Gênero"
+                    [items]="generoOptions"></app-select-default>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="saveClient()">Salvar</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</ng-template>
 
-  <div class="modal fade" id="modalOpenBox" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">Abrir Caixa</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <form>
-            <div class="row mt-3">
-              <app-input-default [control]="valueBox" type="text" label="Valor de abertura"
-                placeHolder="0.00"></app-input-default>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="saveBox()">Abrir</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalClient" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductLabel">Adicionar novo cliente
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <form>
-            <div class="row">
-              <div class="col-12 col-md-6 col-lg-8">
-                <app-input-default [control]="nome" type="text" label="Nome" placeHolder="nome"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6 col-lg-4">
-                <app-input-default [control]="apelido" type="text" label="Apelido"
-                  placeHolder="apelido"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="razao_social" type="text" label="Razão Social"
-                  placeHolder="Razão Social"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="rg_inscricao" type="text" label="RG/N° Inscrição"
-                  placeHolder="RG/N° Inscrição"></app-input-default>
-              </div>
-
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="documento" type="text" label="Documento"
-                  placeHolder="Documento"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="email" type="text" label="Email" placeHolder="Email"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="celular" type="text" label="Celular"
-                  placeHolder="Celular"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="telefone" type="text" label="Telefone"
-                  placeHolder="Telefone"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-4 col-lg-2">
-                <app-input-default [control]="cep" type="text" label="CEP" placeHolder="CEP"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4 col-lg-6">
-                <app-input-default [control]="endereco" type="text" label="Endereço"
-                  placeHolder="Endereço"></app-input-default>
-              </div>
-              <div class="col-6 col-md-4 col-lg-4">
-                <app-input-default [control]="cidade" type="text" label="Cidade"
-                  placeHolder="cidade"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-6 col-lg-2">
-                <app-input-default [control]="numero" type="text" label="Número"
-                  placeHolder="Número"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6 col-lg-5">
-                <app-input-default [control]="bairro" type="text" label="Bairro"
-                  placeHolder="Bairro"></app-input-default>
-              </div>
-              <div class="col-12 col-md-6 col-lg-5">
-                <app-input-default [control]="complemento" type="text" label="Complemento"
-                  placeHolder="Complemento"></app-input-default>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="data_nascimento" type="date" label="Data Nascimento"
-                  placeHolder="Data Nascimento"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4">
-                <app-input-default [control]="icms" type="text" label="Icms" placeHolder="Icms"></app-input-default>
-              </div>
-              <div class="col-12 col-md-4">
-                <app-select-default [control]="genero" label="Gênero" placeHolder="Gênero"
-                  [items]="generoOptions"></app-select-default>
-              </div>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" (click)="saveClient()">Salvar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

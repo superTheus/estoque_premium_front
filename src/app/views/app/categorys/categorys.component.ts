@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { ApiService } from '../../../data/api.service';
 import { Categorys } from './categorys.interface';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -17,7 +18,10 @@ export class CategorysComponent implements OnInit {
   Categoryselected?: Categorys;
   data: Categorys[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    public authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.load();

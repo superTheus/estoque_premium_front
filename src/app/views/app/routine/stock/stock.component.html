@@ -1,143 +1,151 @@
-<div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-2 mt-3">
-    <h3> Estoque e Produtos </h3>
-  </div>
+<ng-container *ngIf="authService.user.permissao?.showReportsStock; then permission; else notPermission"></ng-container>
 
-  <div class="row px-3 mt-2">
-    <div class="col-12">
-
-      <div class="search-bar">
-        <div class="input-search">
-          <input type="text" class="" [formControl]="search" placeholder="Pesquisar" aria-label="Pesquisar..."
-            (keydown)="loadProducts()" (keypress)="loadProducts()" (keyup)="loadProducts()">
-          <i class="fas fa-search"></i>
-        </div>
-      </div>
-
-      <div class="row my-2">
-        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
-          <div class="card card-green h-100">
-            <div class="card-body">
-              <p> Investimento: {{totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
-              <p> Retorno Previsto: {{ totalSale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
-              <p> Lucro Previsto: {{ totalSale - totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
-          <div class="card card-blue h-100">
-            <div class="card-body">
-              <p> Produtos no estoque: {{ totalStock }} </p>
-              <p> Produtos Cadastrados: {{ totalProducts }} </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
-          <div class="card card-yellow h-100">
-            <div class="card-body">
-              <p> Produtos com estoque minimo: {{ totalProductsStockMinimum }} </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
-          <div class="card card-red h-100">
-            <div class="card-body">
-              <p> Produtos com estoque zerado: {{ totalProductsStockZero }} </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <ng-container *ngIf="view === 'table'; then table; else chart"></ng-container>
+<ng-template #permission>
+  <div class="container-main d-flex flex-column">
+    <div class="row px-3 mb-2 mt-3">
+      <h3> Estoque e Produtos </h3>
     </div>
 
-    <ng-template #table>
-      <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between">
-          <p class="mb-0"> Dados de Vendas </p>
+    <div class="row px-3 mt-2">
+      <div class="col-12">
 
-          <div class="d-flex">
-            <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
-              title="Relatórios">
-              <i class="fas fa-file-alt"></i>
-            </button>
-            <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
-              title="Gráficos">
-              <i class="fas fa-chart-pie"></i>
-            </button>
+        <div class="search-bar">
+          <div class="input-search">
+            <input type="text" class="" [formControl]="search" placeholder="Pesquisar" aria-label="Pesquisar..."
+              (keydown)="loadProducts()" (keypress)="loadProducts()" (keyup)="loadProducts()">
+            <i class="fas fa-search"></i>
           </div>
         </div>
-        <div *ngIf="!products.length" class="card-body text-center">
-          Nenhum resultado encontrado.
-        </div>
 
-        <div *ngIf="products.length" class="card-body table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Preço Custo</th>
-                <th>Preço Venda</th>
-                <th>Estoque atual</th>
-                <th>Estoque minimo</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product of products">
-                <td> {{ product.description }} </td>
-                <td> {{ product.price_cost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
-                <td> {{ product.price_sale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
-                <td> {{ product.stock }} </td>
-                <td> {{ product.stock_minimum }} </td>
-                <td>
-                  <button class="btn btn-secondary" (click)="generatePDF(product)" data-toggle="tooltip"
-                    data-placement="top" title="Relatório">
-                    <i class="fas fa-print"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template #chart>
-      <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between">
-          <p class="mb-0"> Dados de Vendas </p>
-
-          <div class="d-flex">
-            <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
-              title="Relatórios">
-              <i class="fas fa-file-alt"></i>
-            </button>
-            <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
-              title="Gráficos">
-              <i class="fas fa-chart-pie"></i>
-            </button>
-          </div>
-        </div>
-        <div *ngIf="!products.length" class="card-body text-center">
-          Nenhum resultado encontrado.
-        </div>
-
-        <div *ngIf="products.length" class="card-body text-center">
-          <div class="row mt-3">
-            <div class="col-12 col-md-6">
-              <!-- <app-chart [chartData]="chartPieClient"></app-chart> -->
+        <div class="row my-2">
+          <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+            <div class="card card-green h-100">
+              <div class="card-body">
+                <p> Investimento: {{totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+                <p> Retorno Previsto: {{ totalSale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+                <p> Lucro Previsto: {{ totalSale - totalCost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </p>
+              </div>
             </div>
-            <div class="col-12 col-md-6">
-              <!-- <app-chart [chartData]="chartPieClientTotal"></app-chart> -->
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+            <div class="card card-blue h-100">
+              <div class="card-body">
+                <p> Produtos no estoque: {{ totalStock }} </p>
+                <p> Produtos Cadastrados: {{ totalProducts }} </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+            <div class="card card-yellow h-100">
+              <div class="card-body">
+                <p> Produtos com estoque minimo: {{ totalProductsStockMinimum }} </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-3 mt-2 mt-lg-0">
+            <div class="card card-red h-100">
+              <div class="card-body">
+                <p> Produtos com estoque zerado: {{ totalProductsStockZero }} </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card-footer"></div>
+        <ng-container *ngIf="view === 'table'; then table; else chart"></ng-container>
       </div>
-    </ng-template>
+
+      <ng-template #table>
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between">
+            <p class="mb-0"> Dados de Vendas </p>
+
+            <div class="d-flex">
+              <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
+                title="Relatórios">
+                <i class="fas fa-file-alt"></i>
+              </button>
+              <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
+                title="Gráficos">
+                <i class="fas fa-chart-pie"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!products.length" class="card-body text-center">
+            Nenhum resultado encontrado.
+          </div>
+
+          <div *ngIf="products.length" class="card-body table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Preço Custo</th>
+                  <th>Preço Venda</th>
+                  <th>Estoque atual</th>
+                  <th>Estoque minimo</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of products">
+                  <td> {{ product.description }} </td>
+                  <td> {{ product.price_cost | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+                  <td> {{ product.price_sale | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </td>
+                  <td> {{ product.stock }} </td>
+                  <td> {{ product.stock_minimum }} </td>
+                  <td>
+                    <button class="btn btn-secondary" (click)="generatePDF(product)" data-toggle="tooltip"
+                      data-placement="top" title="Relatório">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #chart>
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between">
+            <p class="mb-0"> Dados de Vendas </p>
+
+            <div class="d-flex">
+              <button class="btn" (click)="changeView('table')" data-toggle="tooltip" data-placement="top"
+                title="Relatórios">
+                <i class="fas fa-file-alt"></i>
+              </button>
+              <button class="btn" (click)="changeView('chart')" data-toggle="tooltip" data-placement="top"
+                title="Gráficos">
+                <i class="fas fa-chart-pie"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!products.length" class="card-body text-center">
+            Nenhum resultado encontrado.
+          </div>
+
+          <div *ngIf="products.length" class="card-body text-center">
+            <div class="row mt-3">
+              <div class="col-12 col-md-6">
+                <!-- <app-chart [chartData]="chartPieClient"></app-chart> -->
+              </div>
+              <div class="col-12 col-md-6">
+                <!-- <app-chart [chartData]="chartPieClientTotal"></app-chart> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer"></div>
+        </div>
+      </ng-template>
+    </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

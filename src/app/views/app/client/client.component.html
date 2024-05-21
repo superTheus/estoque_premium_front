@@ -1,211 +1,220 @@
-<div class="container-main d-flex flex-column">
-  <div class="row px-3 mb-4">
-    <h3> Clientes </h3>
-  </div>
-  <div id="stock-control-container">
-    <div class="search-bar">
-      <div class="input-search">
-        <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
-        <i class="fas fa-search"></i>
-      </div>
+<ng-container *ngIf="authService.user.permissao?.managerClientes; then permission; else notPermission"></ng-container>
+
+<ng-template #permission>
+  <div class="container-main d-flex flex-column">
+    <div class="row px-3 mb-4">
+      <h3> Clientes </h3>
     </div>
-
-    <div class="d-flex align-items-center justify-content-end mt-3">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-end px-2">
-        <button class="btn btn-primary" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
-          Cliente</button>
+    <div id="stock-control-container">
+      <div class="search-bar">
+        <div class="input-search">
+          <input type="text" class="" placeholder="Pesquisar" aria-label="Pesquisar...">
+          <i class="fas fa-search"></i>
+        </div>
       </div>
-    </div>
 
-    <div class="table-responsive">
-      <table id="stockTable" *ngIf="data" class="table">
-        <thead>
-          <tr>
-            <th class="col-2">ID</th>
-            <th class="col-5">Nome</th>
-            <th class="col-4">Documento</th>
-            <th class="col"></th>
-          </tr>
-        </thead>
-        <tbody>
+      <div class="d-flex align-items-center justify-content-end mt-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex justify-content-end px-2">
+          <button class="btn btn-primary" [ngClass]="{'disabled': disableNew}" (click)="openModal()">Novo
+            Cliente</button>
+        </div>
+      </div>
 
-          <ng-container *ngFor="let client of data">
+      <div class="table-responsive">
+        <table id="stockTable" *ngIf="data" class="table">
+          <thead>
             <tr>
-              <td class="col-2"> {{client.id}} </td>
-              <td class="col-5"> {{client.name}} </td>
-              <td class="col-4"> {{client.documento}} </td>
-              <td class="col d-flex">
-                <button class="btn btn-primary me-2" (click)="update(client)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" (click)="delete(client)">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
+              <th class="col-2">ID</th>
+              <th class="col-5">Nome</th>
+              <th class="col-4">Documento</th>
+              <th class="col"></th>
             </tr>
-          </ng-container>
+          </thead>
+          <tbody>
 
-        </tbody>
-      </table>
+            <ng-container *ngFor="let client of data">
+              <tr>
+                <td class="col-2"> {{client.id}} </td>
+                <td class="col-5"> {{client.name}} </td>
+                <td class="col-4"> {{client.documento}} </td>
+                <td class="col d-flex">
+                  <button class="btn btn-primary me-2" (click)="update(client)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="delete(client)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+          </tbody>
+        </table>
+      </div>
+
     </div>
 
-  </div>
-
-  <div class="modal fade" id="modalClient" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <form [formGroup]="form" (ngSubmit)="save()">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Cliente' : 'Adicionar novo cliente'
-              }}
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
+    <div class="modal fade" id="modalClient" tabindex="-1" aria-labelledby="modalProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalProductLabel">{{ isEditMode ? 'Editar Cliente' : 'Adicionar novo cliente'
+                }}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
 
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="nome" class="form-label"> Nome </label>
-                  <input type="text" class="form-control" id="nome" placeholder="Nome" formControlName="name">
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="nome" class="form-label"> Nome </label>
+                    <input type="text" class="form-control" id="nome" placeholder="Nome" formControlName="name">
+                  </div>
                 </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="apelido" class="form-label"> Apelido </label>
-                  <input type="text" class="form-control" id="apelido" placeholder="Apelido" formControlName="apelido">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="razao_social" class="form-label"> Razão social </label>
-                  <input type="text" class="form-control" id="razao_social" placeholder="Razao social"
-                    formControlName="razao_social">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="rg_inscricao" class="form-label"> RG/N° Inscrição </label>
-                  <input type="text" class="form-control" id="rg_inscricao" placeholder="RG/N° Inscrição"
-                    formControlName="rg_inscricao">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="email" class="form-label"> Email </label>
-                  <input type="email" class="form-control" id="email" placeholder="exemplo@email.com"
-                    formControlName="email">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="celular" class="form-label"> Celular </label>
-                  <input type="text" class="form-control" id="celular" placeholder="(99) 99999-9999"
-                    formControlName="celular">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="telefone" class="form-label"> Telefone </label>
-                  <input type="text" class="form-control" id="telefone" placeholder="(99) 99999-9999"
-                    formControlName="telefone">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="documento" class="form-label"> Documento </label>
-                  <input type="text" class="form-control" id="documento" placeholder="Documento"
-                    formControlName="documento">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="mb-3">
-                  <label for="cep" class="form-label"> Cep </label>
-                  <input type="text" class="form-control" id="cep" placeholder="99999-999" formControlName="cep">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="endereco" class="form-label"> Endereco </label>
-                  <input type="text" class="form-control" id="endereco" placeholder="Endereco"
-                    formControlName="endereco">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="cidade" class="form-label"> Cidade </label>
-                  <input type="text" class="form-control" id="cidade" placeholder="cidade" formControlName="cidade">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="numero" class="form-label"> Número </label>
-                  <input type="text" class="form-control" id="numero" placeholder="Número" formControlName="numero">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="bairro" class="form-label"> Bairro </label>
-                  <input type="text" class="form-control" id="bairro" placeholder="Bairro" formControlName="bairro">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="complemento" class="form-label"> Complemento </label>
-                  <input type="text" class="form-control" id="complemento" placeholder="Complemento"
-                    formControlName="complemento">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="data_nascimento" class="form-label"> Data Nascimento </label>
-                  <input type="text" class="form-control" id="data_nascimento" placeholder="Data Nascimento"
-                    formControlName="data_nascimento">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="icms" class="form-label"> ICMS </label>
-                  <input type="text" class="form-control" id="icms" placeholder="ICMS" formControlName="icms">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="genero" class="form-label"> {{ 'Gênero' }} </label>
-                  <div class="d-flex">
-                    <select id="genero" class="form-control" formControlName="genero">
-                      <option value=""> Selecione </option>
-                      <option *ngFor="let item of generoOptions" [value]="item.value">{{item.label}}</option>
-                    </select>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="apelido" class="form-label"> Apelido </label>
+                    <input type="text" class="form-control" id="apelido" placeholder="Apelido"
+                      formControlName="apelido">
                   </div>
                 </div>
               </div>
-            </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="razao_social" class="form-label"> Razão social </label>
+                    <input type="text" class="form-control" id="razao_social" placeholder="Razao social"
+                      formControlName="razao_social">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="rg_inscricao" class="form-label"> RG/N° Inscrição </label>
+                    <input type="text" class="form-control" id="rg_inscricao" placeholder="RG/N° Inscrição"
+                      formControlName="rg_inscricao">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="email" class="form-label"> Email </label>
+                    <input type="email" class="form-control" id="email" placeholder="exemplo@email.com"
+                      formControlName="email">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="celular" class="form-label"> Celular </label>
+                    <input type="text" class="form-control" id="celular" placeholder="(99) 99999-9999"
+                      formControlName="celular">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="telefone" class="form-label"> Telefone </label>
+                    <input type="text" class="form-control" id="telefone" placeholder="(99) 99999-9999"
+                      formControlName="telefone">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="documento" class="form-label"> Documento </label>
+                    <input type="text" class="form-control" id="documento" placeholder="Documento"
+                      formControlName="documento">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="cep" class="form-label"> Cep </label>
+                    <input type="text" class="form-control" id="cep" placeholder="99999-999" formControlName="cep">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="endereco" class="form-label"> Endereco </label>
+                    <input type="text" class="form-control" id="endereco" placeholder="Endereco"
+                      formControlName="endereco">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="cidade" class="form-label"> Cidade </label>
+                    <input type="text" class="form-control" id="cidade" placeholder="cidade" formControlName="cidade">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="numero" class="form-label"> Número </label>
+                    <input type="text" class="form-control" id="numero" placeholder="Número" formControlName="numero">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="bairro" class="form-label"> Bairro </label>
+                    <input type="text" class="form-control" id="bairro" placeholder="Bairro" formControlName="bairro">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="complemento" class="form-label"> Complemento </label>
+                    <input type="text" class="form-control" id="complemento" placeholder="Complemento"
+                      formControlName="complemento">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="data_nascimento" class="form-label"> Data Nascimento </label>
+                    <input type="text" class="form-control" id="data_nascimento" placeholder="Data Nascimento"
+                      formControlName="data_nascimento">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="icms" class="form-label"> ICMS </label>
+                    <input type="text" class="form-control" id="icms" placeholder="ICMS" formControlName="icms">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label for="genero" class="form-label"> {{ 'Gênero' }} </label>
+                    <div class="d-flex">
+                      <select id="genero" class="form-control" formControlName="genero">
+                        <option value=""> Selecione </option>
+                        <option *ngFor="let item of generoOptions" [value]="item.value">{{item.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-          </div>
-        </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

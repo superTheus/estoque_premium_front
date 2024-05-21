@@ -4,6 +4,7 @@ import { Clients } from './client.interface';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { getCompanyId, getPermision } from '../../../utils/util';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -43,6 +44,7 @@ export class ClientComponent {
   constructor(
     private apiService: ApiService,
     private formBuilder: FormBuilder,
+    public authService: AuthService,
   ) {
 
     this.form = this.formBuilder.group({

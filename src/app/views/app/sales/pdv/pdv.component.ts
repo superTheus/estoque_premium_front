@@ -20,6 +20,7 @@ import { Clients } from '../../client/client.interface';
 import { BalanceService } from '../../../../data/balance.service';
 import { Users } from '../../user/users.interface';
 import { FinanceData } from '../../finance/finance.interface';
+import { AuthService } from '../../../../shared/auth.service';
 
 declare var $: any;
 
@@ -168,7 +169,8 @@ export class PdvComponent {
     private salesService: SalesService,
     private router: Router,
     private routeParam: ActivatedRoute,
-    private balanceService: BalanceService
+    private balanceService: BalanceService,
+    public authService: AuthService,
   ) {
     this.routeParam.paramMap.subscribe(async (params) => {
       const id = params.get('id');

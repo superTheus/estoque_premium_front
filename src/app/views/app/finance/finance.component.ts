@@ -9,6 +9,7 @@ import { Options } from '../../../components/select-default/select-default.inter
 import { getCompanyId } from '../../../utils/util';
 import { FinanceData } from './finance.interface';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -169,7 +170,8 @@ export class FinanceComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public authService: AuthService,
   ) {
     this.clientForm = this.formBuilder.group({
       client: new FormControl(''),

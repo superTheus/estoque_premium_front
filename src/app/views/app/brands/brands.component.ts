@@ -5,6 +5,7 @@ import { Brands } from './brands.interface';
 import { getCompanyId } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -19,7 +20,10 @@ export class BrandsComponent implements OnInit {
   brandSelected?: Brands;
   data: Brands[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    public authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.load();

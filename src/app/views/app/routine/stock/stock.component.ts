@@ -6,6 +6,7 @@ import { Products } from '../../product/product.interface';
 import { FormControl } from '@angular/forms';
 import { BalanceService } from '../../../../data/balance.service';
 import { ReportsService } from '../../../../shared/reports.service';
+import { AuthService } from '../../../../shared/auth.service';
 
 @Component({
   selector: 'app-stock',
@@ -34,6 +35,7 @@ export class StockComponent implements OnInit {
     private apiService: ApiService,
     private balanceService: BalanceService,
     private reportService: ReportsService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {

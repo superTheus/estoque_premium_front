@@ -11,6 +11,7 @@ import { getCompanyId, getPermision } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
 import { BalanceService } from '../../../data/balance.service';
+import { AuthService } from '../../../shared/auth.service';
 
 declare var $: any;
 
@@ -42,7 +43,8 @@ export class ProductComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private balanceService: BalanceService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public authService: AuthService,
   ) {
 
     this.formSearch = this.formBuilder.group({

@@ -51,6 +51,7 @@ export class UserComponent {
     private apiService: ApiService,
     public utilsService: UtilsService,
     private formBuilder: FormBuilder,
+    public authService: AuthService,
   ) {
     this.formPermission = this.formBuilder.group({
       showMenuRegister: [true],

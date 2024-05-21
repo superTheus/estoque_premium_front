@@ -21,7 +21,8 @@ export class BoxComponent {
   data: Box[] = [];
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    public authService: AuthService,
   ) { }
 
   ngOnInit(): void {

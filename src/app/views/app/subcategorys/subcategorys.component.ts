@@ -4,6 +4,7 @@ import { ApiService } from '../../../data/api.service';
 import { Subcategorys } from './subcategorys.interface';
 import { Categorys } from '../categorys/categorys.interface';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../shared/auth.service';
 
 declare const $: any;
 
@@ -23,7 +24,10 @@ export class SubcategorysComponent implements OnInit {
     label: string;
   }[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    public authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.load();

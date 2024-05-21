@@ -8,6 +8,7 @@ import { Options } from '../../../../components/select-default/select-default.in
 import { FormControl } from '@angular/forms';
 import { ReportsService } from '../../../../shared/reports.service';
 import { ChartData, DatasetChart } from '../../../../components/chart/chart.component';
+import { AuthService } from '../../../../shared/auth.service';
 
 @Component({
   selector: 'app-sales-routine',
@@ -38,7 +39,8 @@ export class SalesRoutineComponent implements OnInit {
   constructor(
     private salesService: SalesService,
     private apiService: ApiService,
-    private reportsService: ReportsService
+    private reportsService: ReportsService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {

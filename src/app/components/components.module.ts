@@ -7,15 +7,16 @@ import { SelectDefaultComponent } from './select-default/select-default.componen
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputQuantityComponent } from './input-quantity/input-quantity.component';
 import { ChartComponent } from './chart/chart.component';
+import { DeniedComponent } from './denied/denied.component';
 
 @NgModule({
-  declarations: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent],
+  declarations: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     FloatLabelModule
   ],
-  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent]
+  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent]
 })
 export class ComponentsModule { }
