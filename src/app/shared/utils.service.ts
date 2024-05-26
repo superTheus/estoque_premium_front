@@ -113,4 +113,32 @@ export class UtilsService {
     let differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
     return differenceInDays;
   }
+
+  public formatCurrency(value: number) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  public currencyToNumber(value: string) {
+    return Number(value.replace(/\D/g, '')) / 100;
+  }
+
+  public numberToCurrency(value: number) {
+    return this.formatCurrency(value);
+  }
+
+  public formatNumberMoney(control: AbstractControl) {
+    if (control.value) {
+      let value = control.value.replace(/\D/g, '');
+      value = this.formatCurrency(Number(value) / 100);
+      control.setValue(value);
+    }
+  }
+
+  public isDateLessThanCurrent(dateStr: string): boolean {
+    const inputDate = new Date(dateStr);
+    inputDate.setHours(0, 0, 0, 0);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    return inputDate.getTime() < currentDate.getTime();
+  }
 }

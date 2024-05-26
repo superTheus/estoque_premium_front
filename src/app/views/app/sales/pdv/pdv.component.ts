@@ -21,6 +21,8 @@ import { BalanceService } from '../../../../data/balance.service';
 import { Users } from '../../user/users.interface';
 import { FinanceData } from '../../finance/finance.interface';
 import { AuthService } from '../../../../shared/auth.service';
+import { UtilsService } from '../../../../shared/utils.service';
+import { Box } from '../../box/box.interface';
 
 declare var $: any;
 
@@ -40,7 +42,7 @@ interface PaymentForms {
   styleUrl: './pdv.component.scss'
 })
 export class PdvComponent {
-  valueBox = new FormControl('0');
+  valueBox = new FormControl('R$ 0,00');
 
   isEdit = false;
   currentSale!: Sales;
@@ -164,13 +166,16 @@ export class PdvComponent {
     },
   ]
 
+  currentBox!: Box;
+
   constructor(
+    private router: Router,
     private apiService: ApiService,
     private salesService: SalesService,
-    private router: Router,
     private routeParam: ActivatedRoute,
     private balanceService: BalanceService,
     public authService: AuthService,
+    public utilsService: UtilsService,
   ) {
     this.routeParam.paramMap.subscribe(async (params) => {
       const id = params.get('id');
@@ -189,9 +194,19 @@ export class PdvComponent {
         status: 'AB'
       }
     }).then(res => {
+      this.currentBox = res.results[0] as Box;
+
+      if (this.utilsService.isDateLessThanCurrent(this.currentBox.date_hour as string)) {
+        const element = document.getElementById('modalCloseBox');
+        if (element) {
+          var myModal = new bootstrap.Modal(element, {
+            backdrop: 'static'
+          });
+          myModal.show();
+        }
+      }
     }).catch(() => {
       const element = document.getElementById('modalOpenBox');
-
       if (element) {
         var myModal = new bootstrap.Modal(element, {
           backdrop: 'static'
@@ -361,8 +376,8 @@ export class PdvComponent {
     this.apiService.createBox({
       id_company: getCompanyId(),
       id_user: getUserId(),
-      value_init: Number(this.valueBox.value)
-    }).then(() => {
+      value_init: this.utilsService.currencyToNumber(this.valueBox.value as string)
+    }).then((data) => {
       let element = document.getElementById('modalOpenBox');
 
       if (element) {
@@ -753,5 +768,10 @@ export class PdvComponent {
 
   selectPortion(portion: number) {
     this.portionNumber = portion;
+  }
+
+  closeBox() {
+    $('#modalCloseBox').modal('hide');
+    this.router.navigate(['/app/box/close/' + this.currentBox.id]);
   }
 }

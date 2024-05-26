@@ -1,3 +1,4 @@
+import { AbstractControl } from "@angular/forms";
 import { Permission, Users } from "../views/app/user/users.interface";
 
 export const getCompanyId = () => {
@@ -105,6 +106,14 @@ export const clearSession = () => {
 
 export const formatCurrency = (value: number) => {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+export const formatNumber = (control: AbstractControl) => {
+  if (control.value) {
+    let value = control.value.replace(/\D/g, '');
+    value = formatCurrency(Number(value));
+    control.setValue(value);
+  }
 }
 
 // export const getBaseUrl = () => {

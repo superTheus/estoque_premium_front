@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { BoxComponent } from './box/box.component';
 import { ShoppComponent } from './shopp/shopp.component';
 import { StockComponent } from './stock/stock.component';
 import { FinanceComponent } from './finance/finance.component';
@@ -30,7 +29,7 @@ let routes: Routes = [
       { path: 'categorys', component: CategorysComponent },
       { path: 'subcategorys', component: SubcategorysComponent },
       { path: 'suppliers', component: SuppliersComponent },
-      { path: 'box', component: BoxComponent },
+      { path: 'box', loadChildren: () => import('./box/box.module').then(m => m.BoxModule) },
       { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
       { path: 'shopp', component: ShoppComponent },
       { path: 'routine', loadChildren: () => import('./routine/routine.module').then(m => m.RoutineModule) },

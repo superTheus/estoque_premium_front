@@ -23,7 +23,6 @@ import { ContasComponent } from './contas/contas.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
-import { BoxComponent } from './box/box.component';
 import { CompanyComponent } from './company/company.component';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { StockComponent } from './stock/stock.component';
@@ -45,7 +44,6 @@ import { AccountComponent } from './accounts/accounts.component';
     PaymentComponent,
     ReceiveComponent,
     DashboardsComponent,
-    BoxComponent,
     CompanyComponent,
     StockComponent,
     FinanceComponent,
