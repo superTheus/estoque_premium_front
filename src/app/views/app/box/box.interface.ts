@@ -15,7 +15,19 @@ export interface Box {
   user?: Users;
 }
 
+export interface BoxMov {
+  id?: number;
+  id_caixa?: number;
+  value?: number;
+  id_sale?: number;
+}
+
 export interface BoxRequest {
   filter?: Box;
+  limit?: number;
+}
+
+export interface BoxMovRequest {
+  filter?: BoxMov;
   limit?: number;
 }

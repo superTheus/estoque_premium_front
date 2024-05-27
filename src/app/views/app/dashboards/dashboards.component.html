@@ -3,132 +3,128 @@
     <div class="col-12 col-sm-3 px-0">
       <h2> Bem Vindo </h2>
     </div>
-
-    <div class="col-12 col-sm-6 d-flex justify-content-sm-between justify-content-sm-end col-md-4 mt-md-0 px-0">
-      <button class="btn btn-filter btn-seven-day me-2 mx-sm-2" (click)="changeView('sale')"
-        [ngClass]="{'btn-primary': isSaleView, 'btn-outline-primary': !isSaleView}"> Vendas </button>
-      <button class="btn btn-filter btn-day mr-2" (click)="changeView('finance')"
-        [ngClass]="{'btn-primary': isFinanceView, 'btn-outline-primary': !isFinanceView}"> Financeiro </button>
-      <!-- <button class="btn btn-outline-primary btn-filter btn-month mx-2"> 30 dias </button> -->
-    </div>
-
   </div>
 
-  <ng-container *ngIf="isFinanceView then finance; else sale"></ng-container>
+  <div class="row">
+    <div class="card">
+      <div class="card-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="visao-geral-tab" data-bs-toggle="tab" data-bs-target="#visao-geral"
+              type="button" role="tab" aria-controls="visao-geral" aria-selected="true">Visão Geral</button>
+          </li>
 
-  <ng-template #finance>
-    <div class="row">
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card">
-          <div class="card-body text-center danger">
-            <h4> {{ qtdPagarVencidas }} Contas </h4>
-            <p> À pagar Vencidas </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card">
-          <div class="card-body text-center danger">
-            <h4> {{ qtdReceberVencidas }} Contas </h4>
-            <p> À receber Vencidas </p>
-          </div>
-        </div>
-      </div>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="vendas-tab" data-bs-toggle="tab" data-bs-target="#vendas" type="button"
+              role="tab" aria-controls="vendas" aria-selected="true" (click)="generateGrapsSales()">Vendas</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
 
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card">
-          <div class="card-body text-center success">
-            <h4> {{ totalReceber | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
-            <p> Á receber </p>
-          </div>
-        </div>
-      </div>
+          <div class="tab-pane fade show active my-3" id="visao-geral" role="tabpanel"
+            aria-labelledby="visao-geral-tab">
+            <div class="row">
 
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card">
-          <div class="card-body text-center danger">
-            <h4> {{ totalPagar | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} </h4>
-            <p> Á pagar </p>
+              <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
+                <a class="btn card p-0 h-100" routerLink="../sales/list">
+                  <div class="card-body text-center primary">
+                    <h4> PDV </h4>
+                    <p> Vendas de mercadorias </p>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
+                <div class="card h-100">
+                  <div class="card-body text-center success">
+                    <h4> {{ salesClose }} Vendas </h4>
+                    <p> Vendas finalizadas </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
+                <div class="card h-100">
+                  <div class="card-body text-center warning">
+                    <h4> {{ salesOpen }} Vendas </h4>
+                    <p> Vendas iniciadas </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
+                <div class="card h-100">
+                  <div class="card-body text-center danger">
+                    <h4> {{ salesCancelad }} Vendas </h4>
+                    <p> Vendas canceladas </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-12 col-md-8">
+                <app-chart [chartData]="chartSalesPrimary"></app-chart>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div *ngIf="company && company.certificate" class="card">
+                  <div class="card-body">
+
+                  </div>
+                </div>
+
+                <div *ngIf="company && !company.certificate" class="card h-100">
+                  <div class="card-body text-center">
+                    <img class="certificate" src="../../../../assets/images/not_certificate.svg"
+                      alt="Certificate Banner" srcset="">
+
+                    <p class="mt-4"> O certificado digital não foi detectado <a routerLink="../company"> Clique aqui
+                        para
+                        resolver </a> </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div class="tab-pane fade my-3" id="vendas" role="tabpanel" aria-labelledby="vendas-tab">
+
+            <form [formGroup]="form" class="row">
+              <div class="col-12 col-md-5">
+                <label for="dt_ini" class="form-label"> Data Inicial </label>
+                <input type="date" class="form-control" id="dt_ini" formControlName="dt_ini">
+              </div>
+
+              <div class="col-12 col-md-5">
+                <label for="dt_end" class="form-label"> Data Final </label>
+                <input type="date" class="form-control" id="dt_end" formControlName="dt_end">
+              </div>
+
+              <div class="col-12 col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100"> Filtrar </button>
+              </div>
+            </form>
+
+            <div class="row mt-4">
+              <div class="col-12 col-md-6">
+                <app-chart [chartData]="chartSalesPrimary"></app-chart>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-chart [chartData]="chartSalesPrimary"></app-chart>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-chart [chartData]="chartSalesPrimary"></app-chart>
+              </div>
+              <div class="col-12 col-md-6">
+                <app-chart [chartData]="chartSalesPrimary"></app-chart>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
     </div>
-
-    <div class="row mt-3">
-      <div class="col-12 col-md-8">
-        <app-chart [chartData]="chartFinancePrimary"></app-chart>
-      </div>
-
-      <div class="col-12 col-md-4"> </div>
-    </div>
-
-  </ng-template>
-
-  <ng-template #sale>
-
-    <div class="row">
-
-      <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
-        <a class="btn card p-0 h-100" routerLink="../sales/list">
-          <div class="card-body text-center primary">
-            <h4> PDV </h4>
-            <p> Vendas de mercadorias </p>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
-        <div class="card h-100">
-          <div class="card-body text-center success">
-            <h4> {{ salesClose }} Vendas </h4>
-            <p> Vendas finalizadas </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
-        <div class="card h-100">
-          <div class="card-body text-center warning">
-            <h4> {{ salesOpen }} Vendas </h4>
-            <p> Vendas iniciadas </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6 col-md-3 mt-2 mt-md-0">
-        <div class="card h-100">
-          <div class="card-body text-center danger">
-            <h4> {{ salesCancelad }} Vendas </h4>
-            <p> Vendas canceladas </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-12 col-md-8">
-        <app-chart [chartData]="chartSalesPrimary"></app-chart>
-      </div>
-
-      <div class="col-12 col-md-4">
-        <div *ngIf="company && company.certificate" class="card">
-          <div class="card-body">
-
-          </div>
-        </div>
-
-        <div *ngIf="company && !company.certificate" class="card h-100">
-          <div class="card-body text-center">
-            <img class="certificate" src="../../../../assets/images/not_certificate.svg" alt="Certificate Banner"
-              srcset="">
-
-            <p class="mt-4"> O certificado digital não foi detectado <a routerLink="../company"> Clique aqui para
-                resolver </a> </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </ng-template>
-
+  </div>
 </div>

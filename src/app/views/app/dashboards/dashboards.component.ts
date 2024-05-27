@@ -9,6 +9,7 @@ import { Sales } from '../sales/sales.interface';
 import { getCompanyId } from '../../../utils/util';
 import { Company } from '../company/company.interface';
 import { AuthService } from '../../../shared/auth.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -17,6 +18,8 @@ import { AuthService } from '../../../shared/auth.service';
   styleUrl: './dashboards.component.scss'
 })
 export class DashboardsComponent implements OnInit {
+  form!: FormGroup;
+
   currentAccount!: Contas;
 
   isFinanceView = false;
@@ -29,6 +32,9 @@ export class DashboardsComponent implements OnInit {
 
   chartFinancePrimary!: ChartData;
   chartSalesPrimary!: ChartData;
+
+  chartSalesBox!: ChartData;
+  chartSalesUser!: ChartData;
 
   salesOpen = 0;
   salesClose = 0;
@@ -46,13 +52,24 @@ export class DashboardsComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private saleService: SalesService,
-    public authService: AuthService
-  ) { }
+    public authService: AuthService,
+    private formBuilder: FormBuilder
+  ) {
+    const currentDate = new Date();
+    currentDate.setDate(1);
+    const firstDayOfMonth = currentDate.toISOString().slice(0, 10);
+
+    const today = new Date();
+    const currentDay = today.toISOString().slice(0, 10);
+
+    this.form = this.formBuilder.group({
+      dt_ini: [firstDayOfMonth],
+      dt_end: [currentDay]
+    });
+  }
 
   ngOnInit(): void {
     this.load();
-
-    console.log(this.authService.user);
   }
 
   load() {
@@ -102,6 +119,18 @@ export class DashboardsComponent implements OnInit {
       this.salesCancelad = data.results.filter((sale: Sales) => sale.status === 'CA').length;
 
       this.generateChartsLineSales(data);
+    })
+  }
+
+  generateGrapsSales() {
+    this.saleService.findSales({
+      filter: {
+        id_company: getCompanyId(),
+        date_init: this.form.value.dt_ini,
+        date_end: this.form.value.dt_end
+      }
+    }).then(data => {
+      let values = data.results as Sales[];
     })
   }
 
@@ -284,5 +313,4 @@ export class DashboardsComponent implements OnInit {
 
     this.chartSalesPrimary = config;
   }
-
 }

@@ -240,13 +240,16 @@ export class PdvComponent {
   }
 
   openModalPayment = () => {
+    console.log(this.id_client.valid);
+    console.log(this.products);
+
     if (this.id_client.valid) {
-      if (this.products.length > 0 || (this.currentSale.products ?? []).length > 0) {
+      if (this.products.length > 0 || ((this.currentSale && this.currentSale.products) ?? []).length > 0) {
         $('#modalPayment').modal('show');
         this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
       } else {
         Swal.fire({
-          position: "top-end",
+          position: "center",
           icon: "error",
           title: "Adicione produtos para continuar!",
           showConfirmButton: false,
@@ -333,6 +336,8 @@ export class PdvComponent {
 
           this.updateTotal();
         }
+      }).catch((error) => {
+        console.log(error);
       });
     }
   }
@@ -502,7 +507,7 @@ export class PdvComponent {
     if (this.currentSale) {
       this.addProduct(this.currentProduct);
     } else {
-      this.createSale(() => this.addProduct(this.currentProduct).then(() => {
+      this.createSale(() => this.addProduct(this.currentProduct).then((data) => {
         this.closeModal();
         this.router.navigate(['/app/sales/pdv/' + this.currentSale.id]);
       }));
@@ -660,6 +665,8 @@ export class PdvComponent {
           window.location.href = location.origin + '/app/sales/list';
         });
 
+        this.saveBoxMov();
+
       });
     });
   }
@@ -752,6 +759,17 @@ export class PdvComponent {
     });
 
     return promises;
+  }
+
+  saveBoxMov() {
+    console.log(this.currentSale);
+    this.apiService.createBoxMov({
+      id_caixa: this.currentBox.id,
+      value: this.total,
+      id_sale: this.currentSale.id
+    }).then((data) => {
+      console.log(data);
+    });
   }
 
   changeValueFormat() {

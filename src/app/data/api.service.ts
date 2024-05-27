@@ -14,7 +14,7 @@ import { Categorys } from '../views/app/categorys/categorys.interface';
 import { Products, ProductsRequest } from '../views/app/product/product.interface';
 import { Contas, ContasRequest } from '../views/app/contas/contas.interface';
 import { Finance, FinanceRequest } from '../views/app/payment/payment.interface';
-import { Box, BoxRequest } from '../views/app/box/box.interface';
+import { Box, BoxMov, BoxRequest } from '../views/app/box/box.interface';
 import { Company, CompanyRequest } from '../views/app/company/company.interface';
 import { Permission, PermissionData, PermissionRequest, Users, UsersRequest } from '../views/app/user/users.interface';
 import { FinanceData, FinanceDataRequest } from '../views/app/finance/finance.interface';
@@ -886,6 +886,33 @@ export class ApiService {
 
   createBox(box: Box): Promise<resultInterface> {
     const url = `${environment.baseUrl}/caixas/insert`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, box, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  createBoxMov(box: BoxMov): Promise<resultInterface> {
+    const url = `${environment.baseUrl}/caixas/mov/insert`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

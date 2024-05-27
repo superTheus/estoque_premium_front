@@ -15,6 +15,8 @@ export interface Sales {
   user?: Users,
   client?: Clients,
   payforms?: SalePayForm[];
+  date_init?: string;
+  date_end?: string;
 }
 
 export interface SalePayForm {
