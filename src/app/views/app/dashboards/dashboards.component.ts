@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as Chart from 'chart.js';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Contas } from '../contas/contas.interface';
 import { ApiService } from '../../../data/api.service';
 import { ChartData, DatasetChart } from '../../../components/chart/chart.component';
@@ -9,7 +9,8 @@ import { Sales } from '../sales/sales.interface';
 import { getCompanyId } from '../../../utils/util';
 import { Company } from '../company/company.interface';
 import { AuthService } from '../../../shared/auth.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UtilsService } from '../../../shared/utils.service';
+import { Products } from '../product/product.interface';
 
 
 @Component({
@@ -33,8 +34,11 @@ export class DashboardsComponent implements OnInit {
   chartFinancePrimary!: ChartData;
   chartSalesPrimary!: ChartData;
 
-  chartSalesBox!: ChartData;
+  chartSalesSeller!: ChartData;
   chartSalesUser!: ChartData;
+  chartSalesPayForms!: ChartData;
+  chartSalesDay!: ChartData;
+  chartSalesInvestiment!: ChartData;
 
   salesOpen = 0;
   salesClose = 0;
@@ -46,14 +50,19 @@ export class DashboardsComponent implements OnInit {
 
   CHART_COLORS = {
     green: 'rgb(76, 206, 172)',
-    red: 'rgb(219, 80, 74)'
+    red: 'rgb(219, 80, 74)',
+    yellow: 'rgb(255, 205, 86)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    blueDark: 'rgb(34, 59, 99)',
   };
 
   constructor(
     private apiService: ApiService,
     private saleService: SalesService,
     public authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private utilsService: UtilsService
   ) {
     const currentDate = new Date();
     currentDate.setDate(1);
@@ -125,13 +134,322 @@ export class DashboardsComponent implements OnInit {
   generateGrapsSales() {
     this.saleService.findSales({
       filter: {
+        status: 'FE',
         id_company: getCompanyId(),
         date_init: this.form.value.dt_ini,
         date_end: this.form.value.dt_end
       }
     }).then(data => {
       let values = data.results as Sales[];
+
+      console.log(values);
+
+      this.graphSaleSeller(values);
+      this.graphSaleUser(values);
+      this.graphSalePaymentForms(values);
+      this.graphSaleDay(values);
+      this.graphSaleInvestiment();
     })
+  }
+
+  graphSaleSeller(values: Sales[]) {
+    const labels = values.reduce((unique: string[], sale: Sales) => {
+      if (sale.seller && !unique.includes(sale.seller.name as string)) {
+        unique.push(sale.seller.name as string);
+      }
+      return unique;
+    }, []);
+
+    const values_data = labels.map((label: string) => {
+      return {
+        label: label,
+        data: values.filter((sale: Sales) => sale.seller?.name === label).length,
+      };
+    });
+
+    values_data.sort((a, b) => b.data - a.data);
+
+    this.chartSalesSeller = {
+      data: [
+        {
+          label: 'Vendas por vendedor',
+          backgroundColor: [this.CHART_COLORS.blueDark],
+          borderColor: [this.CHART_COLORS.blueDark],
+          borderWidth: 1,
+          data: values_data.map((value: any) => value.data),
+          fill: false
+        }
+      ],
+      labels: values_data.map((value: any) => value.label),
+      type: 'bar',
+      options: {
+        responsive: true,
+        plugins: {
+
+          filler: {
+            propagate: false,
+          },
+          title: {
+            display: true,
+            text: 'Vendas por vendedor'
+          }
+        },
+        interaction: {
+          intersect: false,
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
+        }
+      },
+    }
+  }
+
+  graphSaleUser(values: Sales[]) {
+    const labels = values.reduce((unique: string[], sale: Sales) => {
+      if (sale.user && !unique.includes(sale.user.name as string)) {
+        unique.push(sale.user.name as string);
+      }
+      return unique;
+    }, []);
+
+    const values_data = labels.map((label: string) => {
+      return {
+        label: label,
+        data: values.filter((sale: Sales) => sale.user?.name === label).length,
+      };
+    });
+
+    values_data.sort((a, b) => b.data - a.data);
+
+    this.chartSalesUser = {
+      data: [
+        {
+          label: 'Vendas por Usuário',
+          backgroundColor: [this.CHART_COLORS.blueDark],
+          borderColor: [this.CHART_COLORS.blueDark],
+          borderWidth: 1,
+          data: values_data.map((value: any) => value.data),
+          fill: false
+        }
+      ],
+      labels: values_data.map((value: any) => value.label),
+      type: 'bar',
+      options: {
+        responsive: true,
+        plugins: {
+
+          filler: {
+            propagate: false,
+          },
+          title: {
+            display: true,
+            text: 'Vendas por Usuário'
+          }
+        },
+        interaction: {
+          intersect: false,
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
+        }
+      },
+    }
+  }
+
+  graphSalePaymentForms(values: Sales[]) {
+    let valuePay = values.map((sale: Sales) => {
+      return sale.payforms
+    }).flat();
+
+    let data = [
+      {
+        id: 1,
+        label: 'Dinheiro',
+        value: valuePay.filter((pay) => {
+          return pay?.id_form === 1
+        }).reduce((acc, pay) => acc + (Number(pay?.value) ?? 0), 0)
+      },
+      {
+        id: 2,
+        label: 'Cartão de Débito',
+        value: valuePay.filter((pay) => {
+          return pay?.id_form === 2
+        }).reduce((acc, pay) => acc + (Number(pay?.value) ?? 0), 0)
+      },
+      {
+        id: 3,
+        label: 'Cartão de Crédito',
+        value: valuePay.filter((pay) => {
+          return pay?.id_form === 3
+        }).reduce((acc, pay) => acc + (Number(pay?.value) ?? 0), 0)
+      },
+      {
+        id: 4,
+        label: 'Pix',
+        value: valuePay.filter((pay) => {
+          return pay?.id_form === 4
+        }).reduce((acc, pay) => acc + (Number(pay?.value) ?? 0), 0)
+      },
+      {
+        id: 5,
+        label: 'Crédiário',
+        value: 0
+      },
+    ]
+
+    data = data.sort((a, b) => b.value - a.value);
+
+    this.chartSalesPayForms = {
+      data: [
+        {
+          label: 'Formas de Pagamento',
+          backgroundColor: [this.CHART_COLORS.green],
+          borderColor: [this.CHART_COLORS.green],
+          borderWidth: 1,
+          data: data.map((item) => item.value),
+          fill: false
+        }
+      ],
+      labels: data.map((item) => item.label),
+      type: 'bar',
+      options: {
+        indexAxis: 'y',
+        elements: {
+          bar: {
+            borderWidth: 2,
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Ranking Formas de Pagamento'
+          }
+        }
+      },
+    }
+  }
+
+  graphSaleDay(values: Sales[]) {
+    const labels = values.reduce((unique: string[], sale: Sales) => {
+      if (sale.user && !unique.includes(this.utilsService.formatDate(sale.date_hour as string))) {
+        unique.push(this.utilsService.formatDate(sale.date_hour as string));
+      }
+      return unique;
+    }, []);
+
+    const values_data = labels.map((label: string) => {
+      return {
+        label: label,
+        data: values.filter((sale: Sales) => this.utilsService.formatDate(sale.date_hour as string) === label).length,
+      };
+    });
+
+    values_data.sort((a, b) => b.data - a.data);
+
+    this.chartSalesDay = {
+      data: [
+        {
+          label: 'Total',
+          backgroundColor: [this.CHART_COLORS.blueDark],
+          borderColor: [this.CHART_COLORS.blueDark],
+          borderWidth: 1,
+          data: values_data.map((value: any) => value.data),
+          fill: false
+        }
+      ],
+      labels: values_data.map((value: any) => value.label),
+      type: 'bar',
+      options: {
+        responsive: true,
+        plugins: {
+
+          filler: {
+            propagate: false,
+          },
+          title: {
+            display: true,
+            text: 'Vendas por Dia'
+          }
+        },
+        interaction: {
+          intersect: false,
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
+        }
+      },
+    }
+  }
+
+  graphSaleInvestiment() {
+    this.apiService.findProducts({
+      filter: {
+        id_company: getCompanyId(),
+        deleted: 'N'
+      }
+    }).then((response) => {
+      const products: Products[] = response.results;
+      let totalCost = products.reduce((acc, product) => acc + (Number((product.price_cost ?? 0) * (product.stock ?? 0)) ?? 0), 0);
+      let totalSale = products.reduce((acc, product) => acc + (Number((product.price_sale ?? 0) * (product.stock ?? 0)) ?? 0), 0);
+
+      this.chartSalesInvestiment = {
+        data: [
+          {
+            label: 'Total',
+            backgroundColor: [this.CHART_COLORS.red, this.CHART_COLORS.green],
+            borderColor: [this.CHART_COLORS.red, this.CHART_COLORS.green],
+            borderWidth: 1,
+            data: [totalCost, totalSale],
+            fill: false
+          }
+        ],
+        labels: ['Investimento', 'Retorno'],
+        type: 'pie',
+        options: {
+          responsive: true,
+          plugins: {
+
+            filler: {
+              propagate: false,
+            },
+            title: {
+              display: true,
+              text: 'Investimento x Retorno'
+            }
+          },
+          interaction: {
+            intersect: false,
+          },
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+          }
+        },
+      }
+    });
   }
 
   changeView(mode: 'finance' | 'sale') {

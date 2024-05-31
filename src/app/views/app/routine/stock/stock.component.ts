@@ -51,8 +51,8 @@ export class StockComponent implements OnInit {
       }
     }).then((response) => {
       this.products = response.results;
-      this.totalCost = this.products.reduce((acc, product) => acc + (Number(product.price_cost) ?? 0), 0);
-      this.totalSale = this.products.reduce((acc, product) => acc + (Number(product.price_sale) ?? 0), 0);
+      this.totalCost = this.products.reduce((acc, product) => acc + (Number((product.price_cost ?? 0) * (product.stock ?? 0)) ?? 0), 0);
+      this.totalSale = this.products.reduce((acc, product) => acc + (Number((product.price_sale ?? 0) * (product.stock ?? 0)) ?? 0), 0);
       this.totalStock = this.products.reduce((acc, product) => acc + (Number(product.stock) ?? 0), 0);
       this.totalProducts = response.results.length;
 

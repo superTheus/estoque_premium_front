@@ -2,19 +2,34 @@
 
 <ng-template #permission>
   <div class="container-main d-flex flex-column justify-content-between">
-    <!-- <div class="input-group mb-3">
-      <input type="text" class="form-control   " placeholder="Selecionar vendedor">
-      <button onclick="Novo()" type="button" class="btn btn-success"><i class=""></i>Novo cliente</button>
-      <input type="text" class="form-control " id="searchInput" placeholder=" Pesquisa cliente....">
-    </div> -->
     <div>
       <div class="row px-3 py-2">
         <div class="col-12 col-md-6">
           <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default>
         </div>
         <div class="col-12 col-md-6">
-          <app-select-default [control]="id_client" (change)="updateClient()" label="Cliente" [items]="clientsSelect"
-            [showButton]="true" (buttonAction)="openModalClient()"></app-select-default>
+          <label class="form-label">Cliente</label>
+          <!-- <app-select-default [control]=" id_client" (change)="updateClient()" label="Cliente"
+          [items]="clientsSelect" [showButton]="true" (buttonAction)="openModalClient()"></app-select-default> -->
+          <div class="d-flex">
+            <div class="col-10">
+              <p-dropdown [options]="clientsSelect" [(ngModel)]="client_id" optionLabel="label" [filter]="true"
+                filterBy="label" [showClear]="true" placeholder="Selecione um cliente" (onChange)="updateClient()">
+                <ng-template pTemplate="selectedItem" let-selectedOption>
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ selectedOption.label }}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-country pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ country.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+
+            <button class="btn btn-secondary" (click)="openModalClient()"> <i class="fa fa-plus"></i> </button>
+          </div>
         </div>
       </div>
 

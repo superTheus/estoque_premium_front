@@ -141,4 +141,13 @@ export class UtilsService {
     currentDate.setHours(0, 0, 0, 0);
     return inputDate.getTime() < currentDate.getTime();
   }
+
+  public formatDate(date: string): string {
+    const newDate = new Date(date);
+    const day = String(newDate.getDate()).padStart(2, '0');
+    const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are zero based
+    const year = newDate.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
 }

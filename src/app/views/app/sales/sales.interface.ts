@@ -6,6 +6,7 @@ export interface Sales {
   id?: number,
   id_company?: number,
   id_user?: number,
+  id_seller?: number | null,
   id_client?: number | null,
   total?: number,
   status?: 'AB' | 'FE' | 'CA',
@@ -13,10 +14,16 @@ export interface Sales {
   deleted?: string,
   products?: SaleProduct[]
   user?: Users,
+  seller?: Users,
   client?: Clients,
   payforms?: SalePayForm[];
   date_init?: string;
   date_end?: string;
+}
+
+interface PayForm {
+  id: number,
+  description: string,
 }
 
 export interface SalePayForm {
@@ -27,6 +34,7 @@ export interface SalePayForm {
   date: string,
   portion_number: number,
   portion_total: number,
+  payform?: PayForm
 }
 
 export interface SalesRequest {

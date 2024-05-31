@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HotkeyModule } from "angular2-hotkeys";
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { LayoutModule } from "../../../containers/layout/layout.module";
 import { SalesComponent } from "./sales.component";
@@ -28,7 +29,8 @@ import { BalanceService } from "../../../data/balance.service";
     ComponentsModule,
     ReactiveFormsModule,
     HotkeyModule.forRoot(),
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    DropdownModule
   ],
   providers: [ApiService, SalesService, BalanceService],
 })

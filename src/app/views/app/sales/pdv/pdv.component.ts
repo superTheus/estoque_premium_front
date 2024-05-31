@@ -62,7 +62,11 @@ export class PdvComponent {
   id_supplier = new FormControl('');
 
   id_client = new FormControl(0, [Validators.required]);
-  id_seller = new FormControl('');
+  id_seller = new FormControl(0, [Validators.required]);
+  client_id: Options = {
+    label: 'Consumidor Final',
+    value: 0
+  };
 
   clientsSelect: Options[] = [];
   sellerSelect: Options[] = [];
@@ -240,18 +244,25 @@ export class PdvComponent {
   }
 
   openModalPayment = () => {
-    console.log(this.id_client.valid);
-    console.log(this.products);
-
-    if (this.id_client.valid) {
-      if (this.products.length > 0 || ((this.currentSale && this.currentSale.products) ?? []).length > 0) {
-        $('#modalPayment').modal('show');
-        this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
+    if (Number(this.client_id.value) >= 0) {
+      if (this.id_seller.valid && this.id_seller.value && this.id_seller.value > 0) {
+        if (this.products.length > 0 || ((this.currentSale && this.currentSale.products) ?? []).length > 0) {
+          $('#modalPayment').modal('show');
+          this.paymentValue.setValue(this.formatValueCurrency(this.total - this.totalPayment));
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Adicione produtos para continuar!",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
       } else {
         Swal.fire({
-          position: "center",
+          position: "top-end",
           icon: "error",
-          title: "Adicione produtos para continuar!",
+          title: "Selecione um vendedor para continuar!",
           showConfirmButton: false,
           timer: 1500
         });
@@ -319,6 +330,11 @@ export class PdvComponent {
       }
     }).subscribe(response => {
       this.sellerSelect = response.results.map((item: Users) => ({ label: item.name, value: item.id }));
+
+      if (this.currentSale) {
+        this.id_seller.setValue(this.currentSale.id_seller ? this.currentSale.id_seller : 0);
+        console.log(this.id_seller.value);
+      }
     });
 
     if (id) {
@@ -329,7 +345,14 @@ export class PdvComponent {
       }).then(response => {
         if (response.results) {
           this.currentSale = response.results[0] as Sales;
+          console.log(this.currentSale);
           this.total = 0;
+          if (this.currentSale.id_seller) {
+            setTimeout(() => {
+              this.id_seller.setValue(this.currentSale.id_seller ? this.currentSale.id_seller : 0);
+            }, 1000);
+          }
+
           this.currentSale.products?.forEach(product => {
             this.total += Number(product.total);
           });
@@ -352,9 +375,14 @@ export class PdvComponent {
       this.clientsSelect = response.results.map((item: Clients) => ({ label: item.name, value: item.id }));
       if (id) {
         this.id_client.setValue(id);
+        let option = this.clientsSelect.find((client) => client.value === id);
+        this.client_id = option ? option : { label: 'Consumidor Final', value: 0 };
         this.updateClient();
       } else if (this.currentSale) {
         this.id_client.setValue(this.currentSale.id_client ? this.currentSale.id_client : 0);
+        let newId = this.currentSale.id_client ? this.currentSale.id_client : 0;
+        let option = this.clientsSelect.find((client) => client.value === newId);
+        this.client_id = option ? option : { label: 'Consumidor Final', value: 0 };
       }
     });
   }
@@ -399,6 +427,8 @@ export class PdvComponent {
   createSale(callback?: () => void) {
     this.salesService.createSale({
       id_company: getCompanyId(),
+      id_user: getUserId(),
+      id_seller: this.id_seller.value ? Number(this.id_seller.value) : null,
       total: 0
     }).then(response => {
       this.currentSale = response.results as Sales;
@@ -546,7 +576,7 @@ export class PdvComponent {
     this.salesService.updateSale({
       id: this.currentSale.id,
       total: this.total,
-      id_client: Number(this.id_client.value) > 0 ? Number(this.id_client.value) : null,
+      id_client: Number(this.client_id.value) > 0 ? Number(this.client_id.value) : null,
       status: 'AB'
     }).then(data => {
       console.log(data);
@@ -635,10 +665,12 @@ export class PdvComponent {
     let newSaleValue = this.currentSale;
     newSaleValue.status = 'FE';
     newSaleValue.id_user = this.id_seller.value ? Number(this.id_seller.value) : getUserId();
-    newSaleValue.id_client = Number(this.id_client.value) > 0 ? Number(this.id_client.value) : null;
+    newSaleValue.id_client = Number(this.client_id.value) > 0 ? Number(this.client_id.value) : null;
+    newSaleValue.total = this.total;
+    newSaleValue.id_seller = this.id_seller.value ? Number(this.id_seller.value) : null;
     newSaleValue.payforms = this.paymentForms.map(item => {
       return {
-        id_sale: this.currentSale.id,
+        id_sale: this.currentSale.id as number,
         id_form: item.id,
         value: item.value,
         date: item.date,
