@@ -220,19 +220,23 @@ export class PdvComponent {
     })
   }
 
-  loadProducts(event: KeyboardEvent) {
-    if (event.key.toLocaleUpperCase() === 'ENTER') {
-      this.apiService.findProducts({
-        filter: {
-          deleted: "N",
-          id_company: getCompanyId()
-        },
-        search: this.search.value || ''
-      }).then(response => {
+  loadProducts() {
+    this.apiService.findProducts({
+      filter: {
+        deleted: "N",
+        id_company: getCompanyId()
+      },
+      search: this.search.value || '',
+      limit: 5
+    }).then(response => {
+      if (!this.search.value) {
+        this.products = [];
+      } else {
         this.products = response.results;
-        this.openModal();
-      });
-    };
+      }
+    }).catch((error) => {
+      this.products = [];
+    });
   }
 
   openModal = () => {

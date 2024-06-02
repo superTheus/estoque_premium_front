@@ -92,3 +92,59 @@ img {
   max-width: 350px;
   height: auto;
 }
+
+.input-container {
+  width: 100%;
+  padding: 10px;
+  border-radius: 25px;
+  border: 2px solid darken($color: #2196F3, $amount: 0);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  z-index: 1030;
+  background-color: #fff;
+
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  button {
+    font-weight: bold;
+    font-size: 1.2em;
+    width: 40px;
+  }
+
+  input {
+    width: 90%;
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+
+    &::placeholder {
+      color: #cfcfcf;
+      font-weight: 300;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.search-container {
+  width: 100%;
+  height: auto;
+  padding-bottom: 10px;
+  background-color: #fff;
+  background-color: #f0f0f0;
+  position: relative;
+  top: -20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: relative;
+  z-index: 1000;
+}

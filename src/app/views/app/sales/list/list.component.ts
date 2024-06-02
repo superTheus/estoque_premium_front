@@ -45,7 +45,7 @@ export class ListComponent implements OnInit {
 
     this.salesService.findSales({
       filter: filter,
-      limit: 30
+      limit: 10
     }).then((response) => {
       this.data = response.results;
     }).catch((error) => {
