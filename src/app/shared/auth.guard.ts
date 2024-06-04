@@ -1,8 +1,8 @@
+import moment from 'moment';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
-import { clearSession } from '../utils/util';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard {
@@ -15,7 +15,6 @@ export class AuthGuard {
       if (state.url === '/user/login') {
         this.router.navigate(['/app'])
       }
-
     }
 
     return true;
@@ -25,6 +24,13 @@ export class AuthGuard {
     const currentUser = this.authService.user;
 
     if (currentUser) {
+      const currentDate = moment();
+      const dateLogin = moment(currentUser.dateLogin);
+
+      if (!currentDate.isSame(dateLogin, 'day')) {
+        this.authService.lougtOut();
+      }
+
       if (state.url === '/user/login') {
         this.router.navigate(['/app'])
       }

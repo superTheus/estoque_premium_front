@@ -5,6 +5,7 @@ import { ApiService } from '../data/api.service';
 import { clearSession, getUser, setCompanyId, setPermision, setUser, setUserEmail, setUserId } from '../utils/util';
 import { Router } from '@angular/router';
 import { Users } from '../views/app/user/users.interface';
+import moment from 'moment';
 
 export interface ISignInCredentials {
   email: string;
@@ -52,7 +53,7 @@ export class AuthService {
           let result = data.results[0];
 
           this.user = data.results[0];
-          this.user.dateLogin = new Date().toISOString();
+          this.user.dateLogin = moment().format('YYYY-MM-DD HH:mm:ss');
 
           this.apiService.findPermission({
             filter: {
