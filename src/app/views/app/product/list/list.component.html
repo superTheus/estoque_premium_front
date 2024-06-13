@@ -1,0 +1,72 @@
+<ng-container *ngIf="authService.user.permissao?.managerProdutos; then permission; else notPermission"></ng-container>
+
+<ng-template #permission>
+  <div class="container-main d-flex flex-column">
+    <div class="row px-3 mb-4 mt-3">
+      <h3> Produtos </h3>
+    </div>
+
+    <div id="stock-control-container" class="card">
+      <div class="card-header p-0">
+        <div class="search-bar">
+          <form [formGroup]="formSearch" (ngSubmit)="loadProducts()" class="input-search">
+            <input type="text" formControlName="search" class="" (keyup)="loadProducts()" (keypress)="loadProducts()"
+              (keydown)="loadProducts()" placeholder="Pesquisar" aria-label="Pesquisar...">
+            <i class="fas fa-search"></i>
+          </form>
+        </div>
+      </div>
+      <div class="card-body" [ngClass]="{'p-0': !data.length }">
+        <div class="table-responsive">
+          <table id="stockTable" *ngIf="data.length">
+            <thead>
+              <tr>
+                <th class="col">ID</th>
+                <th class="col-3">Descricão</th>
+                <th class="col-3">Estoque</th>
+                <th class="col-2">Categoria</th>
+                <th class="col-2">Subcategoria</th>
+                <th class="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <ng-container *ngFor="let product of data">
+                <tr>
+                  <td class="col"> {{product.id}} </td>
+                  <td class="col-3"> {{product.description}} </td>
+                  <td class="col-2"> {{product.stock}} </td>
+                  <td class="col-2"> {{product.category?.description}} </td>
+                  <td class="col-2"> {{product.subcategory?.description}} </td>
+                  <td class="col d-flex">
+                    <button class="btn btn-primary me-2" [routerLink]="['../edit/' + product.id]">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger" (click)="delete(product)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row align-items-center justify-content-end">
+          <div class="col-12 col-sm-4 col-lg-3">
+            <button class="btn btn-primary me-2" [ngClass]="{'disabled': disableNew}" [routerLink]="['../create']">
+              Novo Produto
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

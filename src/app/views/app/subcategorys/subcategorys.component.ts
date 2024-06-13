@@ -5,6 +5,7 @@ import { Subcategorys } from './subcategorys.interface';
 import { Categorys } from '../categorys/categorys.interface';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../shared/auth.service';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -36,7 +37,8 @@ export class SubcategorysComponent implements OnInit {
   load() {
     this.apiService.findSubcategorys({
       filter: {
-        deleted: 'N'
+        deleted: 'N',
+        id_company: getCompanyId()
       }
     }).then(res => {
       this.data = res.results;

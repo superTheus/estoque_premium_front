@@ -1,0 +1,155 @@
+<ng-container *ngIf="authService.user.permissao?.managerProdutos; then permission; else notPermission"></ng-container>
+
+<ng-template #permission>
+  <div class="container-main d-flex flex-column">
+    <div class="row mb-4 mt-3">
+      <h3> {{ isEditMode ? 'Editar Produto' : 'Adicionar novo produto' }} </h3>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="description" class="form-label"> Descricão </label>
+            <input type="text" class="form-control" id="description" placeholder="Descricão"
+              formControlName="description"
+              [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
+            <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched" class="invalid-feedback">
+              Descricão é obrigatória
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="ncm" class="form-label"> NCM </label>
+            <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="price_sale" class="form-label"> Preço de Venda </label>
+            <input type="text" class="form-control" id="price_sale" placeholder="R$ 0,00" formControlName="price_sale"
+              [ngClass]="{'invalid': !form.get('price_sale')?.valid && form.get('price_sale')?.touched}"
+              (keyup)="changeValueFormat(form.controls['price_sale'])"
+              (keydown)="changeValueFormat(form.controls['price_sale'])"
+              (keypress)="changeValueFormat(form.controls['price_sale'])">
+            <div *ngIf="!form.get('price_sale')?.valid && form.get('price_sale')?.touched" class="invalid-feedback">
+              Preço de venda é obrigatório
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="price_cost" class="form-label"> Preço de Custo </label>
+            <input type="text" class="form-control" id="price_cost" placeholder="R$ 0,00" formControlName="price_cost"
+              [ngClass]="{'invalid': !form.get('price_cost')?.valid && form.get('price_cost')?.touched}"
+              (keyup)="changeValueFormat(form.controls['price_cost'])"
+              (keydown)="changeValueFormat(form.controls['price_cost'])"
+              (keypress)="changeValueFormat(form.controls['price_cost'])">
+            <div *ngIf="!form.get('price_cost')?.valid && form.get('price_cost')?.touched" class="invalid-feedback">
+              Preço de custo é obrigatório
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="id_category" class="form-label"> Categoria </label>
+            <div class="d-flex">
+              <select id="id_category" class="form-control" formControlName="id_category">
+                <option value=""> Selecione </option>
+                <option *ngFor="let item of categorySelect" [value]="item.value">{{item.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="id_subcategory" class="form-label"> Subcategoria </label>
+            <div class="d-flex">
+              <select id="id_subcategory" class="form-control" formControlName="id_subcategory">
+                <option value=""> Selecione </option>
+                <option *ngFor="let item of subcategorySelect" [value]="item.value">{{item.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="id_brand" class="form-label"> Marca </label>
+            <div class="d-flex">
+              <select id="id_brand" class="form-control" formControlName="id_brand">
+                <option value=""> Selecione </option>
+                <option *ngFor="let item of brandsSelect" [value]="item.value">{{item.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="id_fornecedor" class="form-label"> Fornecedor </label>
+            <div class="d-flex">
+              <select id="id_fornecedor" class="form-control" formControlName="id_fornecedor">
+                <option value=""> Selecione </option>
+                <option *ngFor="let item of supplierSelect" [value]="item.value">{{item.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="control_stock" class="form-label"> Controle de estoque </label>
+            <div class="d-flex">
+              <select id="control_stock" class="form-control" formControlName="control_stock">
+                <option value=""> Selecione </option>
+                <option *ngFor="let item of controlStock" [value]="item.value">{{item.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!isEditMode" [ngClass]="{'col-md-3': !isEditMode}" class="col-12">
+          <div class="mb-3">
+            <label for="stock" class="form-label"> Estoque </label>
+            <input type="number" class="form-control" id="stock" placeholder="0" formControlName="stock"
+              [readOnly]="form.get('control_stock')?.value === 'S' ? false : true">
+          </div>
+        </div>
+
+        <div [ngClass]="{'col-md-3': !isEditMode, 'col-md-6': isEditMode}" class="col-12">
+          <div class="mb-3">
+            <label for="stock_minimum" class="form-label"> Estoque Minimo </label>
+            <input type="number" class="form-control" id="stock_minimum" placeholder="0"
+              formControlName="stock_minimum">
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center justify-content-md-end">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+          <button type="button" class="btn btn-danger" [routerLink]="['/app/product']">Cancelar</button>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #notPermission>
+  <app-denied></app-denied>
+</ng-template>

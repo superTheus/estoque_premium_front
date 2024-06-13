@@ -35,7 +35,7 @@ let routes: Routes = [
       { path: 'routine', loadChildren: () => import('./routine/routine.module').then(m => m.RoutineModule) },
       { path: 'stock', component: StockComponent },
       { path: 'user', component: UserComponent },
-      { path: 'product', component: ProductComponent },
+      { path: 'product', loadChildren: () => import('./product/product.module').then(m => m.ProductModule) },
       { path: 'client', component: ClientComponent },
       { path: 'contas', component: ContasComponent },
       { path: 'payment', component: PaymentComponent },

@@ -68,13 +68,13 @@
 
 
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="nome" class="form-label"> Nome </label>
                     <input type="text" class="form-control" id="nome" placeholder="Nome" formControlName="name">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="apelido" class="form-label"> Apelido </label>
                     <input type="text" class="form-control" id="apelido" placeholder="Apelido"
@@ -83,14 +83,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="razao_social" class="form-label"> Razão social </label>
                     <input type="text" class="form-control" id="razao_social" placeholder="Razao social"
                       formControlName="razao_social">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="rg_inscricao" class="form-label"> RG/N° Inscrição </label>
                     <input type="text" class="form-control" id="rg_inscricao" placeholder="RG/N° Inscrição"
@@ -99,14 +99,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="email" class="form-label"> Email </label>
                     <input type="email" class="form-control" id="email" placeholder="exemplo@email.com"
                       formControlName="email">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="celular" class="form-label"> Celular </label>
                     <input type="text" class="form-control" id="celular" placeholder="(99) 99999-9999"
@@ -115,14 +115,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="telefone" class="form-label"> Telefone </label>
                     <input type="text" class="form-control" id="telefone" placeholder="(99) 99999-9999"
                       formControlName="telefone">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="documento" class="form-label"> Documento </label>
                     <input type="text" class="form-control" id="documento" placeholder="Documento"
@@ -139,14 +139,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="endereco" class="form-label"> Endereco </label>
                     <input type="text" class="form-control" id="endereco" placeholder="Endereco"
                       formControlName="endereco">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="cidade" class="form-label"> Cidade </label>
                     <input type="text" class="form-control" id="cidade" placeholder="cidade" formControlName="cidade">
@@ -154,13 +154,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="numero" class="form-label"> Número </label>
                     <input type="text" class="form-control" id="numero" placeholder="Número" formControlName="numero">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="bairro" class="form-label"> Bairro </label>
                     <input type="text" class="form-control" id="bairro" placeholder="Bairro" formControlName="bairro">
@@ -168,14 +168,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="complemento" class="form-label"> Complemento </label>
                     <input type="text" class="form-control" id="complemento" placeholder="Complemento"
                       formControlName="complemento">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="data_nascimento" class="form-label"> Data Nascimento </label>
                     <input type="text" class="form-control" id="data_nascimento" placeholder="Data Nascimento"
@@ -184,13 +184,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="icms" class="form-label"> ICMS </label>
                     <input type="text" class="form-control" id="icms" placeholder="ICMS" formControlName="icms">
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <div class="mb-3">
                     <label for="genero" class="form-label"> {{ 'Gênero' }} </label>
                     <div class="d-flex">
@@ -204,9 +204,14 @@
               </div>
 
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="submit" class="btn btn-primary">Salvar</button>
+            <div class="modal-footer d-flex justify-content-md-center justify-content-lg-end">
+              <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
             </div>
           </form>
         </div>

@@ -72,7 +72,7 @@
       <div class="col-12 col-sm-6 col-md-4 pe-md-2 mt-2 mt-md-0">
         <!-- <app-select-default [control]="id_seller" label="Vendedor" [items]="sellerSelect"></app-select-default> -->
         <select class="form-control" [formControl]="id_seller">
-          <option value=""> Selecione vendedor </option>
+          <option value="0"> Selecione vendedor </option>
           <option *ngFor="let item of sellerSelect" [value]="item.value">{{item.label}}</option>
         </select>
       </div>

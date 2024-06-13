@@ -1,27 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Products } from './product.interface';
-import { ApiService } from '../../../data/api.service';
-import { Options } from '../../../components/select-default/select-default.interface';
-import { Brands } from '../brands/brands.interface';
-import { Categorys } from '../categorys/categorys.interface';
-import { Subcategorys } from '../subcategorys/subcategorys.interface';
-import { Suppliers } from '../supplier/supplier.interface';
-import { getCompanyId, getPermision } from '../../../utils/util';
-
+import { Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Products } from '../product.interface';
+import { getCompanyId, getPermision } from '../../../../utils/util';
+import { ApiService } from '../../../../data/api.service';
+import { BalanceService } from '../../../../data/balance.service';
+import { AuthService } from '../../../../shared/auth.service';
+import { Brands } from '../../brands/brands.interface';
+import { Categorys } from '../../categorys/categorys.interface';
+import { Subcategorys } from '../../subcategorys/subcategorys.interface';
+import { Suppliers } from '../../supplier/supplier.interface';
 import Swal from 'sweetalert2';
-import { BalanceService } from '../../../data/balance.service';
-import { AuthService } from '../../../shared/auth.service';
+import { Options } from '../../../../components/select-default/select-default.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var $: any;
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
+  selector: 'app-create',
+  templateUrl: './create.component.html',
+  styleUrl: './create.component.scss'
 })
-export class ProductComponent implements OnInit {
+export class CreateComponent {
   form!: FormGroup;
-  formSearch!: FormGroup;
 
   isEditMode = false;
   productSelected?: Products;
@@ -41,15 +41,11 @@ export class ProductComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private balanceService: BalanceService,
     private formBuilder: FormBuilder,
     public authService: AuthService,
+    private router: Router,
+    private routeParam: ActivatedRoute
   ) {
-
-    this.formSearch = this.formBuilder.group({
-      search: ['', [Validators.required]]
-    })
-
     this.form = this.formBuilder.group({
       description: ['', [Validators.required]],
       price_sale: ['', [Validators.required]],
@@ -63,6 +59,23 @@ export class ProductComponent implements OnInit {
       id_subcategory: [''],
       id_fornecedor: [''],
     })
+
+    this.routeParam.paramMap.subscribe(params => {
+      let id = params.get('id')
+      if (id) {
+        this.isEditMode = true;
+        this.apiService.findProducts({
+          filter: {
+            id: Number(id),
+            id_company: getCompanyId()
+          }
+        }).then(res => {
+          if (res.results.length) {
+            this.update(res.results[0])
+          }
+        })
+      }
+    });
 
     this.loadProductsPermissions();
   }
@@ -105,24 +118,6 @@ export class ProductComponent implements OnInit {
     this.supplierSelect = supplier.results.map((supplier: Suppliers): Options => { return { label: supplier.name || '', value: supplier.id || 0 } })
   }
 
-  loadProducts() {
-    if (this.formSearch.get('search')?.value) {
-      this.apiService.findProducts({
-        filter: {
-          deleted: 'N',
-          id_company: getCompanyId()
-        },
-        search: this.formSearch.get('search')?.value
-      }).then(res => {
-        if (this.formSearch.get('search')?.value) {
-          this.data = res.results;
-        } else {
-          this.data = [];
-        }
-      })
-    }
-  }
-
   loadProductsPermissions() {
     this.apiService.findProducts({
       filter: {
@@ -134,22 +129,6 @@ export class ProductComponent implements OnInit {
         this.disableNew = this.permissions?.limite_produtos <= res.results.length ? true : false;
       }
     });
-  }
-
-  openModal() {
-    this.form.get('description')?.setValue('');
-    this.form.get('id_brand')?.setValue('');
-    this.form.get('id_category')?.setValue('');
-    this.form.get('id_subcategory')?.setValue('');
-    this.form.get('price_sale')?.setValue('');
-    this.form.get('price_cost')?.setValue('');
-    this.form.get('ncm')?.setValue('');
-    this.form.get('id_fornecedor')?.setValue('');
-    this.form.get('control_stock')?.setValue('S');
-    this.form.get('stock')?.setValue('');
-    this.form.get('stock_minimum')?.setValue('');
-
-    $('#modalProduct').modal('show');
   }
 
   save() {
@@ -174,33 +153,42 @@ export class ProductComponent implements OnInit {
     values.id_fornecedor = values.id_fornecedor || null;
 
     if (this.isEditMode) {
-      this.apiService.updateProduct({
-        id: this.productSelected?.id,
-        ...values,
-        id_company: getCompanyId(),
-        deleted: this.productSelected?.deleted
-      }).then(res => {
-        this.loadProducts();
-        this.loadProductsPermissions();
-
-        setTimeout(() => {
-          $('#modalProduct').modal('hide');
-          Swal.fire("Produto editado", "", "success");
-        }, 500);
+      Swal.fire({
+        title: 'Deseja salvar as alterações?',
+        showCancelButton: true,
+        confirmButtonText: `Salvar`,
+        cancelButtonText: `Cancelar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.apiService.updateProduct({
+            id: this.productSelected?.id,
+            ...values,
+            id_company: getCompanyId(),
+            deleted: this.productSelected?.deleted
+          }).then(res => {
+            this.router.navigate(['/app/product']);
+          }).catch(err => {
+            Swal.fire("Erro ao salvar", "", "error");
+          })
+        }
       })
     } else {
-      this.apiService.createProduct({
-        ...values,
-        id_company: getCompanyId(),
-      }).then(res => {
-        this.loadProductsPermissions();
-        this.loadProducts();
-        this.balanceService.firstMoviment(res.results, Number(this.form.get('stock')?.value) || 0);
-
-        setTimeout(() => {
-          $('#modalProduct').modal('hide');
-          Swal.fire("Produto salvo", "", "success");
-        }, 500);
+      Swal.fire({
+        title: 'Deseja salvar este produto?',
+        showCancelButton: true,
+        confirmButtonText: `Salvar`,
+        cancelButtonText: `Cancelar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.apiService.createProduct({
+            ...values,
+            id_company: getCompanyId(),
+          }).then(res => {
+            this.router.navigate(['/app/product']);
+          }).catch(err => {
+            Swal.fire("Erro ao salvar", "", "error");
+          })
+        }
       })
     }
   }
@@ -220,29 +208,6 @@ export class ProductComponent implements OnInit {
     this.form.get('stock_minimum')?.setValue(product.stock_minimum ? String(product.stock_minimum) : '');
     this.isEditMode = true;
     $('#modalProduct').modal('show');
-  }
-
-  delete(product: Products) {
-    Swal.fire({
-      title: "Realmente deseja deletar este produto?",
-      showDenyButton: true,
-      confirmButtonText: "Sim Deletar",
-      denyButtonText: `Não, cancelar`,
-      confirmButtonColor: '#d33',
-      denyButtonColor: '#3085d6',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        var newProduct = { ...product };
-        newProduct.deleted = 'S';
-        this.productSelected = newProduct;
-
-        this.apiService.updateProduct(newProduct).then(res => {
-          this.loadProducts();
-          this.loadProductsPermissions();
-          Swal.fire("Produto deletado", "", "info");
-        })
-      }
-    });
   }
 
   formatValueCurrency(value: string | number) {

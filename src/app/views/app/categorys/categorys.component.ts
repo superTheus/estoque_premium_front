@@ -4,6 +4,7 @@ import { ApiService } from '../../../data/api.service';
 import { Categorys } from './categorys.interface';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../shared/auth.service';
+import { getCompanyId } from '../../../utils/util';
 
 declare const $: any;
 
@@ -30,7 +31,8 @@ export class CategorysComponent implements OnInit {
   load() {
     this.apiService.findCategorys({
       filter: {
-        deleted: 'N'
+        deleted: 'N',
+        id_company: getCompanyId()
       }
     }).then(res => {
       this.data = res.results;
