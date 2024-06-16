@@ -1,0 +1,18 @@
+<input #_fileInput type="file" (change)="openCropperDialog($event)" accept="image/*" hidden>
+<!-- <ly-icon [lyMf]="1">image</ly-icon> -->
+<div class="card card-drop my-3 text-center">
+  <div class="card-body" (click)="_fileInput.click()">
+    <span>Selecione uma imagem</span>
+  </div>
+
+  <div *ngIf="cropped && cropped.length > 0" class="card-body img-container">
+    <ng-container *ngFor="let img of cropped; index as index">
+
+      <div class="thumb-image">
+        <img [src]="img" class="img-fluid" alt="Cropped Image">
+        <button (click)="removeCropped(index)"> REMOVER </button>
+      </div>
+
+    </ng-container>
+  </div>
+</div>

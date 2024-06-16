@@ -22,6 +22,11 @@ export interface Products {
   subcategory?: Subcategorys;
   brand?: Brands;
   suplier?: Suppliers;
+  images?: {
+    id?: number;
+    id_product?: number;
+    image: string;
+  }[];
 }
 
 export interface ProductsRequest {

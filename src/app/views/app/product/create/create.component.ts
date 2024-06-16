@@ -12,17 +12,25 @@ import { Suppliers } from '../../supplier/supplier.interface';
 import Swal from 'sweetalert2';
 import { Options } from '../../../../components/select-default/select-default.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { StyleRenderer } from '@alyle/ui';
+import { STYLES } from '../../../../app.component';
+import { LyIconService } from '@alyle/ui/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var $: any;
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
-  styleUrl: './create.component.scss'
+  styleUrl: './create.component.scss',
+  providers: [
+    StyleRenderer
+  ]
 })
 export class CreateComponent {
-  form!: FormGroup;
+  readonly classes = this.sRenderer.renderSheet(STYLES, true);
 
+  form!: FormGroup;
   isEditMode = false;
   productSelected?: Products;
   data: Products[] = [];
@@ -39,7 +47,12 @@ export class CreateComponent {
   permissions = getPermision()
   disableNew = false;
 
+  images: string[] = [];
+
   constructor(
+    readonly sRenderer: StyleRenderer,
+    iconService: LyIconService,
+    sanitizer: DomSanitizer,
     private apiService: ApiService,
     private formBuilder: FormBuilder,
     public authService: AuthService,
@@ -78,6 +91,10 @@ export class CreateComponent {
     });
 
     this.loadProductsPermissions();
+
+    iconService.setSvg('Github', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/github'));
+    iconService.setSvg('Theme', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/round-format_color_fill-24px'));
+    iconService.setSvg('Discord', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/discord'));
   }
 
   ngOnInit() {
@@ -163,6 +180,7 @@ export class CreateComponent {
           this.apiService.updateProduct({
             id: this.productSelected?.id,
             ...values,
+            images: this.images,
             id_company: getCompanyId(),
             deleted: this.productSelected?.deleted
           }).then(res => {
@@ -182,6 +200,7 @@ export class CreateComponent {
         if (result.isConfirmed) {
           this.apiService.createProduct({
             ...values,
+            images: this.images,
             id_company: getCompanyId(),
           }).then(res => {
             this.router.navigate(['/app/product']);
@@ -206,6 +225,7 @@ export class CreateComponent {
     this.form.get('control_stock')?.setValue(product.control_stock ? product.control_stock : 'S');
     this.form.get('stock')?.setValue(product.stock ? String(product.stock) : '');
     this.form.get('stock_minimum')?.setValue(product.stock_minimum ? String(product.stock_minimum) : '');
+    this.images = product.images?.map((image) => image.image) || [];
     this.isEditMode = true;
     $('#modalProduct').modal('show');
   }
@@ -224,5 +244,9 @@ export class CreateComponent {
       value = this.formatValueCurrency(value);
       control.setValue(value);
     }
+  }
+
+  getImages = (imagesBase: string[]) => {
+    this.images = imagesBase;
   }
 }

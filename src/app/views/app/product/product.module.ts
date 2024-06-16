@@ -6,6 +6,7 @@ import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { ComponentsModule } from '../../../components/components.module';
 import { ProductRoutingModule } from './product.routing';
+import { LyCommonModule } from '@alyle/ui';
 
 
 
@@ -19,7 +20,8 @@ import { ProductRoutingModule } from './product.routing';
     ComponentsModule,
     FormsModule,
     ReactiveFormsModule,
-    ProductRoutingModule
+    ProductRoutingModule,
+    LyCommonModule
   ]
 })
 export class ProductModule { }

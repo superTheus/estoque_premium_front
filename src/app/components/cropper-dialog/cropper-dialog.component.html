@@ -1,0 +1,30 @@
+<div ly-dialog-content [lyPx]="0">
+
+  <div *ngIf="ready" class="d-flex">
+    <button (click)="cropper.zoomIn()" class="btn"> <i class="fas fa-search-plus"></i> </button>
+    <button (click)="cropper.zoomOut()" class="btn"> <i class="fas fa-search-minus"></i> </button>
+    <button (click)="cropper.rotate(-90)" class="btn"><i class="fas fa-undo-alt"></i></button>
+    <!-- <button (click)="cropper.center()" class="btn"><i class="fas fa-filter"></i></button> -->
+    <!-- <button (click)="cropper.fit()" class="btn"><i class="fas fa-burn"></i></button> -->
+    <!-- <button (click)="cropper.fitToScreen()" class="btn">Fit to screen</button> -->
+    <!-- <button (click)="cropper.setScale(1)" class="btn">1:1</button> -->
+  </div>
+
+  <ly-img-cropper [config]="myConfig" [(scale)]="scale" (ready)="ready = true" (cleaned)="ready = false"
+    (minScale)="minScale = $event" (cropped)="onCropped($event)" (loaded)="onLoaded($event)" (error)="onError($event)">
+    <span>Drag and drop image</span>
+  </ly-img-cropper>
+
+  <div [className]="classes.sliderContainer">
+    <div [class]="classes.slider">
+      <ly-slider [thumbVisible]="false" [min]="minScale" [max]="1" [(ngModel)]="scale" (input)="onSliderInput($event)"
+        [step]="0.000001" cdkFocusInitial></ly-slider>
+    </div>
+  </div>
+
+</div>
+
+<div container *ngIf="ready" [lyJustifyContent]="'flex-end'" ly-dialog-actions>
+  <button ly-button color="primary" (click)="dialogRef.close()">Cancelar</button>
+  <button ly-button color="primary" (click)="dialogRef.close(cropper.crop())">Finalizar</button>
+</div>

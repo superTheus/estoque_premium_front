@@ -9,15 +9,35 @@ import { InputQuantityComponent } from './input-quantity/input-quantity.componen
 import { ChartComponent } from './chart/chart.component';
 import { DeniedComponent } from './denied/denied.component';
 import { LoadComponent } from './load/load.component';
+import { LyImageCropperModule } from '@alyle/ui/image-cropper';
+import { LySliderModule } from '@alyle/ui/slider';
+import { LyButtonModule } from '@alyle/ui/button';
+import { LyIconModule } from '@alyle/ui/icon';
+import { LyDialogModule } from '@alyle/ui/dialog';
+import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.module';
 
 @NgModule({
-  declarations: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, LoadComponent],
+  declarations: [
+    ButtonDefaultComponent,
+    InputDefaultComponent,
+    SelectDefaultComponent,
+    InputQuantityComponent,
+    ChartComponent,
+    DeniedComponent,
+    LoadComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FloatLabelModule
+    FloatLabelModule,
+    LyImageCropperModule,
+    LySliderModule,
+    LyButtonModule,
+    LyIconModule,
+    LyDialogModule,
+    CropperWithDialogModule
   ],
-  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, LoadComponent]
+  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, LoadComponent, CropperWithDialogModule]
 })
 export class ComponentsModule { }

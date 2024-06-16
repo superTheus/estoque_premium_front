@@ -10,7 +10,9 @@
   },
   "private": true,
   "dependencies": {
+    "@alyle/ui": "^16.0.1",
     "@angular/animations": "^17.2.0",
+    "@angular/cdk": "^16.2.12",
     "@angular/common": "^17.2.0",
     "@angular/compiler": "^17.2.0",
     "@angular/core": "^17.2.0",
@@ -27,6 +29,7 @@
     "angular2-notifications": "^16.0.1",
     "bootstrap": "5.2.3",
     "chart.js": "^4.4.2",
+    "hammerjs": "^2.0.8",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "moment": "^2.30.1",

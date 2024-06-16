@@ -10,26 +10,6 @@
       <div class="row">
         <div class="col-12 col-md-6">
           <div class="mb-3">
-            <label for="description" class="form-label"> Descricão </label>
-            <input type="text" class="form-control" id="description" placeholder="Descricão"
-              formControlName="description"
-              [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
-            <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched" class="invalid-feedback">
-              Descricão é obrigatória
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="mb-3">
-            <label for="ncm" class="form-label"> NCM </label>
-            <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <div class="mb-3">
             <label for="price_sale" class="form-label"> Preço de Venda </label>
             <input type="text" class="form-control" id="price_sale" placeholder="R$ 0,00" formControlName="price_sale"
               [ngClass]="{'invalid': !form.get('price_sale')?.valid && form.get('price_sale')?.touched}"
@@ -136,6 +116,34 @@
               formControlName="stock_minimum">
           </div>
         </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="description" class="form-label"> Descricão </label>
+            <input type="text" class="form-control" id="description" placeholder="Descricão"
+              formControlName="description"
+              [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
+            <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched" class="invalid-feedback">
+              Descricão é obrigatória
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="ncm" class="form-label"> NCM </label>
+            <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4 mt-3">
+        <h3> Imagens do Produto </h3>
+      </div>
+
+      <div class="row">
+        <aui-cropper-with-dialog [cropped]="images" (croppedAction)="getImages($event)"></aui-cropper-with-dialog>
       </div>
 
       <div class="row justify-content-center justify-content-md-end">
