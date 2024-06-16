@@ -7,6 +7,26 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row mt-3">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="description" class="form-label"> Descricão </label>
+            <input type="text" class="form-control" id="description" placeholder="Descricão"
+              formControlName="description"
+              [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
+            <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched" class="invalid-feedback">
+              Descricão é obrigatória
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="ncm" class="form-label"> NCM </label>
+            <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-12 col-md-6">
           <div class="mb-3">
@@ -114,26 +134,6 @@
             <label for="stock_minimum" class="form-label"> Estoque Minimo </label>
             <input type="number" class="form-control" id="stock_minimum" placeholder="0"
               formControlName="stock_minimum">
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-3">
-        <div class="col-12 col-md-6">
-          <div class="mb-3">
-            <label for="description" class="form-label"> Descricão </label>
-            <input type="text" class="form-control" id="description" placeholder="Descricão"
-              formControlName="description"
-              [ngClass]="{'invalid': !form.get('description')?.valid && form.get('description')?.touched}">
-            <div *ngIf="!form.get('description')?.valid && form.get('description')?.touched" class="invalid-feedback">
-              Descricão é obrigatória
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="mb-3">
-            <label for="ncm" class="form-label"> NCM </label>
-            <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
           </div>
         </div>
       </div>

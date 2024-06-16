@@ -16,6 +16,7 @@ import { StyleRenderer } from '@alyle/ui';
 import { STYLES } from '../../../../app.component';
 import { LyIconService } from '@alyle/ui/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { LoadService } from '../../../../shared/load.service';
 
 declare var $: any;
 
@@ -57,7 +58,8 @@ export class CreateComponent {
     private formBuilder: FormBuilder,
     public authService: AuthService,
     private router: Router,
-    private routeParam: ActivatedRoute
+    private routeParam: ActivatedRoute,
+    private loaderService: LoadService
   ) {
     this.form = this.formBuilder.group({
       description: ['', [Validators.required]],
@@ -149,6 +151,7 @@ export class CreateComponent {
   }
 
   save() {
+    this.loaderService.show();
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -184,9 +187,13 @@ export class CreateComponent {
             id_company: getCompanyId(),
             deleted: this.productSelected?.deleted
           }).then(res => {
-            this.router.navigate(['/app/product']);
+            this.loaderService.hide();
+            Swal.fire("Produto alterado com sucesso", "", "success").then(() => {
+              this.router.navigate(['/app/product']);
+            });
           }).catch(err => {
             Swal.fire("Erro ao salvar", "", "error");
+            this.loaderService.hide();
           })
         }
       })
@@ -203,9 +210,13 @@ export class CreateComponent {
             images: this.images,
             id_company: getCompanyId(),
           }).then(res => {
-            this.router.navigate(['/app/product']);
+            this.loaderService.hide();
+            Swal.fire("Produto salvo com sucesso", "", "success").then(() => {
+              this.router.navigate(['/app/product']);
+            });
           }).catch(err => {
             Swal.fire("Erro ao salvar", "", "error");
+            this.loaderService.hide();
           })
         }
       })

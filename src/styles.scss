@@ -266,3 +266,17 @@ select {
 .text-bold {
   font-weight: bold;
 }
+
+.p-dropdown {
+  height: 40px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

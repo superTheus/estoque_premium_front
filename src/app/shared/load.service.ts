@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 
-export interface ISidebar {
-  containerClassnames: string;
-  menuClickCount: number;
-  selectedMenuHasSubItems: boolean;
-}
+declare var $: any;
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoadService {
-  isLoad: boolean = false;
+  show() {
+    $('#loaderModal').modal('show');
+  }
+
+  hide() {
+    $('#loaderModal').modal('hide');
+  }
 }

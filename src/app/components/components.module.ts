@@ -8,7 +8,6 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputQuantityComponent } from './input-quantity/input-quantity.component';
 import { ChartComponent } from './chart/chart.component';
 import { DeniedComponent } from './denied/denied.component';
-import { LoadComponent } from './load/load.component';
 import { LyImageCropperModule } from '@alyle/ui/image-cropper';
 import { LySliderModule } from '@alyle/ui/slider';
 import { LyButtonModule } from '@alyle/ui/button';
@@ -23,8 +22,7 @@ import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.mo
     SelectDefaultComponent,
     InputQuantityComponent,
     ChartComponent,
-    DeniedComponent,
-    LoadComponent
+    DeniedComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +36,6 @@ import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.mo
     LyDialogModule,
     CropperWithDialogModule
   ],
-  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, LoadComponent, CropperWithDialogModule]
+  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, CropperWithDialogModule]
 })
 export class ComponentsModule { }
