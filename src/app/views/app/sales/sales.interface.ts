@@ -51,7 +51,7 @@ export interface SaleProduct {
   desconto: number,
   desconto_percentual: number,
   total: number,
-  product?: Products
+  product?: Products,
 }
 
 export interface SalesProducRequest {

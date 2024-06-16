@@ -351,7 +351,6 @@ export class PdvComponent {
       }).then(response => {
         if (response.results) {
           this.currentSale = response.results[0] as Sales;
-          console.log(this.currentSale);
           this.total = 0;
           if (this.currentSale.id_seller) {
             setTimeout(() => {

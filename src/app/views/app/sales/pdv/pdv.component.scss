@@ -163,12 +163,22 @@ img {
   }
 }
 
+.product-view {
+  display: flex;
+  align-items: center;
+
+  .btn-add-product {
+    width: 79px;
+  }
+
+  div {
+    flex: 1;
+  }
+}
+
 .img-fluid {
   width: 50px;
   height: auto;
   border-radius: 10px;
-}
-
-.btn-add-product {
-  width: 79px;
+  margin-right: 10px;
 }
