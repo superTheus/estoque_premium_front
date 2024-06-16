@@ -5,6 +5,7 @@ import { Box } from '../box.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UtilsService } from '../../../../shared/utils.service';
 import Swal from 'sweetalert2';
+import { LoadService } from '../../../../shared/load.service';
 
 @Component({
   selector: 'app-close',
@@ -21,7 +22,8 @@ export class CloseComponent {
     private routerControl: Router,
     private apiService: ApiService,
     private formBuilder: FormBuilder,
-    public utilsService: UtilsService
+    public utilsService: UtilsService,
+    private loaderService: LoadService
   ) {
     let id = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -53,6 +55,7 @@ export class CloseComponent {
   }
 
   save() {
+    this.loaderService.show();
     let newBox: Box = {
       ...this.box,
       value_credit: this.utilsService.currencyToNumber(this.form.value.value_credit),
@@ -64,6 +67,7 @@ export class CloseComponent {
     };
 
     this.apiService.updateBox(newBox).then((response) => {
+      this.loaderService.hide();
       Swal.fire('Sucesso', 'Caixa fechado com sucesso', 'success').then(() => {
         this.routerControl.navigate(['/app/box/list']);
       });

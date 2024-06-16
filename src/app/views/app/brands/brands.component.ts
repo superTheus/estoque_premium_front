@@ -6,6 +6,7 @@ import { getCompanyId } from '../../../utils/util';
 
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../shared/auth.service';
+import { LoadService } from '../../../shared/load.service';
 
 declare const $: any;
 
@@ -23,6 +24,7 @@ export class BrandsComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     public authService: AuthService,
+    private loaderService: LoadService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class BrandsComponent implements OnInit {
   }
 
   save() {
+    this.loaderService.show();
     if (this.isEditMode) {
       this.apiService.updateBrands({
         id: this.brandSelected?.id,
@@ -51,6 +54,7 @@ export class BrandsComponent implements OnInit {
         let index = allBrands.findIndex(brand => brand.id === this.brandSelected?.id);
         allBrands[index] = res.results;
         this.data = allBrands;
+        this.loaderService.hide();
       })
     } else {
       this.apiService.createBrands({
@@ -58,6 +62,7 @@ export class BrandsComponent implements OnInit {
         id_company: 1
       }).then(res => {
         this.data.push(res.results);
+        this.loaderService.hide();
       })
     }
 

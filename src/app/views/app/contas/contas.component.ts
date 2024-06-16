@@ -4,6 +4,7 @@ import { Contas } from './contas.interface';
 import { ApiService } from '../../../data/api.service';
 import { Options } from '../../../components/select-default/select-default.interface';
 import Swal from 'sweetalert2';
+import { LoadService } from '../../../shared/load.service';
 
 declare var $: any;
 
@@ -29,7 +30,10 @@ export class ContasComponent {
     { value: 'PA', label: 'Conta Pagamento' }
   ]
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private loaderService: LoadService
+  ) { }
 
   ngOnInit(): void {
     this.load();
@@ -61,6 +65,7 @@ export class ContasComponent {
   }
 
   save() {
+    this.loaderService.show();
     if (this.isEditMode) {
       this.apiService.updateConta({
         id: this.contaSelected?.id,
@@ -73,6 +78,7 @@ export class ContasComponent {
         id_company: 1
       }).then(res => {
         this.load();
+        this.loaderService.hide();
       })
     } else {
       this.apiService.createContas({
@@ -85,6 +91,7 @@ export class ContasComponent {
         id_company: 1
       }).then(res => {
         this.load();
+        this.loaderService.hide();
       })
     }
 

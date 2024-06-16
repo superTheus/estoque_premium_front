@@ -23,6 +23,7 @@ import { FinanceData } from '../../finance/finance.interface';
 import { AuthService } from '../../../../shared/auth.service';
 import { UtilsService } from '../../../../shared/utils.service';
 import { Box } from '../../box/box.interface';
+import { LoadService } from '../../../../shared/load.service';
 
 declare var $: any;
 
@@ -180,6 +181,7 @@ export class PdvComponent {
     private balanceService: BalanceService,
     public authService: AuthService,
     public utilsService: UtilsService,
+    private loaderService: LoadService
   ) {
     this.routeParam.paramMap.subscribe(async (params) => {
       const id = params.get('id');
@@ -392,6 +394,8 @@ export class PdvComponent {
   }
 
   save() {
+    this.loaderService.show();
+
     this.apiService.createProduct({
       description: this.description.value ? this.description.value : '',
       id_brand: Number(this.id_brand.value) || 0,
@@ -405,6 +409,7 @@ export class PdvComponent {
       stock: Number(this.stock.value) || 0,
       id_company: 1
     }).then(() => {
+      this.loaderService.hide();
       $('#modalProduct').modal('hide');
     });
   }
@@ -429,12 +434,14 @@ export class PdvComponent {
   }
 
   createSale(callback?: () => void) {
+    this.loaderService.show();
     this.salesService.createSale({
       id_company: getCompanyId(),
       id_user: getUserId(),
       id_seller: this.id_seller.value ? Number(this.id_seller.value) : null,
       total: 0
     }).then(response => {
+      this.loaderService.hide();
       this.currentSale = response.results as Sales;
       if (callback) {
         callback();
@@ -461,8 +468,6 @@ export class PdvComponent {
   }
 
   verifySale(product: Products) {
-
-
     if (product.control_stock === 'S' && product?.stock && Number(product?.stock) > 0 && Number(product?.stock) > (Number(product.stock_minimum) ?? 0)) {
       this.closeModal();
       this.quantity.setValue(1);
@@ -665,6 +670,7 @@ export class PdvComponent {
   }
 
   finishedSale() {
+    this.loaderService.show();
     this.closeModal();
     let newSaleValue = this.currentSale;
     newSaleValue.status = 'FE';
@@ -698,16 +704,17 @@ export class PdvComponent {
         promises?.push(...this.saveFinances());
 
         Promise.all(promises as any[]).then(() => {
+          this.loaderService.hide();
           window.location.href = location.origin + '/app/sales/list';
         });
 
         this.saveBoxMov();
-
       });
     });
   }
 
   saveClient() {
+    this.loaderService.show();
     this.apiService.createClient({
       apelido: this.apelido.value || '',
       bairro: this.bairro.value || '',
@@ -746,6 +753,7 @@ export class PdvComponent {
       this.rg_inscricao.setValue('');
       this.telefone.setValue('');
       this.loadClients(res.results.id);
+      this.loaderService.hide();
     })
 
     this.closeModal();

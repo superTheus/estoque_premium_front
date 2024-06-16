@@ -5,6 +5,7 @@ import { Categorys } from './categorys.interface';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../shared/auth.service';
 import { getCompanyId } from '../../../utils/util';
+import { LoadService } from '../../../shared/load.service';
 
 declare const $: any;
 
@@ -22,6 +23,7 @@ export class CategorysComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     public authService: AuthService,
+    private loaderService: LoadService
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +42,7 @@ export class CategorysComponent implements OnInit {
   }
 
   save() {
+    this.loaderService.show();
     if (this.isEditMode) {
       this.apiService.updateCategory({
         id: this.Categoryselected?.id,
@@ -50,6 +53,7 @@ export class CategorysComponent implements OnInit {
         let index = allCategorys.findIndex(brand => brand.id === this.Categoryselected?.id);
         allCategorys[index] = res.results;
         this.data = allCategorys;
+        this.loaderService.hide();
       })
     } else {
       this.apiService.createCategory({
@@ -57,6 +61,7 @@ export class CategorysComponent implements OnInit {
         id_company: 1,
       }).then(res => {
         this.data.push(res.results);
+        this.loaderService.hide();
       })
     }
 

@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { getCompanyId, getPermision } from '../../../utils/util';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../shared/auth.service';
+import { LoadService } from '../../../shared/load.service';
 
 declare const $: any;
 
@@ -45,6 +46,7 @@ export class ClientComponent {
     private apiService: ApiService,
     private formBuilder: FormBuilder,
     public authService: AuthService,
+    private loaderService: LoadService
   ) {
 
     this.form = this.formBuilder.group({
@@ -123,13 +125,15 @@ export class ClientComponent {
   }
 
   save() {
+    this.loaderService.show();
     if (this.isEditMode) {
       this.apiService.updateClient({
         id: this.clientSelected?.id,
         ...this.form.value
       }).then(res => {
         this.load();
-        this.loadClients()
+        this.loadClients();
+        this.loaderService.hide();
       })
     } else {
       this.apiService.createClient({
@@ -137,7 +141,8 @@ export class ClientComponent {
         id_company: getCompanyId(),
       }).then(res => {
         this.load();
-        this.loadClients()
+        this.loadClients();
+        this.loaderService.hide();
       })
     }
 
