@@ -14,6 +14,7 @@ import { LyButtonModule } from '@alyle/ui/button';
 import { LyIconModule } from '@alyle/ui/icon';
 import { LyDialogModule } from '@alyle/ui/dialog';
 import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.module';
+import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.mo
     SelectDefaultComponent,
     InputQuantityComponent,
     ChartComponent,
-    DeniedComponent
+    DeniedComponent,
+    ImageViewerComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +38,15 @@ import { CropperWithDialogModule } from './cropper-dialog/cropper-with-dialog.mo
     LyDialogModule,
     CropperWithDialogModule
   ],
-  exports: [ButtonDefaultComponent, InputDefaultComponent, SelectDefaultComponent, InputQuantityComponent, ChartComponent, DeniedComponent, CropperWithDialogModule]
+  exports: [
+    ButtonDefaultComponent,
+    InputDefaultComponent,
+    SelectDefaultComponent,
+    InputQuantityComponent,
+    ChartComponent,
+    DeniedComponent,
+    CropperWithDialogModule,
+    ImageViewerComponent
+  ]
 })
 export class ComponentsModule { }
