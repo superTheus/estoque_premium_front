@@ -7,7 +7,7 @@ import { CreateComponent } from './create/create.component';
 import { ComponentsModule } from '../../../components/components.module';
 import { ProductRoutingModule } from './product.routing';
 import { LyCommonModule } from '@alyle/ui';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 
 @NgModule({
@@ -21,7 +21,8 @@ import { LyCommonModule } from '@alyle/ui';
     FormsModule,
     ReactiveFormsModule,
     ProductRoutingModule,
-    LyCommonModule
+    LyCommonModule,
+    BreadcrumbModule
   ]
 })
 export class ProductModule { }

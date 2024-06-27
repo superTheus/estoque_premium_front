@@ -17,6 +17,7 @@ import { STYLES } from '../../../../app.component';
 import { LyIconService } from '@alyle/ui/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoadService } from '../../../../shared/load.service';
+import { MenuItem } from 'primeng/api';
 
 declare var $: any;
 
@@ -31,7 +32,20 @@ declare var $: any;
 export class CreateComponent {
   readonly classes = this.sRenderer.renderSheet(STYLES, true);
 
-  form!: FormGroup;
+  form: FormGroup = this.formBuilder.group({
+    description: ['', [Validators.required]],
+    price_sale: ['', [Validators.required]],
+    price_cost: ['', [Validators.required]],
+    ncm: [''],
+    control_stock: ['S'],
+    stock: [''],
+    stock_minimum: [''],
+    id_brand: [''],
+    id_category: [''],
+    id_subcategory: [''],
+    id_fornecedor: [''],
+  });
+
   isEditMode = false;
   productSelected?: Products;
   data: Products[] = [];
@@ -49,6 +63,7 @@ export class CreateComponent {
   disableNew = false;
 
   images: string[] = [];
+  items: MenuItem[] | undefined;
 
   constructor(
     readonly sRenderer: StyleRenderer,
@@ -61,24 +76,12 @@ export class CreateComponent {
     private routeParam: ActivatedRoute,
     private loaderService: LoadService
   ) {
-    this.form = this.formBuilder.group({
-      description: ['', [Validators.required]],
-      price_sale: ['', [Validators.required]],
-      price_cost: ['', [Validators.required]],
-      ncm: [''],
-      control_stock: ['S'],
-      stock: [''],
-      stock_minimum: [''],
-      id_brand: [''],
-      id_category: [''],
-      id_subcategory: [''],
-      id_fornecedor: [''],
-    })
 
     this.routeParam.paramMap.subscribe(params => {
       let id = params.get('id')
       if (id) {
         this.isEditMode = true;
+        this.items = [{ icon: 'pi pi-home', route: '/app' }, { label: 'Produtos', route: '/app/product' }, { label: 'Editar Produto' }];
         this.apiService.findProducts({
           filter: {
             id: Number(id),
@@ -89,6 +92,8 @@ export class CreateComponent {
             this.update(res.results[0])
           }
         })
+      } else {
+        this.items = [{ icon: 'pi pi-home', route: '/app' }, { label: 'Produtos', route: '/app/product' }, { label: 'Novo Produto' }];
       }
     });
 

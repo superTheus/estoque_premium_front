@@ -24,6 +24,12 @@ interface resultInterface {
   results: any;
 }
 
+export type states = {
+  codigo: string,
+  nome: string,
+  uf: string
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   constructor(private http: HttpClient) {
@@ -1149,6 +1155,60 @@ export class ApiService {
         ).subscribe(
           (res) => {
             resolve(res as resultInterface);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  getStates(): Promise<states[]> {
+    const url = `${environment.baseUrl}/estados`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.get(url, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as states[]);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    })
+  }
+
+  getCitys(uf: string): Promise<states[]> {
+    const url = `${environment.baseUrl}/estados/municipios/${uf}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.get(url, { headers })
+        .pipe(
+          map((res) => {
+            return res;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          (res) => {
+            resolve(res as states[]);
           },
           (error) => {
             reject(error);

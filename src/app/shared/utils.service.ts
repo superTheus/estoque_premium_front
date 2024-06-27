@@ -82,6 +82,18 @@ export class UtilsService {
     return document;
   }
 
+  public formatOnlyCnpj(control?: AbstractControl) {
+    if (control && control.value) {
+      let value = control.value.replace(/[^\d]+/g, '');
+
+      if (value.length === 14) {
+        value = this.formatDocument(control.value)
+      }
+
+      control.setValue(value);
+    }
+  }
+
   public formatPhoneNumber(phoneNumber?: string): string {
     if (!phoneNumber) {
       return '';
@@ -95,6 +107,14 @@ export class UtilsService {
     }
 
     return phoneNumber;
+  }
+
+  public formatPhone(control?: AbstractControl | null) {
+    if (control && control.value) {
+      let value = control.value.replace(/[^\d]+/g, '');
+      value = this.formatPhoneNumber(control.value);
+      control.setValue(value);
+    }
   }
 
   public generatePassword(id: string): string {
@@ -149,5 +169,9 @@ export class UtilsService {
     const year = newDate.getFullYear();
 
     return `${day}/${month}/${year}`;
+  }
+
+  static extractNumbersFromString(inputString: string): string {
+    return inputString.replace(/\D/g, '');
   }
 }

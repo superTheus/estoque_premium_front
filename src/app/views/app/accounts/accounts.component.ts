@@ -114,8 +114,6 @@ export class AccountComponent {
 
   createCompany() {
     this.apiService.createCompany({
-      nome: this.name.value || '',
-      sobrenome: this.lastName.value || '',
       cnpj: this.document.value?.replace(/[^\d]+/g, ''),
       telefone: this.telephone.value?.replace(/[^\d]+/g, ''),
       email: this.email.value ?? '',
@@ -146,8 +144,6 @@ export class AccountComponent {
     company.telefone = this.telephone.value?.replace(/[^\d]+/g, '') as string;
     company.email = this.email.value ?? '';
 
-    company.nome = this.name.value ?? '';
-    company.sobrenome = this.lastName.value ?? '';
     company.email = this.email.value ?? '';
 
     Promise.all([this.apiService.updateCompany(company)])
@@ -157,8 +153,6 @@ export class AccountComponent {
     this.companySelected = company;
     this.userSelected = company.users?.find(user => user.type === 'owner');
 
-    this.name.setValue(company.nome ?? '');
-    this.lastName.setValue(company.sobrenome ?? '');
     this.email.setValue(company.email ?? null);
 
     this.document.setValue(this.utilsService.formatDocument(company.cnpj));

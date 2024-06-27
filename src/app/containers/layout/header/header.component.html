@@ -13,19 +13,25 @@
     <div class="d-flex justify-content-end align-items-center h-100">
       <div class="d-flex align-items-center justify-content-between">
 
-        <button class="btn">
+        <span class="user-name me-3" style="white-space: nowrap;"> Olá {{ authService.user.name }}#{{
+          utilsService.padWithZeros(authService.user.id)
+          }} </span>
+
+        <a [routerLink]="['/app/company']" class="btn">
+          <i class="fa-solid fa-building"></i>
+        </a>
+
+        <!-- <button class="btn">
           <img src="../../../../assets/images/icons/message.svg" alt="">
         </button>
 
         <button class="btn">
           <img src="../../../../assets/images/icons/notification.svg" alt="">
+        </button> -->
+
+        <button class="btn" (click)="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </button>
-
-        <span class="user-name me-3" style="white-space: nowrap;"> Olá {{ authService.user.name }}#{{
-          utilsService.padWithZeros(authService.user.id)
-          }} </span>
-
-        <button class="btn btn-logout" (click)="logout()"> Sair </button>
         <!-- <img src="../../../../assets/images/user.png" alt="User" class="user"> -->
       </div>
     </div>

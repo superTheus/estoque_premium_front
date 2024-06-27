@@ -37,7 +37,7 @@
             <ng-container *ngFor="let company of data">
               <tr>
                 <td class="col"> #{{ utilsService.padWithZeros(company.id) }} </td>
-                <td class="col-4"> {{company.nome}} {{company.sobrenome}} </td>
+                <td class="col-4"> </td>
                 <td class="col-3"> {{company.email ? company.email : ' -- '}} </td>
                 <td class="col-3"> {{ utilsService.formatDocument(company.cnpj) }} </td>
                 <td class="col">

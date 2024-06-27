@@ -63,7 +63,10 @@
 
 header {
   color: #fff;
-  background-color: #2D9CDB;
+  // background-color: #2D9CDB;
+  background-color: #006EB9;
+  background-image: linear-gradient(to right, #006EB9 0%, #51c6ea 100%);
+  background-repeat: repeat-x;
   width: 100vw;
   padding: 5px;
   height: auto;
@@ -104,6 +107,7 @@ main {
 
   .container-main {
     width: 95%;
+    max-width: 1200px;
     margin: auto;
     min-height: calc(100vh - 80px);
   }
@@ -279,4 +283,17 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.p-breadcrumb {
+  border: 0;
+}
+
+ol,
+ul {
+  padding-left: 0 !important;
+}
+
+.text-color {
+  color: #3a3a3a;
 }

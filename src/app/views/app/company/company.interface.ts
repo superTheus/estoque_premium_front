@@ -2,11 +2,11 @@ import { Permission, Users } from "../user/users.interface";
 
 export interface Company {
   id?: number,
-  nome?: string,
-  sobrenome?: string,
   cnpj?: string,
   razao_social?: string,
   nome_fantasia?: string,
+  inscricao_estadual?: string,
+  inscricao_municipal?: string,
   telefone?: string,
   email?: string,
   cep?: string,
@@ -16,6 +16,7 @@ export interface Company {
   cidade?: string,
   uf?: string,
   certificate?: string,
+  certificate_name?: string,
   password?: string,
   csc?: string,
   csc_id?: string,

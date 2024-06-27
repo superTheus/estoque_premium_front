@@ -1,89 +1,309 @@
-<div class="container-main d-flex flex-column">
-  <div class="row mt-4">
-    <h3> Empresa </h3>
-  </div>
-
-  <form>
-    <div class="row mt-3">
-      <div class="col-12">
-        <app-input-default [control]="razao_social" type="text" label="Razão Social" placeHolder=""></app-input-default>
-      </div>
-      <div class="col-12">
-        <app-input-default [control]="nome_fantasia" type="text" label="Nome Fantasia"
-          placeHolder=""></app-input-default>
-      </div>
-      <div class="col-12">
-        <app-input-default [control]="cnpj" type="text" label="CNPJ"
-          placeHolder="Ex: 00.000.000/0001-00"></app-input-default>
-      </div>
-
-      <div class="col-12">
-        <app-input-default [control]="email" type="text" label="Email" placeHolder="Email"></app-input-default>
-      </div>
-
-      <div class="col-12">
-        <app-input-default [control]="cep" type="text" label="CEP" placeHolder="CEP"></app-input-default>
-      </div>
-
-      <div class="col-12">
-        <app-input-default [control]="logradouro" type="text" label="Logradouro"
-          placeHolder="Logradouro"></app-input-default>
-      </div>
-
-      <div class="d-flex">
-        <div class="col-4">
-          <app-input-default [control]="bairro" type="text" label="Bairro" placeHolder="Bairro"></app-input-default>
+<div class="container-main d-flex flex-column py-2">
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mt-4">
+          <h3> Empresa </h3>
+          <div class="flex justify-content-center">
+            <p-breadcrumb class="max-w-full" [model]="items">
+              <ng-template pTemplate="item" let-item>
+                <ng-container *ngIf="item.route; else elseBlock">
+                  <a [routerLink]="item.route" class="p-menuitem-link">
+                    <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span>
+                    <span class="text-primary font-semibold">{{ item.label }}</span>
+                  </a>
+                </ng-container>
+                <ng-template #elseBlock>
+                  <a [href]="item.url">
+                    <span class="text-color">{{ item.label }}</span>
+                  </a>
+                </ng-template>
+              </ng-template>
+            </p-breadcrumb>
+          </div>
         </div>
-        <div class="col-4 px-2">
-          <app-input-default [control]="cidade" type="text" label="Cidade" placeHolder="Cidade"></app-input-default>
-        </div>
-        <div class="col-4">
-          <app-input-default [control]="uf" type="text" label="Estado" placeHolder="Estado"></app-input-default>
+
+        <div class="row">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="dados-tab" data-bs-toggle="tab" data-bs-target="#dados" type="button"
+                role="tab" aria-controls="dados" aria-selected="true">
+                <i class="pi pi-file"></i> Dados
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button"
+                role="tab" aria-controls="address" aria-selected="false">
+                <i class="pi pi-map"></i> Endereço
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tributacao-tab" data-bs-toggle="tab" data-bs-target="#tributacao"
+                type="button" role="tab" aria-controls="tributacao" aria-selected="false">
+                <i class="pi pi-dollar"></i> Tributação
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
+
+              <div class="row mt-3">
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="cnpj" class="form-label"> <span class="text-danger">*</span> CNPJ</label>
+                    <input type="text" class="form-control" id="cnpj" placeholder="Ex: 00.000.000/0001-00"
+                      formControlName="cnpj" (keydown)="utilsService.formatOnlyCnpj(form.controls['cnpj'])"
+                      (keyup)="utilsService.formatOnlyCnpj(form.controls['cnpj'])"
+                      (keypress)="utilsService.formatOnlyCnpj(form.controls['cnpj'])">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="razaoSocial" class="form-label"> <span class="text-danger">*</span> Razão Social</label>
+                    <input type="text" class="form-control" id="razaoSocial" placeholder="Razão Social"
+                      formControlName="razao_social">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="nomeFantasia" class="form-label"> <span class="text-danger">*</span> Nome
+                      Fantasia</label>
+                    <input type="text" class="form-control" id="nomeFantasia" placeholder="Noma Fantasia"
+                      formControlName="nome_fantasia">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="inscricaoEstadual" class="form-label"> <span class="text-danger">*</span> Inscrição
+                      Estadual</label>
+                    <input type="text" class="form-control" id="inscricaoEstadual" placeholder="Ex: 99999999999999"
+                      formControlName="inscricao_estadual">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="inscricaoMunicipal" class="form-label"> Inscrição Municipal </label>
+                    <input type="text" class="form-control" id="inscricaoMunicipal" placeholder="Ex: 99999999999999"
+                      formControlName="inscricao_municipal">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="email" class="form-label"><span class="text-danger">*</span> E-mail</label>
+                    <input type="text" class="form-control" id="email" placeholder="nome@mail.com"
+                      formControlName="email">
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="telefone" class="form-label"><span class="text-danger">*</span> Telefone</label>
+                    <input type="text" class="form-control" id="telefone" placeholder="(99) 99999-9999"
+                      formControlName="telefone" (keypress)="utilsService.formatPhone(form.get('telefone'))"
+                      (keydown)="utilsService.formatPhone(form.get('telefone'))"
+                      (keyup)="utilsService.formatPhone(form.get('telefone'))" maxlength="15">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="cep" class="form-label"><span class="text-danger">*</span> CEP</label>
+                    <input type="text" class="form-control" id="cep" placeholder="69.999-999" formControlName="cep">
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap">
+                  <div class="col-12 col-md-8 pe-md-2">
+                    <div class="mb-3">
+                      <label for="logradouro" class="form-label"><span class="text-danger">*</span> Logradouro</label>
+                      <input type="text" class="form-control" id="logradouro" placeholder="Ex: Rua, beco"
+                        formControlName="logradouro">
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                      <label for="numero" class="form-label"><span class="text-danger">*</span> Numero</label>
+                      <input type="text" class="form-control" id="numero" placeholder="Ex: 01" formControlName="numero">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap">
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label for="bairro" class="form-label"><span class="text-danger">*</span> Bairro</label>
+                      <input type="text" class="form-control" id="bairro" placeholder="" formControlName="bairro">
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 px-2">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> Estado</label>
+                      <p-dropdown [options]="estadosSelected" [formControl]="estadoSelected" optionLabel="label"
+                        [filter]="true" filterBy="label" [showClear]="true" placeholder="Selecione seu estado"
+                        (onChange)="selectEstado()">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ selectedOption.label }}</div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> Município</label>
+                      <p-dropdown [options]="citySelected" [formControl]="cidadeSelected" optionLabel="label"
+                        [filter]="true" filterBy="label" [showClear]="true" placeholder="Selecione um município"
+                        (onChange)="selectEstado()">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ selectedOption.label }}</div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div>{{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="tributacao" role="tabpanel" aria-labelledby="tributacao-tab">
+              <div class="row mt-3">
+                <div class="col-12">
+                  <p-fileUpload #uploader mode="basic" chooseLabel="Selecione Certificado" chooseIcon="pi pi-upload"
+                    name="demo[]" (onSelect)="onFileSelect($event, uploader)" />
+
+                  <div *ngIf="fileCertificateName" class="d-flex justify-content-between">
+                    <p style="flex: 1"> <small>Certificado: {{ fileCertificateName }} </small> </p>
+                    <button class="btn" style="width: 40px;" (click)="clearCertificate()">
+                      <i class="pi pi-trash text-danger"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="password" class="form-label"><span class="text-danger">*</span> Senha do
+                      Certificado</label>
+                    <div class="d-flex flex-wrap">
+                      <div class="col-12 col-md-10 col-lg-11 pe-md-2">
+                        <input type="password" class="form-control" id="password" placeholder="*****"
+                          formControlName="password">
+                      </div>
+                      <div class="col">
+                        <button type="button" class="btn btn-primary" (click)="testCertificate()"> Testar </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="csc" class="form-label"><span class="text-danger">*</span> CSC</label>
+                    <input type="text" class="form-control" id="csc" placeholder="Ex: 0123456789" formControlName="csc">
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="csc_id" class="form-label"><span class="text-danger">*</span> CSC ID</label>
+                    <input type="text" class="form-control" id="csc_id" placeholder="Ex: 000001"
+                      formControlName="csc_id">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 px-2">
+                <div class="mb-3">
+                  <label class="form-label"><span class="text-danger">*</span> Situação Tributária</label>
+                  <p-dropdown [options]="situacaoTributariaSelected" [formControl]="situacaoTributariaSelect"
+                    optionLabel="label" [filter]="true" filterBy="value" [showClear]="true"
+                    placeholder="Selecione seu estado" (onChange)="selectSistuacao()">
+                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ selectedOption.value }} - {{ selectedOption.label }}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-country pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div> {{ country.value }} - {{ country.label }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="numero_nfce" class="form-label">Numero NFCE</label>
+                    <input type="text" class="form-control" id="numero_nfce" placeholder="Ex: 0123456789"
+                      formControlName="numero_nfce">
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="serie_nfce" class="form-label">Série NFCE</label>
+                    <input type="text" class="form-control" id="serie_nfce" placeholder="Ex: 123"
+                      formControlName="serie_nfce">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="numero_nfe" class="form-label">Numero NFE</label>
+                    <input type="text" class="form-control" id="numero_nfe" placeholder="Ex: 0123456789"
+                      formControlName="numero_nfe">
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="mb-3">
+                    <label for="serie_nfe" class="form-label">Série NFE</label>
+                    <input type="text" class="form-control" id="serie_nfe" placeholder="Ex: 123"
+                      formControlName="serie_nfe">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
       </div>
-
-      <div class="d-flex justify-content-end mb-4">
-        <div class="col-12 col-md-2">
-          <button type="button" class="btn btn-primary" (click)="save()">Salvar</button>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end mb-4">
+          <div class="col-12 col-md-2">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
         </div>
       </div>
-
     </div>
   </form>
-
-  <form method="post" (ngSubmit)="saveCertificate()">
-
-    <div class="row">
-      <div class="col-12">
-        <h4> Dados Fiscais </h4>
-      </div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-12">
-        <app-input-default [control]="certificate" type="file" label="Certificado" placeHolder="" accept=".pfx"
-          (change)="onFileChange($event)"></app-input-default>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-12">
-        <app-input-default [control]="password" type="password" label="Senha" placeHolder=""></app-input-default>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-12 col-md-6">
-        <app-input-default [control]="csc" type="text" label="CSC" placeHolder=""></app-input-default>
-      </div>
-      <div class="col-12 col-md-6">
-        <app-input-default [control]="csc_id" type="text" label="CSC ID" placeHolder=""></app-input-default>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-end mb-4">
-      <div class="col-12 col-md-2">
-        <button type="button" class="btn btn-primary" (click)="saveCertificate()">Salvar</button>
-      </div>
-    </div>
-  </form>
-
 </div>
