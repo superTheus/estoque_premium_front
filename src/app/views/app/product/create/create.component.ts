@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Products } from '../product.interface';
 import { getCompanyId, getPermision } from '../../../../utils/util';
 import { ApiService } from '../../../../data/api.service';
@@ -18,6 +18,8 @@ import { LyIconService } from '@alyle/ui/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoadService } from '../../../../shared/load.service';
 import { MenuItem } from 'primeng/api';
+import { FiscalService } from '../../../../data/fiscal.service';
+import { CfopInterface, NcmInterface, OrigemInterface, UnidadesInterface } from '../../../../utils/interfcaes';
 
 declare var $: any;
 
@@ -36,7 +38,10 @@ export class CreateComponent {
     description: ['', [Validators.required]],
     price_sale: ['', [Validators.required]],
     price_cost: ['', [Validators.required]],
-    ncm: [''],
+    ncm: ['', [Validators.required]],
+    cfop: ['', [Validators.required]],
+    origem: ['', [Validators.required]],
+    unidade: ['', [Validators.required]],
     control_stock: ['S'],
     stock: [''],
     stock_minimum: [''],
@@ -59,6 +64,23 @@ export class CreateComponent {
     { label: 'Não', value: 'N' }
   ]
 
+  ncm: NcmInterface[] = [];
+  cfop: CfopInterface[] = [];
+  unidades: UnidadesInterface[] = [];
+  origem: OrigemInterface[] = [];
+
+  ncmSelect: Options[] = [];
+  cfopSelect: Options[] = [];
+  unidadeSelect: Options[] = [];
+  origemSelect: Options[] = [];
+
+  ncmSelected = new FormControl<Options | null>(null);
+  cfopSelected = new FormControl<Options | null>(null);
+  unidadeSelected = new FormControl<Options | null>(null);
+  origemSelected = new FormControl<Options | null>(null);
+
+  search = new FormControl<string>('');
+
   permissions = getPermision()
   disableNew = false;
 
@@ -67,9 +89,8 @@ export class CreateComponent {
 
   constructor(
     readonly sRenderer: StyleRenderer,
-    iconService: LyIconService,
-    sanitizer: DomSanitizer,
     private apiService: ApiService,
+    private fiscalService: FiscalService,
     private formBuilder: FormBuilder,
     public authService: AuthService,
     private router: Router,
@@ -97,11 +118,27 @@ export class CreateComponent {
       }
     });
 
-    this.loadProductsPermissions();
+    this.fiscalService.listNcm().then(res => {
+      this.ncm = res;
+      this.ncmSelect = res.map((ncm: NcmInterface): Options => { return { label: ncm.codigo + ' - ' + ncm.descricao, value: ncm.codigo } })
+    });
 
-    iconService.setSvg('Github', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/github'));
-    iconService.setSvg('Theme', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/round-format_color_fill-24px'));
-    iconService.setSvg('Discord', sanitizer.bypassSecurityTrustResourceUrl('assets/svg/discord'));
+    this.fiscalService.listCfop().then(res => {
+      this.cfop = res;
+      this.cfopSelect = res.map((cfop: CfopInterface): Options => { return { label: cfop.id + ' - ' + cfop.descricao, value: cfop.id } })
+    });
+
+    this.fiscalService.listUnidade().then(res => {
+      this.unidades = res;
+      this.unidadeSelect = res.map((unidade: UnidadesInterface): Options => { return { label: unidade.sigla + ' - ' + unidade.descricao, value: unidade.sigla } })
+    });
+
+    this.fiscalService.listOrigem().then(res => {
+      this.origem = res;
+      this.origemSelect = res.map((origem: OrigemInterface): Options => { return { label: origem.descricao, value: origem.id } })
+    });
+
+    this.loadProductsPermissions();
   }
 
   ngOnInit() {
@@ -264,5 +301,21 @@ export class CreateComponent {
 
   getImages = (imagesBase: string[]) => {
     this.images = imagesBase;
+  }
+
+  selectNcm() {
+    this.form.get('ncm')?.setValue(this.ncmSelected.value);
+  }
+
+  selectCfop() {
+    this.form.get('cfop')?.setValue(this.cfopSelected.value);
+  }
+
+  selectUnidade() {
+    this.form.get('cfop')?.setValue(this.unidadeSelected.value);
+  }
+
+  selectOrigem() {
+    this.form.get('origem')?.setValue(this.origemSelected.value);
   }
 }

@@ -66,3 +66,52 @@ export interface CompanyFiscalInterface {
   situacao_tributaria: string,
   dados_certificado?: any
 }
+
+export interface Nfce {
+  cnpj: string,
+  modoEmissao: number,
+  total: number,
+  total_pago: number,
+  troco: number,
+  cliente: ClienteNfce,
+  produtos: ProdutoNfe[],
+  pagamentos: PagamentoNfe[]
+}
+
+export interface ProdutoNfe {
+  codigo: string,
+  ean: string,
+  descricao: string,
+  ncm: string,
+  cfop: string,
+  origem: string,
+  unidade: string,
+  quantidade: number,
+  valor: number,
+  total: number,
+  desconto: number,
+  frete: number,
+  acrescimo: number,
+}
+
+export interface PagamentoNfe {
+  codigo: number,
+  valorpago: number
+}
+
+export interface ClienteNfce {
+  nome: string,
+  documento: string,
+  tipo_documento: string,
+}
+
+export interface UnidadesInterface {
+  id: number,
+  descricao: string,
+  sigla: string
+}
+
+export interface OrigemInterface {
+  id: number,
+  descricao: string
+}

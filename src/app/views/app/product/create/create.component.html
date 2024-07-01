@@ -46,12 +46,18 @@
                   <i class="fa-solid fa-file-invoice"></i> Fiscal
                 </button>
               </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kit-tab" data-bs-toggle="tab" data-bs-target="#kit" type="button"
+                  role="tab" aria-controls="kit" aria-selected="true">
+                  <i class="fa-solid fa-boxes-stacked"></i> Kit
+                </button>
+              </li>
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
                 <div class="row">
                   <div class="row mt-3">
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
                       <div class="mb-3">
                         <label for="description" class="form-label"> Descricão </label>
                         <input type="text" class="form-control" id="description" placeholder="Descricão"
@@ -61,12 +67,6 @@
                           class="invalid-feedback">
                           Descricão é obrigatória
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <div class="mb-3">
-                        <label for="ncm" class="form-label"> NCM </label>
-                        <input type="text" class="form-control" id="ncm" placeholder="NCM" formControlName="ncm">
                       </div>
                     </div>
                   </div>
@@ -195,7 +195,104 @@
                 </div>
               </div>
 
-              <div class="tab-pane fade show" id="fiscal" role="tabpanel" aria-labelledby="fiscal-tab"></div>
+              <div class="tab-pane fade show" id="fiscal" role="tabpanel" aria-labelledby="fiscal-tab">
+                <div class="row mt-4">
+                  <div class="col-12 col-md-6 px-2">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> NCM</label>
+                      <p-dropdown [options]="ncmSelect" [formControl]="ncmSelected" optionLabel="label" [filter]="true"
+                        filterBy="value" [showClear]="true" placeholder="Selecione o NCM do produto"
+                        (onChange)="selectNcm">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ selectedOption.label }} </div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 px-2">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> Unidade</label>
+                      <p-dropdown [options]="unidadeSelect" [formControl]="unidadeSelected" optionLabel="label"
+                        [filter]="true" filterBy="value" [showClear]="true" placeholder="Selecione a Unidade do produto"
+                        (onChange)="selectUnidade">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ selectedOption.label }} </div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-md-6 px-2">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> Origem</label>
+                      <p-dropdown [options]="origemSelect" [formControl]="origemSelected" optionLabel="label"
+                        [filter]="true" filterBy="value" [showClear]="true" placeholder="Selecione a Origem do produto"
+                        (onChange)="selectOrigem">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ selectedOption.label }} </div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 px-2">
+                    <div class="mb-3">
+                      <label class="form-label"><span class="text-danger">*</span> CFOP</label>
+                      <p-dropdown [options]="cfopSelect" [formControl]="cfopSelected" optionLabel="label"
+                        [filter]="true" filterBy="value" [showClear]="true" placeholder="Selecione o CFOP"
+                        (onChange)="selectCfop">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ selectedOption.label }} </div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                          <div class="flex align-items-center gap-2">
+                            <div> {{ country.label }}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade show" id="kit" role="tabpanel" aria-labelledby="kit-tab">
+                <div class="row my-3">
+                  <div class="col-12 col-sm-9 col-md-10">
+                    <input [formControl]="search" type="text" class="form-control w-100"
+                      placeholder="Pesquisar Produto">
+                  </div>
+
+                  <div class="col">
+                    <button type="button" class="btn btn-primary"> Buscar </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

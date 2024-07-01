@@ -22,6 +22,9 @@ export interface Products {
   subcategory?: Subcategorys;
   brand?: Brands;
   suplier?: Suppliers;
+  unidade?: string;
+  cfop?: string;
+  origem?: string;
   images?: {
     id?: number;
     id_product?: number;

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
 import { catchError, map, throwError } from "rxjs";
-import { CestInterface, CfopInterface, CompanyFiscalInterface, FormasPagamentoInterface, IbptInterface, NcmInterface, SituacaoTributariaInterface } from "../utils/interfcaes";
+import { CestInterface, CfopInterface, CompanyFiscalInterface, FormasPagamentoInterface, IbptInterface, NcmInterface, OrigemInterface, SituacaoTributariaInterface, UnidadesInterface } from "../utils/interfcaes";
 
 @Injectable({ providedIn: 'root' })
 export class FiscalService {
@@ -237,6 +237,62 @@ export class FiscalService {
           }
         );
     });
+  }
+
+  listUnidade(filter?: { descricao?: string, sigla?: string }): Promise<UnidadesInterface[]> {
+    const url = `${environment.emissorUrl}/unidades`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, {
+        filter: filter
+      }, { headers })
+        .pipe(
+          map((res) => {
+            return res as any;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as any);
+          },
+          error => {
+            reject(error);
+          });
+    })
+  }
+
+  listOrigem(filter?: { id?: number, descricao?: string }): Promise<OrigemInterface[]> {
+    const url = `${environment.emissorUrl}/origem`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return new Promise((resolve, reject) => {
+      this.http.post(url, {
+        filter: filter
+      }, { headers })
+        .pipe(
+          map((res) => {
+            return res as any;
+          }),
+          catchError(errorRes => {
+            return throwError(errorRes);
+          })
+        ).subscribe(
+          res => {
+            resolve(res as any);
+          },
+          error => {
+            reject(error);
+          });
+    })
   }
 
   createCompanyFiscal(company: CompanyFiscalInterface): Promise<CompanyFiscalInterface[]> {

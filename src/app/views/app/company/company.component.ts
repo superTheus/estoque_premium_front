@@ -156,6 +156,9 @@ export class CompanyComponent implements OnInit {
         timer: 3000,
         showConfirmButton: false
       });
+
+      console.log(this.form.value);
+
       return;
     }
 
@@ -250,6 +253,7 @@ export class CompanyComponent implements OnInit {
     if (extension && acceptedExtensions.includes(extension)) {
       this.fileCertificate = file;
       this.fileCertificateName = file.name;
+      this.form.get('cetificate_name')?.setValue(this.fileCertificateName);
       const reader = new FileReader();
       reader.onload = (loadEvent: ProgressEvent<FileReader>) => {
         const base64String = loadEvent.target?.result as string;
